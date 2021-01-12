@@ -2,9 +2,7 @@ package dev.mruniverse.pixelmotd.utils;
 
 import dev.mruniverse.pixelmotd.enums.*;
 import dev.mruniverse.pixelmotd.files.bungeeControl;
-import dev.mruniverse.pixelmotd.files.spigotControl;
 import dev.mruniverse.pixelmotd.init.bungeePixelMOTD;
-import dev.mruniverse.pixelmotd.init.spigotPixelMOTD;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ServerPing;
@@ -16,6 +14,19 @@ import java.text.ParseException;
 import java.util.*;
 
 public class bungeeUtils {
+    public List<String> getPlayers(WhitelistMembers mode, String worldName) {
+        if(mode.equals(WhitelistMembers.NAMEs)) {
+            if(bungeeControl.getControl(Files.MODULES).get(Extras.getWorldPath(Whitelist.PLAYERS_NAME,worldName)) != null)
+                if(bungeeControl.getControl(Files.MODULES).get("modules.world-whitelist.worlds." + worldName + " .players-name") != null) {
+                    return bungeeControl.getControl(Files.MODULES).getStringList("modules.world-whitelist.worlds." + worldName + " .players-name");
+                }
+            return new ArrayList<>();
+        }
+        if(bungeeControl.getControl(Files.MODULES).get("modules.world-whitelist.worlds." + worldName + " .players-uuid") != null) {
+            return bungeeControl.getControl(Files.MODULES).getStringList("modules.world-whitelist.worlds." + worldName + " .players-uuid");
+        }
+        return new ArrayList<>();
+    }
     public static ServerPing.PlayerInfo[] getHover(MotdType motdType, String motdName,int online,int max) {
         int ids = 0;
         ServerPing.PlayerInfo[] hoverToShow = new ServerPing.PlayerInfo[0];
