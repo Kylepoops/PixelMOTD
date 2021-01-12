@@ -40,9 +40,6 @@ public class PixelUpdater {
                 bungeePixelMOTD.redIssue();
                 if(bungeeControl.isDetailed()) {
                     bungeePixelMOTD.sendConsole("&a[Pixel MOTD] [Detailed Error] Information:");
-                    //if(ignored.getCause().toString() != null) {
-                    //    bungeePixelMOTD.sendConsole("&a[Pixel MOTD] Cause: " + ignored.getCause().toString());
-                    //}
                     if(ignored.getMessage() != null) {
                         bungeePixelMOTD.sendConsole("&a[Pixel MOTD] Message: " + ignored.getMessage());
                     }
@@ -68,9 +65,6 @@ public class PixelUpdater {
                 spigotPixelMOTD.redIssue();
                 if(spigotControl.isDetailed()) {
                     spigotPixelMOTD.sendConsole("&a[Pixel MOTD] [Detailed Error] Information:");
-                    //if(ignored.getCause().toString() != null) {
-                    //    spigotPixelMOTD.sendConsole("&a[Pixel MOTD] Cause: " + ignored.getCause().toString());
-                    //}
                     if(ignored.getMessage() != null) {
                         spigotPixelMOTD.sendConsole("&a[Pixel MOTD] Message: " + ignored.getMessage());
                     }

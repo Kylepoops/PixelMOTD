@@ -368,6 +368,21 @@ public class FileManager {
         motdLists = new ArrayList<>();
         motdLists.add("0-0-0-0");
         addConfig(Files.MODULES, "modules.%type%-whitelist.%type%s.%type%Name.players-uuid", motdLists);
+        motdLists = new ArrayList<>();
+        motdLists.add("&b------------ &aPixelMotd &b------------");
+        motdLists.add("&aYou are in %type%'s blacklist.");
+        motdLists.add("&c%type%: &f%value%");
+        motdLists.add("&cReason: &f%blacklist_reason%");
+        motdLists.add("&b------------ &aPixelMotd &b------------");
+        addConfig(Files.MODULES, "modules.%type%-blacklist.kickMessage", motdLists);
+        addConfig(Files.MODULES, "modules.%type%-blacklist.%type%s.%type%Name.blacklist-status", false);
+        addConfig(Files.MODULES, "modules.%type%-blacklist.%type%s.%type%Name.blacklist-reason", "You're a bad player!");
+        motdLists = new ArrayList<>();
+        motdLists.add("md_5");
+        addConfig(Files.MODULES, "modules.%type%-blacklist.%type%s.%type%Name.players-name", motdLists);
+        motdLists = new ArrayList<>();
+        motdLists.add("0-0-0-0");
+        addConfig(Files.MODULES, "modules.%type%-blacklist.%type%s.%type%Name.players-uuid", motdLists);
 
         addConfig(Files.COMMAND, "command.online-status.online","Online &8(&7%server%&8)");
         addConfig(Files.COMMAND, "command.online-status.offline","Offline");

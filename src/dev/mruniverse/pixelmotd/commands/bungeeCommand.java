@@ -40,9 +40,6 @@ public class bungeeCommand extends Command {
         }
         return true;
     }
-    private List<String> getPlayers(WhitelistMembers mode, String areaName) {
-        return new ArrayList<>();
-    }
 
     private String getStatus(String location) {
         if(location.equalsIgnoreCase("Global")) {
