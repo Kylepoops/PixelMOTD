@@ -55,6 +55,27 @@ public class FileManager {
         }
         return spigotControl.getControl(Files.SETTINGS).contains("events");
     }
+    private void callMotdVerificator(MotdType motdType) {
+        if(motdType.equals(MotdType.WHITELIST_MOTD)) {
+            if (bungeeMode) {
+                bungeeControl.loadMotdPaths(MotdType.WHITELIST_MOTD);
+                return;
+            }
+            spigotControl.loadMotdPaths(MotdType.WHITELIST_MOTD);
+        }
+        if(motdType.equals(MotdType.TIMER_MOTD)) {
+            if (bungeeMode) {
+                bungeeControl.loadMotdPaths(MotdType.TIMER_MOTD);
+                return;
+            }
+            spigotControl.loadMotdPaths(MotdType.TIMER_MOTD);
+        }
+        if (bungeeMode) {
+            bungeeControl.loadMotdPaths(MotdType.NORMAL_MOTD);
+            return;
+        }
+        spigotControl.loadMotdPaths(MotdType.NORMAL_MOTD);
+    }
     private void callDataFolder() {
         if(bungeeMode) {
             dataFolder = bungeePixelMOTD.getInstance().getDataFolder();
@@ -242,12 +263,18 @@ public class FileManager {
     public void loadConfiguration() {
         if (getMotdControl(MotdType.NORMAL_MOTD)) {
             callMotdGeneration(MotdType.NORMAL_MOTD);
+        } else {
+            callMotdVerificator(MotdType.NORMAL_MOTD);
         }
         if (getMotdControl(MotdType.WHITELIST_MOTD)) {
             callMotdGeneration(MotdType.WHITELIST_MOTD);
+        } else {
+            callMotdVerificator(MotdType.WHITELIST_MOTD);
         }
         if (getMotdControl(MotdType.TIMER_MOTD)) {
             callMotdGeneration(MotdType.TIMER_MOTD);
+        } else {
+            callMotdVerificator(MotdType.TIMER_MOTD);
         }
         addConfig(Files.SETTINGS, "settings.update-check", true);
         addConfig(Files.SETTINGS, "settings.hexColors", true);

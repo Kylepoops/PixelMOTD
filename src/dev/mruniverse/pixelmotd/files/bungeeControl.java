@@ -17,6 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static dev.mruniverse.pixelmotd.init.bungeePixelMOTD.getFiles;
+
 @SuppressWarnings("ConstantConditions")
 public class bungeeControl {
     private static Configuration pEditable,pTimer, pModules ,pSettings, pWhitelist, pNormal,pCommand;
@@ -397,6 +399,165 @@ public class bungeeControl {
                 bungeePixelMOTD.sendConsole("&a[Pixel MOTD] Plugin version:" + bungeePixelMOTD.getInstance().getDescription().getVersion());
                 bungeePixelMOTD.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
             }
+        }
+    }
+    public static boolean pendingPath(MotdType motdType,String motdName) {
+        String initial = "timers.";
+        Files fileS = Files.TIMER_MOTD;
+        if(motdType.equals(MotdType.NORMAL_MOTD)) {
+            initial = "normal.";
+            fileS = Files.NORMAL_MOTD;
+        }
+        if(motdType.equals(MotdType.WHITELIST_MOTD)) {
+            initial = "whitelist.";
+            fileS = Files.WHITELIST_MOTD;
+        }
+        if(motdType.equals(MotdType.NORMAL_MOTD)) {
+            if(getControl(Files.NORMAL_MOTD).get(initial + motdName + ".enabled") == null) return true;
+        }
+        if(getControl(fileS).get(initial + motdName + ".line1") == null) return true;
+        if(getControl(fileS).get(initial + motdName + ".line2") == null) return true;
+        if(getControl(fileS).get(initial + motdName + ".otherSettings.customHover.toggle") == null) return true;
+        if(getControl(fileS).get(initial + motdName + ".otherSettings.customHover.hover") == null) return true;
+        if(getControl(fileS).get(initial + motdName + ".otherSettings.customIcon.toggle") == null) return true;
+        if(getControl(fileS).get(initial + motdName + ".otherSettings.customIcon.customFile") == null) return true;
+        if(getControl(fileS).get(initial + motdName + ".otherSettings.customProtocol.toggle") == null) return true;
+        if(getControl(fileS).get(initial + motdName + ".otherSettings.customProtocol.changeProtocolVersion") == null) return true;
+        if(getControl(fileS).get(initial + motdName + ".otherSettings.customProtocol.protocol") == null) return true;
+        if(getControl(fileS).get(initial + motdName + ".otherSettings.customHexMotd.toggle") == null) return true;
+        if(getControl(fileS).get(initial + motdName + ".otherSettings.customHexMotd.line1") == null) return true;
+        if(getControl(fileS).get(initial + motdName + ".otherSettings.customHexMotd.line2") == null) return true;
+        if(getControl(fileS).get(initial + motdName + ".otherSettings.customOnlinePlayers.toggle") == null) return true;
+        if(getControl(fileS).get(initial + motdName + ".otherSettings.customOnlinePlayers.mode") == null) return true;
+        if(getControl(fileS).get(initial + motdName + ".otherSettings.customOnlinePlayers.values") == null) return true;
+        if(getControl(fileS).get(initial + motdName + ".otherSettings.customMaxPlayers.toggle") == null) return true;
+        if(getControl(fileS).get(initial + motdName + ".otherSettings.customMaxPlayers.mode") == null) return true;
+        return getControl(fileS).get(initial + motdName + ".otherSettings.customMaxPlayers.values") == null;
+    }
+    public static void loadMotdPath(MotdType motdType,String motdName) {
+        if(pendingPath(motdType,motdName)) {
+            List<Object> stringList = new ArrayList<>();
+            if (motdType.equals(MotdType.WHITELIST_MOTD)) {
+                stringList.add("     &c&lPIXEL MOTD");
+                stringList.add("&7SpigotMC Plugin v%plugin_version%");
+                stringList.add("");
+                stringList.add("&c&lInformation:");
+                stringList.add("  &7Whitelist by: &f%whitelist_author%");
+                stringList.add("  &7Spigot ID: &f37177");
+                stringList.add("  &7Discord: &fMrUniverse#2556");
+                stringList.add("  &7Online: &f%online%");
+                stringList.add("  &frigox.club/discord/dev");
+                stringList.add("");
+                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".line1", "&8» &aPixelMOTD v%plugin_version% &7| &aSpigotMC");
+                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".line2", "&f&oThis server is in whitelist. (1.8-1.15 Motd)");
+                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customHover.toggle", true);
+                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customHover.hover", stringList);
+                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customIcon.toggle", true);
+                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customIcon.customFile", false);
+                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customProtocol.toggle", true);
+                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customProtocol.changeProtocolVersion", false);
+                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customProtocol.protocol", "PixelMotd Security");
+                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customHexMotd.toggle", true);
+                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customHexMotd.line1", "&8» &cPixelMOTD v%plugin_version% &7| &cSpigotMC");
+                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customHexMotd.line2", "&f&oWhitelist Mode (1.16+ Motd)");
+                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customOnlinePlayers.toggle", false);
+                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customOnlinePlayers.mode", "HALF-ADD");
+                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customMaxPlayers.toggle", true);
+                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customMaxPlayers.mode", "HALF");
+                stringList = new ArrayList<>();
+                stringList.add(2021);
+                stringList.add(2022);
+                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customOnlinePlayers.values", stringList);
+                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customMaxPlayers.values", stringList);
+                return;
+            }
+            if (motdType.equals(MotdType.NORMAL_MOTD)) {
+                stringList.add("     &9&lPIXEL MOTD");
+                stringList.add("&7SpigotMC Plugin v%plugin_version%");
+                stringList.add("");
+                stringList.add("&b&lInformation:");
+                stringList.add("  &7Version: &f%plugin_version%");
+                stringList.add("  &7Spigot ID: &f37177");
+                stringList.add("  &7Discord: &fMrUniverse#2556");
+                stringList.add("  &7Online: &f%online%&7/&f%max%");
+                stringList.add("  &frigox.club/discord/dev");
+                stringList.add("");
+                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".line1", "&b&lPixelMOTD v%plugin_version%");
+                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".line2", "&f&oThis motd only appear for 1.8 - 1.15");
+                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customHover.toggle", true);
+                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customHover.hover", stringList);
+                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customIcon.toggle", true);
+                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customIcon.customFile", false);
+                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customProtocol.toggle", true);
+                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customProtocol.changeProtocolVersion", false);
+                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customProtocol.protocol", "PixelMotd System");
+                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customHexMotd.toggle", true);
+                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customHexMotd.line1", "&b&lPixelMOTD v%plugin_version%");
+                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customHexMotd.line2", "&f&oThis motd only appear for 1.16+");
+                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customOnlinePlayers.toggle", false);
+                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customOnlinePlayers.mode", "HALF-ADD");
+                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customMaxPlayers.toggle", true);
+                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customMaxPlayers.mode", "HALF-ADD");
+                stringList = new ArrayList<>();
+                stringList.add(2021);
+                stringList.add(2022);
+                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customOnlinePlayers.values", stringList);
+                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customMaxPlayers.values", stringList);
+                return;
+            }
+            stringList.add("     &9&lPIXEL MOTD");
+            stringList.add("&7This is a timer motd");
+            stringList.add("&7When you enable 1 motd");
+            stringList.add("&7And you have 1 event with");
+            stringList.add("&7the same name it will be");
+            stringList.add("&7Sync. And when an event");
+            stringList.add("&7End, it will execute commands");
+            stringList.add("&7By the console automatically!");
+            stringList.add("&frigox.club/discord/dev");
+            stringList.add("");
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".enabled", false);
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".line1", "&6&l%event_timeLeft%");
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".line2", "&f&oThis is a timer motd");
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customHover.toggle", true);
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customHover.hover", stringList);
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customIcon.toggle", true);
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customIcon.customFile", false);
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customProtocol.toggle", true);
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customProtocol.changeProtocolVersion", false);
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customProtocol.protocol", "PixelMotd System");
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customHexMotd.toggle", true);
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customHexMotd.line1", "&6&l%event_timeLeft%");
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customHexMotd.line2", "&f&oThis motd only appear for 1.16+");
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customOnlinePlayers.toggle", false);
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customOnlinePlayers.mode", "HALF-ADD");
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customMaxPlayers.toggle", true);
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customMaxPlayers.mode", "HALF-ADD");
+            stringList = new ArrayList<>();
+            stringList.add("/pmotd whitelist off");
+            stringList.add("/alert Maintenance off automatically!");
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".timerSettings.commandsToExecute", stringList);
+            stringList = new ArrayList<>();
+            stringList.add(2021);
+            stringList.add(2022);
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customOnlinePlayers.values", stringList);
+            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customMaxPlayers.values", stringList);
+        }
+    }
+    public static void loadMotdPaths(MotdType motdType) {
+        if(motdType.equals(MotdType.NORMAL_MOTD)) {
+            for (String motdName : Objects.requireNonNull(getControl(Files.NORMAL_MOTD).getSection("normal")).getKeys()) {
+                loadMotdPath(motdType,motdName);
+            }
+            return;
+        }
+        if(motdType.equals(MotdType.WHITELIST_MOTD)) {
+            for (String motdName : Objects.requireNonNull(getControl(Files.WHITELIST_MOTD).getSection("whitelist")).getKeys()) {
+                loadMotdPath(motdType,motdName);
+            }
+            return;
+        }
+        for (String motdName : Objects.requireNonNull(getControl(Files.TIMER_MOTD).getSection("timers")).getKeys()) {
+            loadMotdPath(motdType,motdName);
         }
     }
     public static String getWhitelistAuthor() {
