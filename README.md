@@ -28,8 +28,7 @@
 * Custom Server-Icon
 
 ---
-
-* Config files:
+Config files:
 - settings.yml
 - command.yml
 - whitelist-motd.yml
@@ -45,10 +44,9 @@
 * Whitelist System (With Per-World-Whitelist and a Global-Whitelist)
 * BlackList System (With Per-World-BlackList and a Global-Blacklist)
 * External Modules Support
-* Plugin Internal Modules:
 
 ---
-
+Plugin Internal Modules:
 - block-users
 - block-words-in-name
 - server/world-whitelist
