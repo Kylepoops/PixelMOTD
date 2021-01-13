@@ -1,10 +1,9 @@
 package dev.mruniverse.pixelmotd.commands;
 
-import dev.mruniverse.pixelmotd.enums.Files;
-import dev.mruniverse.pixelmotd.enums.SaveMode;
-import dev.mruniverse.pixelmotd.enums.WhitelistMembers;
+import dev.mruniverse.pixelmotd.enums.*;
 import dev.mruniverse.pixelmotd.files.bungeeControl;
 import dev.mruniverse.pixelmotd.init.bungeePixelMOTD;
+import dev.mruniverse.pixelmotd.utils.Extras;
 import dev.mruniverse.pixelmotd.utils.bungeeUtils;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -56,7 +55,6 @@ public class bungeeCommand extends Command {
         }
         return bungeeControl.getControl(Files.COMMAND).getString("command.status.off");
     }
-    @SuppressWarnings("all")
     private String getOnline(String playerName) {
         if(bungeePixelMOTD.getInstance().getProxy().getPlayer(playerName) != null) {
             try {
@@ -71,6 +69,12 @@ public class bungeeCommand extends Command {
 
         return bungeeControl.getControl(Files.COMMAND).getString("command.online-status.offline");
     }
+    private String getAuthor(String location) {
+        if(bungeeControl.getControl(Files.MODULES).get("modules.server-whitelist.servers." + location +".whitelist-author") != null) {
+            return bungeeControl.getControl(Files.COMMAND).getString("modules.server-whitelist.servers." + location +".whitelist-author");
+        }
+        return "Console";
+    }
     private void sendMain(CommandSender sender) {
         for(String lines : bungeeControl.getControl(Files.COMMAND).getStringList("command.help")) {
             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
@@ -79,7 +83,7 @@ public class bungeeCommand extends Command {
             bungeeUtils.sendColored(sender,lines);
         }
     }
-    @SuppressWarnings({"NullableProblems", "ConstantConditions"})
+    @SuppressWarnings({"ConstantConditions"})
     public void execute(CommandSender sender, String[] args) {
         try {
             if (bungeeControl.isCommandEnabled()) {
@@ -114,15 +118,26 @@ public class bungeeCommand extends Command {
                     }
                     if (args[1].equalsIgnoreCase("global")) {
                         if (args.length == 2) {
+                            boolean userMessage;
                             for(String lines : bungeeControl.getControl(Files.COMMAND).getStringList("command.whitelist.list.top")) {
+                                userMessage = false;
                                 if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                                 if(lines.contains("%author%")) lines = lines.replace("%author%", bungeeControl.getWhitelistAuthor());
                                 if(lines.contains("%version%")) lines = lines.replace("%version%", bungeePixelMOTD.getInstance().getDescription().getVersion());
                                 if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", "Global");
                                 if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus("Global"));
-                                if(lines.contains("<isUser>")) lines = lines.replace("<isUser>","");
+                                if(lines.contains("<isUser>")) {
+                                    lines = lines.replace("<isUser>","");
+                                    userMessage = true;
+                                }
                                 if(lines.contains("%your_uuid%")) lines = lines.replace("%your_uuid%",getUniqueId(sender));
-                                bungeeUtils.sendColored(sender,lines);
+                                if(userMessage) {
+                                    if(sender instanceof ProxiedPlayer) {
+                                        bungeeUtils.sendColored(sender, lines);
+                                    }
+                                } else {
+                                    bungeeUtils.sendColored(sender, lines);
+                                }
                             }
                             for(String players : bungeeControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name")) {
                                 String line= bungeeControl.getControl(Files.COMMAND).getString("command.whitelist.list.playersNameFormat");
@@ -132,14 +147,24 @@ public class bungeeCommand extends Command {
                                 bungeeUtils.sendColored(sender,line);
                             }
                             for(String lines : bungeeControl.getControl(Files.COMMAND).getStringList("command.whitelist.list.mid")) {
+                                userMessage = false;
                                 if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                                 if(lines.contains("%author%")) lines = lines.replace("%author%", bungeeControl.getWhitelistAuthor());
                                 if(lines.contains("%version%")) lines = lines.replace("%version%", bungeePixelMOTD.getInstance().getDescription().getVersion());
                                 if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", "Global");
                                 if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus("Global"));
-                                if(lines.contains("<isUser>")) lines = lines.replace("<isUser>","");
+                                if(lines.contains("<isUser>")) {
+                                    lines = lines.replace("<isUser>","");
+                                    userMessage = true;
+                                }
                                 if(lines.contains("%your_uuid%")) lines = lines.replace("%your_uuid%",getUniqueId(sender));
-                                bungeeUtils.sendColored(sender,lines);
+                                if(userMessage) {
+                                    if(sender instanceof ProxiedPlayer) {
+                                        bungeeUtils.sendColored(sender, lines);
+                                    }
+                                } else {
+                                    bungeeUtils.sendColored(sender, lines);
+                                }
                             }
                             for(String uuids : bungeeControl.getControl(Files.EDITABLE).getStringList("whitelist.players-uuid")) {
                                 String line= bungeeControl.getControl(Files.COMMAND).getString("command.whitelist.list.playersUuidFormat");
@@ -150,14 +175,24 @@ public class bungeeCommand extends Command {
                                 bungeeUtils.sendColored(sender,line);
                             }
                             for(String lines : bungeeControl.getControl(Files.COMMAND).getStringList("command.whitelist.list.bot")) {
+                                userMessage = false;
                                 if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                                 if(lines.contains("%author%")) lines = lines.replace("%author%", bungeeControl.getWhitelistAuthor());
                                 if(lines.contains("%version%")) lines = lines.replace("%version%", bungeePixelMOTD.getInstance().getDescription().getVersion());
                                 if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", "Global");
                                 if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus("Global"));
-                                if(lines.contains("<isUser>")) lines = lines.replace("<isUser>","");
+                                if(lines.contains("<isUser>")) {
+                                    lines = lines.replace("<isUser>","");
+                                    userMessage = true;
+                                }
                                 if(lines.contains("%your_uuid%")) lines = lines.replace("%your_uuid%",getUniqueId(sender));
-                                bungeeUtils.sendColored(sender,lines);
+                                if(userMessage) {
+                                    if(sender instanceof ProxiedPlayer) {
+                                        bungeeUtils.sendColored(sender, lines);
+                                    }
+                                } else {
+                                    bungeeUtils.sendColored(sender, lines);
+                                }
                             }
                             return;
                         }
@@ -179,15 +214,26 @@ public class bungeeCommand extends Command {
                         }
                     }
                     if (args.length == 2) {
+                        boolean userMessage;
                         for(String lines : bungeeControl.getControl(Files.COMMAND).getStringList("command.whitelist.list.top")) {
+                            userMessage=false;
                             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
-                            if(lines.contains("%author%")) lines = lines.replace("%author%", bungeeControl.getWhitelistAuthor());
+                            if(lines.contains("%author%")) lines = lines.replace("%author%", getAuthor(args[1]));
                             if(lines.contains("%version%")) lines = lines.replace("%version%", bungeePixelMOTD.getInstance().getDescription().getVersion());
                             if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", args[1]);
                             if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus(args[1]));
-                            if(lines.contains("<isUser>")) lines = lines.replace("<isUser>","");
+                            if(lines.contains("<isUser>")) {
+                                lines = lines.replace("<isUser>","");
+                                userMessage = true;
+                            }
                             if(lines.contains("%your_uuid%")) lines = lines.replace("%your_uuid%",getUniqueId(sender));
-                            bungeeUtils.sendColored(sender,lines);
+                            if(userMessage) {
+                                if(sender instanceof ProxiedPlayer) {
+                                    bungeeUtils.sendColored(sender, lines);
+                                }
+                            } else {
+                                bungeeUtils.sendColored(sender, lines);
+                            }
                         }
                         for(String players : bungeeControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name")) {
                             String line= bungeeControl.getControl(Files.COMMAND).getString("command.whitelist.list.playersNameFormat");
@@ -197,14 +243,24 @@ public class bungeeCommand extends Command {
                             bungeeUtils.sendColored(sender,line);
                         }
                         for(String lines : bungeeControl.getControl(Files.COMMAND).getStringList("command.whitelist.list.mid")) {
+                            userMessage=false;
                             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
-                            if(lines.contains("%author%")) lines = lines.replace("%author%", bungeeControl.getWhitelistAuthor());
+                            if(lines.contains("%author%")) lines = lines.replace("%author%", getAuthor(args[1]));
                             if(lines.contains("%version%")) lines = lines.replace("%version%", bungeePixelMOTD.getInstance().getDescription().getVersion());
-                            if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", "Global");
-                            if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus("Global"));
-                            if(lines.contains("<isUser>")) lines = lines.replace("<isUser>","");
+                            if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", args[1]);
+                            if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus(args[1]));
+                            if(lines.contains("<isUser>")) {
+                                lines = lines.replace("<isUser>","");
+                                userMessage=true;
+                            }
                             if(lines.contains("%your_uuid%")) lines = lines.replace("%your_uuid%",getUniqueId(sender));
-                            bungeeUtils.sendColored(sender,lines);
+                            if(userMessage) {
+                                if(sender instanceof ProxiedPlayer) {
+                                    bungeeUtils.sendColored(sender, lines);
+                                }
+                            } else {
+                                bungeeUtils.sendColored(sender, lines);
+                            }
                         }
                         for(String uuids : bungeeControl.getControl(Files.EDITABLE).getStringList("whitelist.players-uuid")) {
                             String line= bungeeControl.getControl(Files.COMMAND).getString("command.whitelist.list.playersUuidFormat");
@@ -215,14 +271,24 @@ public class bungeeCommand extends Command {
                             bungeeUtils.sendColored(sender,line);
                         }
                         for(String lines : bungeeControl.getControl(Files.COMMAND).getStringList("command.whitelist.list.bot")) {
+                            userMessage = false;
                             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
-                            if(lines.contains("%author%")) lines = lines.replace("%author%", bungeeControl.getWhitelistAuthor());
+                            if(lines.contains("%author%")) lines = lines.replace("%author%", getAuthor(args[1]));
                             if(lines.contains("%version%")) lines = lines.replace("%version%", bungeePixelMOTD.getInstance().getDescription().getVersion());
-                            if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", "Global");
-                            if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus("Global"));
-                            if(lines.contains("<isUser>")) lines = lines.replace("<isUser>","");
+                            if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", args[1]);
+                            if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus(args[1]));
+                            if(lines.contains("<isUser>")) {
+                                lines = lines.replace("<isUser>","");
+                                userMessage = true;
+                            }
                             if(lines.contains("%your_uuid%")) lines = lines.replace("%your_uuid%",getUniqueId(sender));
-                            bungeeUtils.sendColored(sender,lines);
+                            if(userMessage) {
+                                if(sender instanceof ProxiedPlayer) {
+                                    bungeeUtils.sendColored(sender, lines);
+                                }
+                            } else {
+                                bungeeUtils.sendColored(sender, lines);
+                            }
                         }
                         return;
                     }
@@ -238,41 +304,71 @@ public class bungeeCommand extends Command {
                                 sendMain(sender);
                                 return;
                             }
-                            if (args[2].contains("-")) {
-                                if (bungeeControl.getControl(Files.EDITABLE).get("whitelist.players-uuid") != null) {
-                                    bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "UUID").replace("%player%", args[2])));
-                                    List<String> list = bungeeControl.getControl(Files.EDITABLE).getStringList("whitelist.players-uuid");
+                            if (args.length == 3) {
+                                sendMain(sender);
+                                return;
+                            }
+                            if(args[2].equalsIgnoreCase("Global")) {
+                                if (args[3].contains("-")) {
+                                    if (bungeeControl.getControl(Files.EDITABLE).get("whitelist.players-uuid") != null) {
+                                        bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "UUID").replace("%player%", args[3])));
+                                        List<String> list = bungeeControl.getControl(Files.EDITABLE).getStringList("whitelist.players-uuid");
+                                        list.add(args[3]);
+                                        bungeeControl.getControl(Files.EDITABLE).set("whitelist.players-uuid", list);
+                                        bungeeControl.save(SaveMode.EDITABLE);
+                                        bungeeControl.reloadFile(SaveMode.EDITABLE);
+                                        return;
+                                    }
+                                    bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "UUID").replace("%player%", args[3])));
+                                    List<String> list = new ArrayList<>();
+                                    list.add(args[3]);
                                     bungeeControl.getControl(Files.EDITABLE).set("whitelist.players-uuid", list);
                                     bungeeControl.save(SaveMode.EDITABLE);
                                     bungeeControl.reloadFile(SaveMode.EDITABLE);
                                     return;
                                 }
-                                bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "UUID").replace("%player%", args[2])));
+                                if (bungeeControl.getControl(Files.EDITABLE).get("whitelist.players-name") != null) {
+                                    if (!bungeeControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name").contains(args[3])) {
+                                        bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "Player").replace("%player%", args[3])));
+                                        List<String> list = bungeeControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name");
+                                        list.add(args[3]);
+                                        bungeeControl.getControl(Files.EDITABLE).set("whitelist.players-name", list);
+                                        bungeeControl.save(SaveMode.EDITABLE);
+                                        bungeeControl.reloadFile(SaveMode.EDITABLE);
+                                        return;
+                                    }
+                                    bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.already-whitelisted")).replace("%type%", "Player").replace("%player%", args[3])));
+                                    return;
+                                }
+                                bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "Player").replace("%player%", args[3])));
                                 List<String> list = new ArrayList<>();
                                 list.add(args[2]);
-                                bungeeControl.getControl(Files.EDITABLE).set("whitelist.players-uuid", list);
+                                bungeeControl.getControl(Files.EDITABLE).set("whitelist.players-name", list);
                                 bungeeControl.save(SaveMode.EDITABLE);
                                 bungeeControl.reloadFile(SaveMode.EDITABLE);
                                 return;
                             }
-                            if (bungeeControl.getControl(Files.EDITABLE).get("whitelist.players-name") != null) {
-                                if(!bungeeControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name").contains(args[2])) {
-                                    bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "Player").replace("%player%", args[2])));
-                                    List<String> list = bungeeControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name");
-                                    list.add(args[2]);
-                                    bungeeControl.getControl(Files.EDITABLE).set("whitelist.players-name", list);
+                            if (args[3].contains("-")) {
+                                if (!bungeeUtils.getPlayers(WhitelistMembers.UUIDs,args[2]).contains(args[3])) {
+                                    bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "UUID").replace("%player%", args[3])));
+                                    List<String> list = bungeeUtils.getPlayers(WhitelistMembers.UUIDs, args[2]);
+                                    list.add(args[3]);
+                                    bungeeControl.getControl(Files.EDITABLE).set(Extras.getServerPath(Whitelist.PLAYERS_UUID, args[2]), list);
                                     bungeeControl.save(SaveMode.EDITABLE);
                                     bungeeControl.reloadFile(SaveMode.EDITABLE);
+                                    return;
                                 }
-                                bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.already-whitelisted")).replace("%type%", "Player").replace("%player%", args[2])));
+                            }
+                            if (!bungeeUtils.getPlayers(WhitelistMembers.NAMEs,args[2]).contains(args[3])) {
+                                bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "Player").replace("%player%", args[3])));
+                                List<String> list = bungeeUtils.getPlayers(WhitelistMembers.NAMEs,args[2]);
+                                list.add(args[3]);
+                                bungeeControl.getControl(Files.EDITABLE).set(Extras.getServerPath(Whitelist.PLAYERS_NAME,args[2]), list);
+                                bungeeControl.save(SaveMode.EDITABLE);
+                                bungeeControl.reloadFile(SaveMode.EDITABLE);
                                 return;
                             }
-                            bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "Player").replace("%player%", args[2])));
-                            List<String> list = new ArrayList<>();
-                            list.add(args[2]);
-                            bungeeControl.getControl(Files.EDITABLE).set("whitelist.players-name", list);
-                            bungeeControl.save(SaveMode.EDITABLE);
-                            bungeeControl.reloadFile(SaveMode.EDITABLE);
+                            bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.already-whitelisted")).replace("%type%", "Player").replace("%player%", args[3])));
                             return;
                         }
                         if (args[1].equalsIgnoreCase("blacklist")) {
@@ -280,39 +376,69 @@ public class bungeeCommand extends Command {
                                 sendMain(sender);
                                 return;
                             }
-                            if (args[2].contains("-")) {
-                                if (bungeeControl.getControl(Files.EDITABLE).get("blacklist.players-uuid") != null) {
-                                    List<String> list = bungeeControl.getControl(Files.EDITABLE).getStringList("blacklist.players-uuid");
-                                    list.add(args[2]);
+                            if (args.length == 3) {
+                                sendMain(sender);
+                                return;
+                            }
+                            if(args[2].equalsIgnoreCase("Global")) {
+                                if (args[3].contains("-")) {
+                                    if (bungeeControl.getControl(Files.EDITABLE).get("blacklist.players-uuid") != null) {
+                                        List<String> list = bungeeControl.getControl(Files.EDITABLE).getStringList("blacklist.players-uuid");
+                                        list.add(args[3]);
+                                        bungeeControl.getControl(Files.EDITABLE).set("blacklist.players-uuid", list);
+                                        bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "UUID").replace("%player%", args[3]));
+                                        bungeeControl.save(SaveMode.EDITABLE);
+                                        bungeeControl.reloadFile(SaveMode.EDITABLE);
+                                        return;
+                                    }
+                                    bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "UUID").replace("%player%", args[3]));
+                                    List<String> list = new ArrayList<>();
+                                    list.add(args[3]);
                                     bungeeControl.getControl(Files.EDITABLE).set("blacklist.players-uuid", list);
-                                    bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "UUID").replace("%player%", args[2]));
                                     bungeeControl.save(SaveMode.EDITABLE);
                                     bungeeControl.reloadFile(SaveMode.EDITABLE);
                                     return;
                                 }
-                                bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "UUID").replace("%player%", args[2]));
+                                if (bungeeControl.getControl(Files.EDITABLE).get("blacklist.players-name") != null) {
+                                    List<String> list = bungeeControl.getControl(Files.EDITABLE).getStringList("blacklist.players-name");
+                                    list.add(args[3]);
+                                    bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "Player").replace("%player%", args[3]));
+                                    bungeeControl.getControl(Files.EDITABLE).set("blacklist.players-name", list);
+                                    bungeeControl.save(SaveMode.EDITABLE);
+                                    bungeeControl.reloadFile(SaveMode.EDITABLE);
+                                    return;
+                                }
                                 List<String> list = new ArrayList<>();
-                                list.add(args[2]);
-                                bungeeControl.getControl(Files.EDITABLE).set("blacklist.players-uuid", list);
-                                bungeeControl.save(SaveMode.EDITABLE);
-                                bungeeControl.reloadFile(SaveMode.EDITABLE);
-                                return;
-                            }
-                            if (bungeeControl.getControl(Files.EDITABLE).get("blacklist.players-name") != null) {
-                                List<String> list = bungeeControl.getControl(Files.EDITABLE).getStringList("blacklist.players-name");
-                                list.add(args[2]);
-                                bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "Player").replace("%player%", args[2]));
+                                list.add(args[3]);
+                                bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "Player").replace("%player%", args[3]));
                                 bungeeControl.getControl(Files.EDITABLE).set("blacklist.players-name", list);
                                 bungeeControl.save(SaveMode.EDITABLE);
                                 bungeeControl.reloadFile(SaveMode.EDITABLE);
                                 return;
                             }
-                            List<String> list = new ArrayList<>();
-                            list.add(args[2]);
-                            bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "Player").replace("%player%", args[2]));
-                            bungeeControl.getControl(Files.EDITABLE).set("blacklist.players-name", list);
-                            bungeeControl.save(SaveMode.EDITABLE);
-                            bungeeControl.reloadFile(SaveMode.EDITABLE);
+                            if (args[3].contains("-")) {
+                                if (!bungeeUtils.getPlayers(BlacklistMembers.UUIDs,args[2]).contains(args[3])) {
+                                    List<String> list = bungeeUtils.getPlayers(BlacklistMembers.UUIDs, args[2]);
+                                    list.add(args[3]);
+                                    bungeeControl.getControl(Files.EDITABLE).set(Extras.getServerPath(Blacklist.PLAYERS_UUID, args[2]), list);
+                                    bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "UUID").replace("%player%", args[3]));
+                                    bungeeControl.save(SaveMode.EDITABLE);
+                                    bungeeControl.reloadFile(SaveMode.EDITABLE);
+                                    return;
+                                }
+                                bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.already-blacklisted")).replace("%type%", "UUID").replace("%player%", args[3])));
+                                return;
+                            }
+                            if (!bungeeUtils.getPlayers(BlacklistMembers.NAMEs,args[2]).contains(args[3])) {
+                                List<String> list = bungeeUtils.getPlayers(BlacklistMembers.NAMEs,args[2]);
+                                list.add(args[3]);
+                                bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "Player").replace("%player%", args[3]));
+                                bungeeControl.getControl(Files.EDITABLE).set(Extras.getServerPath(Blacklist.PLAYERS_NAME,args[2]), list);
+                                bungeeControl.save(SaveMode.EDITABLE);
+                                bungeeControl.reloadFile(SaveMode.EDITABLE);
+                                return;
+                            }
+                            bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.already-blacklisted")).replace("%type%", "Player").replace("%player%", args[3])));
                             return;
                         }
                     }
@@ -329,38 +455,60 @@ public class bungeeCommand extends Command {
                                 sendMain(sender);
                                 return;
                             }
-                            if (args[2].contains("-")) {
-                                if (bungeeControl.getControl(Files.EDITABLE).get("whitelist.players-uuid") != null) {
-                                    if(bungeeControl.getControl(Files.EDITABLE).getStringList("whitelist.players-uuid").contains(args[2])) {
+                            if (args.length == 3) {
+                                sendMain(sender);
+                                return;
+                            }
+                            if(args[2].equalsIgnoreCase("Global")) {
+                                if (args[3].contains("-")) {
+                                    if (bungeeControl.getControl(Files.EDITABLE).get("whitelist.players-uuid") != null) {
+                                        bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-remove")).replace("%type%", "UUID").replace("%player%", args[3])));
                                         List<String> list = bungeeControl.getControl(Files.EDITABLE).getStringList("whitelist.players-uuid");
-                                        list.remove(args[2]);
+                                        list.remove(args[3]);
                                         bungeeControl.getControl(Files.EDITABLE).set("whitelist.players-uuid", list);
-                                        bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-remove")).replace("%type%", "UUID").replace("%player%", args[2]));
                                         bungeeControl.save(SaveMode.EDITABLE);
                                         bungeeControl.reloadFile(SaveMode.EDITABLE);
                                         return;
                                     }
-                                    bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.not-whitelisted")).replace("%type%", "UUID").replace("%player%", args[2]));
+                                    bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.not-whitelisted")).replace("%type%", "UUID").replace("%player%", args[3])));
+                                }
+                                if (bungeeControl.getControl(Files.EDITABLE).get("whitelist.players-name") != null) {
+                                    if (bungeeControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name").contains(args[3])) {
+                                        bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-remove")).replace("%type%", "Player").replace("%player%", args[3])));
+                                        List<String> list = bungeeControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name");
+                                        list.remove(args[3]);
+                                        bungeeControl.getControl(Files.EDITABLE).set("whitelist.players-name", list);
+                                        bungeeControl.save(SaveMode.EDITABLE);
+                                        bungeeControl.reloadFile(SaveMode.EDITABLE);
+                                        return;
+                                    }
+                                    bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.not-whitelisted")).replace("%type%", "Player").replace("%player%", args[3])));
                                     return;
                                 }
-                                bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.not-whitelisted")).replace("%type%", "UUID").replace("%player%", args[2]));
-                                //spigotControl.getControl(Files.EDITABLE).set("whitelist.players-uuid", new ArrayList<String>().add(args[2]));
+                                bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.not-whitelisted")).replace("%type%", "Player").replace("%player%", args[3])));
                                 return;
                             }
-                            if (bungeeControl.getControl(Files.EDITABLE).get("whitelist.players-name") != null) {
-                                if(bungeeControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name").contains(args[2])) {
-                                    List<String> list = bungeeControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name");
-                                    list.remove(args[2]);
-                                    bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-remove")).replace("%type%", "Player").replace("%player%", args[2]));
-                                    bungeeControl.getControl(Files.EDITABLE).set("whitelist.players-name", list);
+                            if (args[3].contains("-")) {
+                                if (bungeeUtils.getPlayers(WhitelistMembers.UUIDs,args[2]).contains(args[3])) {
+                                    bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-remove")).replace("%type%", "UUID").replace("%player%", args[3])));
+                                    List<String> list = bungeeUtils.getPlayers(WhitelistMembers.UUIDs, args[2]);
+                                    list.remove(args[3]);
+                                    bungeeControl.getControl(Files.EDITABLE).set(Extras.getServerPath(Whitelist.PLAYERS_UUID, args[2]), list);
                                     bungeeControl.save(SaveMode.EDITABLE);
                                     bungeeControl.reloadFile(SaveMode.EDITABLE);
                                     return;
                                 }
-                                bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.not-whitelisted")).replace("%type%", "Player").replace("%player%", args[2]));
+                            }
+                            if (bungeeUtils.getPlayers(WhitelistMembers.NAMEs,args[2]).contains(args[3])) {
+                                bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-remove")).replace("%type%", "Player").replace("%player%", args[3])));
+                                List<String> list = bungeeUtils.getPlayers(WhitelistMembers.NAMEs,args[2]);
+                                list.remove(args[3]);
+                                bungeeControl.getControl(Files.EDITABLE).set(Extras.getServerPath(Whitelist.PLAYERS_NAME,args[2]), list);
+                                bungeeControl.save(SaveMode.EDITABLE);
+                                bungeeControl.reloadFile(SaveMode.EDITABLE);
                                 return;
                             }
-                            bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.not-whitelisted")).replace("%type%", "Player").replace("%player%", args[2]));
+                            bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.not-whitelisted")).replace("%type%", "Player").replace("%player%", args[3])));
                             return;
                         }
                         if (args[1].equalsIgnoreCase("blacklist")) {
@@ -368,37 +516,69 @@ public class bungeeCommand extends Command {
                                 sendMain(sender);
                                 return;
                             }
-                            if (args[2].contains("-")) {
-                                if (bungeeControl.getControl(Files.EDITABLE).get("blacklist.players-uuid") != null) {
-                                    if(bungeeControl.getControl(Files.EDITABLE).getStringList("blacklist.players-uuid").contains(args[2])){
-                                        bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-remove")).replace("%type%", "UUID").replace("%player%", args[2]));
-                                        List<String> list = bungeeControl.getControl(Files.EDITABLE).getStringList("blacklist.players-uuid");
-                                        list.remove(args[2]);
-                                        bungeeControl.getControl(Files.EDITABLE).set("blacklist.players-uuid",list);
-                                        bungeeControl.save(SaveMode.EDITABLE);
-                                        bungeeControl.reloadFile(SaveMode.EDITABLE);
-                                    }
-                                    bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.not-blacklisted")).replace("%type%", "UUID").replace("%player%", args[2]));
-                                    return;
-
-                                }
-                                bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-remove")).replace("%type%", "UUID").replace("%player%", args[2]));
+                            if (args.length == 3) {
+                                sendMain(sender);
                                 return;
                             }
-                            if (bungeeControl.getControl(Files.EDITABLE).get("blacklist.players-name") != null) {
-                                if(bungeeControl.getControl(Files.EDITABLE).getStringList("blacklist.players-name").contains(args[2])) {
+                            if(args[2].equalsIgnoreCase("Global")) {
+                                if (args[3].contains("-")) {
+                                    if (bungeeControl.getControl(Files.EDITABLE).get("blacklist.players-uuid") != null) {
+                                        List<String> list = bungeeControl.getControl(Files.EDITABLE).getStringList("blacklist.players-uuid");
+                                        list.add(args[3]);
+                                        bungeeControl.getControl(Files.EDITABLE).set("blacklist.players-uuid", list);
+                                        bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-remove")).replace("%type%", "UUID").replace("%player%", args[3]));
+                                        bungeeControl.save(SaveMode.EDITABLE);
+                                        bungeeControl.reloadFile(SaveMode.EDITABLE);
+                                        return;
+                                    }
+                                    bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-remove")).replace("%type%", "UUID").replace("%player%", args[3]));
+                                    List<String> list = new ArrayList<>();
+                                    list.add(args[3]);
+                                    bungeeControl.getControl(Files.EDITABLE).set("blacklist.players-uuid", list);
+                                    bungeeControl.save(SaveMode.EDITABLE);
+                                    bungeeControl.reloadFile(SaveMode.EDITABLE);
+                                    return;
+                                }
+                                if (bungeeControl.getControl(Files.EDITABLE).get("blacklist.players-name") != null) {
                                     List<String> list = bungeeControl.getControl(Files.EDITABLE).getStringList("blacklist.players-name");
-                                    list.remove(args[2]);
-                                    bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-remove")).replace("%type%", "Player").replace("%player%", args[2]));
+                                    list.add(args[3]);
+                                    bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-remove")).replace("%type%", "Player").replace("%player%", args[3]));
                                     bungeeControl.getControl(Files.EDITABLE).set("blacklist.players-name", list);
                                     bungeeControl.save(SaveMode.EDITABLE);
                                     bungeeControl.reloadFile(SaveMode.EDITABLE);
                                     return;
                                 }
-                                bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.not-blacklisted")).replace("%type%", "Player").replace("%player%", args[2]));
+                                List<String> list = new ArrayList<>();
+                                list.add(args[3]);
+                                bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-remove")).replace("%type%", "Player").replace("%player%", args[3]));
+                                bungeeControl.getControl(Files.EDITABLE).set("blacklist.players-name", list);
+                                bungeeControl.save(SaveMode.EDITABLE);
+                                bungeeControl.reloadFile(SaveMode.EDITABLE);
                                 return;
                             }
-                            bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.not-blacklisted")).replace("%type%", "Player").replace("%player%", args[2]));
+                            if (args[3].contains("-")) {
+                                if (bungeeUtils.getPlayers(BlacklistMembers.UUIDs,args[2]).contains(args[3])) {
+                                    List<String> list = bungeeUtils.getPlayers(BlacklistMembers.UUIDs, args[2]);
+                                    list.remove(args[3]);
+                                    bungeeControl.getControl(Files.EDITABLE).set(Extras.getServerPath(Blacklist.PLAYERS_UUID, args[2]), list);
+                                    bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-remove")).replace("%type%", "UUID").replace("%player%", args[3]));
+                                    bungeeControl.save(SaveMode.EDITABLE);
+                                    bungeeControl.reloadFile(SaveMode.EDITABLE);
+                                    return;
+                                }
+                                bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.not-blacklisted")).replace("%type%", "UUID").replace("%player%", args[3])));
+                                return;
+                            }
+                            if (bungeeUtils.getPlayers(BlacklistMembers.NAMEs,args[2]).contains(args[3])) {
+                                List<String> list = bungeeUtils.getPlayers(BlacklistMembers.NAMEs,args[2]);
+                                list.remove(args[3]);
+                                bungeeUtils.sendColored(sender, Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-remove")).replace("%type%", "Player").replace("%player%", args[3]));
+                                bungeeControl.getControl(Files.EDITABLE).set(Extras.getServerPath(Blacklist.PLAYERS_NAME,args[2]), list);
+                                bungeeControl.save(SaveMode.EDITABLE);
+                                bungeeControl.reloadFile(SaveMode.EDITABLE);
+                                return;
+                            }
+                            bungeeUtils.sendColored(sender, getMsg(Objects.requireNonNull(bungeeControl.getControl(Files.EDITABLE).getString("messages.not-blacklisted")).replace("%type%", "Player").replace("%player%", args[3])));
                             return;
                         }
                     }
@@ -472,13 +652,10 @@ public class bungeeCommand extends Command {
                                 reload = reload.replace("<ms>", (System.currentTimeMillis() - timeMS) + "");
                             if (reload.contains("<saveMode>")) reload = reload.replace("<saveMode>", "MOTDS");
                             bungeeUtils.sendColored(sender, reload);
-                            return;
                         }
                     }
                 }
-                return;
             }
-            return;
         } catch(Throwable throwable) {
             bungeeUtils.sendColored(sender,"&cPixelMOTD found a error using this command. Check console and report this error to the developer, please enable option &lshow-detailed-errors &cfor more info for the developer.");
             if(bungeeControl.isDetailed()) {
@@ -505,7 +682,6 @@ public class bungeeCommand extends Command {
                 bungeePixelMOTD.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
             }
         }
-        return;
     }
     private String getMsg(String message) {
         if(message == null) return "";

@@ -620,7 +620,7 @@ public class FileManager {
         sendConsole("The plugin can't load or save configuration files!");
     }
     public void reportControlError() {
-        sendConsole("The plugin can't load or save configuration files! (Bungee Control Issue - Caused by: IO Exception)");
+        sendConsole("The plugin can't load or save configuration files! (Bungee | Spigot Control Issue - Caused by: IO Exception)");
     }
     public void reportBungeeGetControlError() {
         sendConsole("The plugin can't load or save configuration files! (Bungee Control Issue - Caused by: One plugin is using bad the <getControl() from FileManager.class>)");

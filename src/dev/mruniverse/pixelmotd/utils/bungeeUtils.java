@@ -14,16 +14,29 @@ import java.text.ParseException;
 import java.util.*;
 
 public class bungeeUtils {
-    public List<String> getPlayers(WhitelistMembers mode, String worldName) {
+    public static List<String> getPlayers(WhitelistMembers mode, String serverName) {
         if(mode.equals(WhitelistMembers.NAMEs)) {
-            if(bungeeControl.getControl(Files.MODULES).get(Extras.getWorldPath(Whitelist.PLAYERS_NAME,worldName)) != null)
-                if(bungeeControl.getControl(Files.MODULES).get("modules.world-whitelist.worlds." + worldName + " .players-name") != null) {
-                    return bungeeControl.getControl(Files.MODULES).getStringList("modules.world-whitelist.worlds." + worldName + " .players-name");
+            if(bungeeControl.getControl(Files.MODULES).get(Extras.getServerPath(Whitelist.PLAYERS_NAME,serverName)) != null)
+                if(bungeeControl.getControl(Files.MODULES).get("modules.server-whitelist.servers." + serverName + " .players-name") != null) {
+                    return bungeeControl.getControl(Files.MODULES).getStringList("modules.server-whitelist.servers." + serverName + " .players-name");
                 }
             return new ArrayList<>();
         }
-        if(bungeeControl.getControl(Files.MODULES).get("modules.world-whitelist.worlds." + worldName + " .players-uuid") != null) {
-            return bungeeControl.getControl(Files.MODULES).getStringList("modules.world-whitelist.worlds." + worldName + " .players-uuid");
+        if(bungeeControl.getControl(Files.MODULES).get("modules.server-whitelist.servers." + serverName + " .players-uuid") != null) {
+            return bungeeControl.getControl(Files.MODULES).getStringList("modules.server-whitelist.servers." + serverName + " .players-uuid");
+        }
+        return new ArrayList<>();
+    }
+    public static List<String> getPlayers(BlacklistMembers mode, String serverName) {
+        if(mode.equals(BlacklistMembers.NAMEs)) {
+            if(bungeeControl.getControl(Files.MODULES).get(Extras.getServerPath(Blacklist.PLAYERS_NAME,serverName)) != null)
+                if(bungeeControl.getControl(Files.MODULES).get("modules.server-blacklist.servers." + serverName + " .players-name") != null) {
+                    return bungeeControl.getControl(Files.MODULES).getStringList("modules.server-blacklist.servers." + serverName + " .players-name");
+                }
+            return new ArrayList<>();
+        }
+        if(bungeeControl.getControl(Files.MODULES).get("modules.server-blacklist.servers." + serverName + " .players-uuid") != null) {
+            return bungeeControl.getControl(Files.MODULES).getStringList("modules.server-blacklist.servers." + serverName + " .players-uuid");
         }
         return new ArrayList<>();
     }

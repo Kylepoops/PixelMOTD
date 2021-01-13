@@ -1,9 +1,9 @@
 package dev.mruniverse.pixelmotd.commands;
 
-import dev.mruniverse.pixelmotd.enums.Files;
-import dev.mruniverse.pixelmotd.enums.SaveMode;
+import dev.mruniverse.pixelmotd.enums.*;
 import dev.mruniverse.pixelmotd.files.spigotControl;
 import dev.mruniverse.pixelmotd.init.spigotPixelMOTD;
+import dev.mruniverse.pixelmotd.utils.Extras;
 import dev.mruniverse.pixelmotd.utils.spigotUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -52,6 +52,12 @@ public class spigotCommand implements CommandExecutor {
             return spigotControl.getControl(Files.COMMAND).getString("command.status.off");
         }
         return spigotControl.getControl(Files.COMMAND).getString("command.status.off");
+    }
+    private String getAuthor(String location) {
+        if(spigotControl.getControl(Files.MODULES).get("modules.world-whitelist.worlds." + location +".whitelist-author") != null) {
+            return spigotControl.getControl(Files.COMMAND).getString("modules.world-whitelist.worlds." + location +".whitelist-author");
+        }
+        return "Console";
     }
     @SuppressWarnings("all")
     private String getOnline(String playerName) {
@@ -179,7 +185,7 @@ public class spigotCommand implements CommandExecutor {
                     if (args.length == 2) {
                         for(String lines : spigotControl.getControl(Files.COMMAND).getStringList("command.whitelist.list.top")) {
                             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
-                            if(lines.contains("%author%")) lines = lines.replace("%author%", spigotControl.getWhitelistAuthor());
+                            if(lines.contains("%author%")) lines = lines.replace("%author%", getAuthor(args[1]));
                             if(lines.contains("%version%")) lines = lines.replace("%version%", spigotPixelMOTD.getInstance().getDescription().getVersion());
                             if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", args[1]);
                             if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus(args[1]));
@@ -187,7 +193,7 @@ public class spigotCommand implements CommandExecutor {
                             if(lines.contains("%your_uuid%")) lines = lines.replace("%your_uuid%",getUniqueId(sender));
                             spigotUtils.sendColored(sender,lines);
                         }
-                        for(String players : spigotControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name")) {
+                        for(String players : spigotUtils.getPlayers(WhitelistMembers.NAMEs,args[1])) {
                             String line= spigotControl.getControl(Files.COMMAND).getString("command.whitelist.list.playersNameFormat");
                             if(line == null) line = "&e&l* &8[&7%online_status%&8] &7%player_name%";
                             if(line.contains("%online_status%")) line = line.replace("%online_status%",getOnline(players));
@@ -196,15 +202,15 @@ public class spigotCommand implements CommandExecutor {
                         }
                         for(String lines : spigotControl.getControl(Files.COMMAND).getStringList("command.whitelist.list.mid")) {
                             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
-                            if(lines.contains("%author%")) lines = lines.replace("%author%", spigotControl.getWhitelistAuthor());
+                            if(lines.contains("%author%")) lines = lines.replace("%author%", getAuthor(args[1]));
                             if(lines.contains("%version%")) lines = lines.replace("%version%", spigotPixelMOTD.getInstance().getDescription().getVersion());
-                            if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", "Global");
-                            if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus("Global"));
+                            if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", args[1]);
+                            if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus(args[1]));
                             if(lines.contains("<isUser>")) lines = lines.replace("<isUser>","");
                             if(lines.contains("%your_uuid%")) lines = lines.replace("%your_uuid%",getUniqueId(sender));
                             spigotUtils.sendColored(sender,lines);
                         }
-                        for(String uuids : spigotControl.getControl(Files.EDITABLE).getStringList("whitelist.players-uuid")) {
+                        for(String uuids : spigotUtils.getPlayers(WhitelistMembers.UUIDs,args[1])) {
                             String line= spigotControl.getControl(Files.COMMAND).getString("command.whitelist.list.playersUuidFormat");
                             if(line == null) line = "&e&l* &8[&7UUID&8] &7%player_uuid%";
                             if(line.contains("%player_uuid%")) line = line.replace("%online_status%","??");
@@ -214,16 +220,42 @@ public class spigotCommand implements CommandExecutor {
                         }
                         for(String lines : spigotControl.getControl(Files.COMMAND).getStringList("command.whitelist.list.bot")) {
                             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
-                            if(lines.contains("%author%")) lines = lines.replace("%author%", spigotControl.getWhitelistAuthor());
+                            if(lines.contains("%author%")) lines = lines.replace("%author%", getAuthor(args[1]));
                             if(lines.contains("%version%")) lines = lines.replace("%version%", spigotPixelMOTD.getInstance().getDescription().getVersion());
-                            if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", "Global");
-                            if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus("Global"));
+                            if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", args[1]);
+                            if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus(args[1]));
                             if(lines.contains("<isUser>")) lines = lines.replace("<isUser>","");
                             if(lines.contains("%your_uuid%")) lines = lines.replace("%your_uuid%",getUniqueId(sender));
                             spigotUtils.sendColored(sender,lines);
                         }
                         return true;
                     }
+                    if(args[2].equalsIgnoreCase("on")) {
+                        spigotControl.getControl(Files.MODULES).set(Extras.getWorldPath(Whitelist.STATUS,args[1]),true);
+                        if(sender instanceof Player) {
+                            spigotControl.getControl(Files.MODULES).set(Extras.getWorldPath(Whitelist.AUTHOR, args[1]), sender.getName());
+                        } else {
+                            spigotControl.getControl(Files.MODULES).set(Extras.getWorldPath(Whitelist.AUTHOR, args[1]), "Console");
+                        }
+                        spigotControl.save(SaveMode.MODULES);
+                        spigotControl.reloadFile(SaveMode.MODULES);
+                        spigotUtils.sendColored(sender,spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-enabled"));
+                        return true;
+                    }
+                    if(args[2].equalsIgnoreCase("off")) {
+                        spigotControl.getControl(Files.MODULES).set(Extras.getWorldPath(Whitelist.STATUS,args[1]),false);
+                        if(sender instanceof Player) {
+                            spigotControl.getControl(Files.MODULES).set(Extras.getWorldPath(Whitelist.AUTHOR, args[1]), sender.getName());
+                        } else {
+                            spigotControl.getControl(Files.MODULES).set(Extras.getWorldPath(Whitelist.AUTHOR, args[1]), "Console");
+                        }
+                        spigotControl.save(SaveMode.MODULES);
+                        spigotControl.reloadFile(SaveMode.MODULES);
+                        spigotUtils.sendColored(sender,spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-disabled"));
+                        return true;
+                        //getServerPath
+                    }
+                    return true;
                 }
                 if (args[0].equalsIgnoreCase("add")) {
                     if (hasPermission(sender, "pixelmotd.command.whitelist.add")) {
@@ -236,41 +268,71 @@ public class spigotCommand implements CommandExecutor {
                                 sendMain(sender);
                                 return true;
                             }
-                            if (args[2].contains("-")) {
-                                if (spigotControl.getControl(Files.EDITABLE).get("whitelist.players-uuid") != null) {
-                                    spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "UUID").replace("%player%", args[2])));
-                                    List<String> list = spigotControl.getControl(Files.EDITABLE).getStringList("whitelist.players-uuid");
+                            if (args.length == 3) {
+                                sendMain(sender);
+                                return true;
+                            }
+                            if(args[2].equalsIgnoreCase("Global")) {
+                                if (args[3].contains("-")) {
+                                    if (spigotControl.getControl(Files.EDITABLE).get("whitelist.players-uuid") != null) {
+                                        spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "UUID").replace("%player%", args[3])));
+                                        List<String> list = spigotControl.getControl(Files.EDITABLE).getStringList("whitelist.players-uuid");
+                                        list.add(args[3]);
+                                        spigotControl.getControl(Files.EDITABLE).set("whitelist.players-uuid", list);
+                                        spigotControl.save(SaveMode.EDITABLE);
+                                        spigotControl.reloadFile(SaveMode.EDITABLE);
+                                        return true;
+                                    }
+                                    spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "UUID").replace("%player%", args[3])));
+                                    List<String> list = new ArrayList<>();
+                                    list.add(args[3]);
                                     spigotControl.getControl(Files.EDITABLE).set("whitelist.players-uuid", list);
                                     spigotControl.save(SaveMode.EDITABLE);
                                     spigotControl.reloadFile(SaveMode.EDITABLE);
                                     return true;
                                 }
-                                spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "UUID").replace("%player%", args[2])));
+                                if (spigotControl.getControl(Files.EDITABLE).get("whitelist.players-name") != null) {
+                                    if (!spigotControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name").contains(args[3])) {
+                                        spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "Player").replace("%player%", args[3])));
+                                        List<String> list = spigotControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name");
+                                        list.add(args[3]);
+                                        spigotControl.getControl(Files.EDITABLE).set("whitelist.players-name", list);
+                                        spigotControl.save(SaveMode.EDITABLE);
+                                        spigotControl.reloadFile(SaveMode.EDITABLE);
+                                        return true;
+                                    }
+                                    spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.already-whitelisted")).replace("%type%", "Player").replace("%player%", args[3])));
+                                    return true;
+                                }
+                                spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "Player").replace("%player%", args[3])));
                                 List<String> list = new ArrayList<>();
                                 list.add(args[2]);
-                                spigotControl.getControl(Files.EDITABLE).set("whitelist.players-uuid", list);
+                                spigotControl.getControl(Files.EDITABLE).set("whitelist.players-name", list);
                                 spigotControl.save(SaveMode.EDITABLE);
                                 spigotControl.reloadFile(SaveMode.EDITABLE);
                                 return true;
                             }
-                            if (spigotControl.getControl(Files.EDITABLE).get("whitelist.players-name") != null) {
-                                if(!spigotControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name").contains(args[2])) {
-                                    spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "Player").replace("%player%", args[2])));
-                                    List<String> list = spigotControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name");
-                                    list.add(args[2]);
-                                    spigotControl.getControl(Files.EDITABLE).set("whitelist.players-name", list);
+                            if (args[3].contains("-")) {
+                                if (!spigotUtils.getPlayers(WhitelistMembers.UUIDs,args[2]).contains(args[3])) {
+                                    spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "UUID").replace("%player%", args[3])));
+                                    List<String> list = spigotUtils.getPlayers(WhitelistMembers.UUIDs, args[2]);
+                                    list.add(args[3]);
+                                    spigotControl.getControl(Files.EDITABLE).set(Extras.getWorldPath(Whitelist.PLAYERS_UUID, args[2]), list);
                                     spigotControl.save(SaveMode.EDITABLE);
                                     spigotControl.reloadFile(SaveMode.EDITABLE);
+                                    return true;
                                 }
-                                spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.already-whitelisted")).replace("%type%", "Player").replace("%player%", args[2])));
+                            }
+                            if (!spigotUtils.getPlayers(WhitelistMembers.NAMEs,args[2]).contains(args[3])) {
+                                spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "Player").replace("%player%", args[3])));
+                                List<String> list = spigotUtils.getPlayers(WhitelistMembers.NAMEs,args[2]);
+                                list.add(args[3]);
+                                spigotControl.getControl(Files.EDITABLE).set(Extras.getWorldPath(Whitelist.PLAYERS_NAME,args[2]), list);
+                                spigotControl.save(SaveMode.EDITABLE);
+                                spigotControl.reloadFile(SaveMode.EDITABLE);
                                 return true;
                             }
-                            spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-add")).replace("%type%", "Player").replace("%player%", args[2])));
-                            List<String> list = new ArrayList<>();
-                            list.add(args[2]);
-                            spigotControl.getControl(Files.EDITABLE).set("whitelist.players-name", list);
-                            spigotControl.save(SaveMode.EDITABLE);
-                            spigotControl.reloadFile(SaveMode.EDITABLE);
+                            spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.already-whitelisted")).replace("%type%", "Player").replace("%player%", args[3])));
                             return true;
                         }
                         if (args[1].equalsIgnoreCase("blacklist")) {
@@ -278,39 +340,69 @@ public class spigotCommand implements CommandExecutor {
                                 sendMain(sender);
                                 return true;
                             }
-                            if (args[2].contains("-")) {
-                                if (spigotControl.getControl(Files.EDITABLE).get("blacklist.players-uuid") != null) {
-                                    List<String> list = spigotControl.getControl(Files.EDITABLE).getStringList("blacklist.players-uuid");
-                                    list.add(args[2]);
+                            if (args.length == 3) {
+                                sendMain(sender);
+                                return true;
+                            }
+                            if(args[2].equalsIgnoreCase("Global")) {
+                                if (args[3].contains("-")) {
+                                    if (spigotControl.getControl(Files.EDITABLE).get("blacklist.players-uuid") != null) {
+                                        List<String> list = spigotControl.getControl(Files.EDITABLE).getStringList("blacklist.players-uuid");
+                                        list.add(args[3]);
+                                        spigotControl.getControl(Files.EDITABLE).set("blacklist.players-uuid", list);
+                                        spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "UUID").replace("%player%", args[3]));
+                                        spigotControl.save(SaveMode.EDITABLE);
+                                        spigotControl.reloadFile(SaveMode.EDITABLE);
+                                        return true;
+                                    }
+                                    spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "UUID").replace("%player%", args[3]));
+                                    List<String> list = new ArrayList<>();
+                                    list.add(args[3]);
                                     spigotControl.getControl(Files.EDITABLE).set("blacklist.players-uuid", list);
-                                    spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "UUID").replace("%player%", args[2]));
                                     spigotControl.save(SaveMode.EDITABLE);
                                     spigotControl.reloadFile(SaveMode.EDITABLE);
                                     return true;
                                 }
-                                spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "UUID").replace("%player%", args[2]));
+                                if (spigotControl.getControl(Files.EDITABLE).get("blacklist.players-name") != null) {
+                                    List<String> list = spigotControl.getControl(Files.EDITABLE).getStringList("blacklist.players-name");
+                                    list.add(args[3]);
+                                    spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "Player").replace("%player%", args[3]));
+                                    spigotControl.getControl(Files.EDITABLE).set("blacklist.players-name", list);
+                                    spigotControl.save(SaveMode.EDITABLE);
+                                    spigotControl.reloadFile(SaveMode.EDITABLE);
+                                    return true;
+                                }
                                 List<String> list = new ArrayList<>();
-                                list.add(args[2]);
-                                spigotControl.getControl(Files.EDITABLE).set("blacklist.players-uuid", list);
-                                spigotControl.save(SaveMode.EDITABLE);
-                                spigotControl.reloadFile(SaveMode.EDITABLE);
-                                return true;
-                            }
-                            if (spigotControl.getControl(Files.EDITABLE).get("blacklist.players-name") != null) {
-                                List<String> list = spigotControl.getControl(Files.EDITABLE).getStringList("blacklist.players-name");
-                                list.add(args[2]);
-                                spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "Player").replace("%player%", args[2]));
+                                list.add(args[3]);
+                                spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "Player").replace("%player%", args[3]));
                                 spigotControl.getControl(Files.EDITABLE).set("blacklist.players-name", list);
                                 spigotControl.save(SaveMode.EDITABLE);
                                 spigotControl.reloadFile(SaveMode.EDITABLE);
                                 return true;
                             }
-                            List<String> list = new ArrayList<>();
-                            list.add(args[2]);
-                            spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "Player").replace("%player%", args[2]));
-                            spigotControl.getControl(Files.EDITABLE).set("blacklist.players-name", list);
-                            spigotControl.save(SaveMode.EDITABLE);
-                            spigotControl.reloadFile(SaveMode.EDITABLE);
+                            if (args[3].contains("-")) {
+                                if (!spigotUtils.getPlayers(BlacklistMembers.UUIDs,args[2]).contains(args[3])) {
+                                    List<String> list = spigotUtils.getPlayers(BlacklistMembers.UUIDs, args[2]);
+                                    list.add(args[3]);
+                                    spigotControl.getControl(Files.EDITABLE).set(Extras.getWorldPath(Blacklist.PLAYERS_UUID, args[2]), list);
+                                    spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "UUID").replace("%player%", args[3]));
+                                    spigotControl.save(SaveMode.EDITABLE);
+                                    spigotControl.reloadFile(SaveMode.EDITABLE);
+                                    return true;
+                                }
+                                spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.already-blacklisted")).replace("%type%", "UUID").replace("%player%", args[3])));
+                                return true;
+                            }
+                            if (!spigotUtils.getPlayers(BlacklistMembers.NAMEs,args[2]).contains(args[3])) {
+                                List<String> list = spigotUtils.getPlayers(BlacklistMembers.NAMEs,args[2]);
+                                list.add(args[3]);
+                                spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-add")).replace("%type%", "Player").replace("%player%", args[3]));
+                                spigotControl.getControl(Files.EDITABLE).set(Extras.getWorldPath(Blacklist.PLAYERS_NAME,args[2]), list);
+                                spigotControl.save(SaveMode.EDITABLE);
+                                spigotControl.reloadFile(SaveMode.EDITABLE);
+                                return true;
+                            }
+                            spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.already-blacklisted")).replace("%type%", "Player").replace("%player%", args[3])));
                             return true;
                         }
                     }
@@ -327,38 +419,60 @@ public class spigotCommand implements CommandExecutor {
                                 sendMain(sender);
                                 return true;
                             }
-                            if (args[2].contains("-")) {
-                                if (spigotControl.getControl(Files.EDITABLE).get("whitelist.players-uuid") != null) {
-                                    if(spigotControl.getControl(Files.EDITABLE).getStringList("whitelist.players-uuid").contains(args[2])) {
+                            if (args.length == 3) {
+                                sendMain(sender);
+                                return true;
+                            }
+                            if(args[2].equalsIgnoreCase("Global")) {
+                                if (args[3].contains("-")) {
+                                    if (spigotControl.getControl(Files.EDITABLE).get("whitelist.players-uuid") != null) {
+                                        spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-remove")).replace("%type%", "UUID").replace("%player%", args[3])));
                                         List<String> list = spigotControl.getControl(Files.EDITABLE).getStringList("whitelist.players-uuid");
-                                        list.remove(args[2]);
+                                        list.remove(args[3]);
                                         spigotControl.getControl(Files.EDITABLE).set("whitelist.players-uuid", list);
-                                        spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-remove")).replace("%type%", "UUID").replace("%player%", args[2]));
                                         spigotControl.save(SaveMode.EDITABLE);
                                         spigotControl.reloadFile(SaveMode.EDITABLE);
                                         return true;
                                     }
-                                    spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.not-whitelisted")).replace("%type%", "UUID").replace("%player%", args[2]));
+                                    spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.not-whitelisted")).replace("%type%", "UUID").replace("%player%", args[3])));
+                                }
+                                if (spigotControl.getControl(Files.EDITABLE).get("whitelist.players-name") != null) {
+                                    if (spigotControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name").contains(args[3])) {
+                                        spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-remove")).replace("%type%", "Player").replace("%player%", args[3])));
+                                        List<String> list = spigotControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name");
+                                        list.remove(args[3]);
+                                        spigotControl.getControl(Files.EDITABLE).set("whitelist.players-name", list);
+                                        spigotControl.save(SaveMode.EDITABLE);
+                                        spigotControl.reloadFile(SaveMode.EDITABLE);
+                                        return true;
+                                    }
+                                    spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.not-whitelisted")).replace("%type%", "Player").replace("%player%", args[3])));
                                     return true;
                                 }
-                                spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.not-whitelisted")).replace("%type%", "UUID").replace("%player%", args[2]));
-                                //spigotControl.getControl(Files.EDITABLE).set("whitelist.players-uuid", new ArrayList<String>().add(args[2]));
+                                spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.not-whitelisted")).replace("%type%", "Player").replace("%player%", args[3])));
                                 return true;
                             }
-                            if (spigotControl.getControl(Files.EDITABLE).get("whitelist.players-name") != null) {
-                                if(spigotControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name").contains(args[2])) {
-                                    List<String> list = spigotControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name");
-                                    list.remove(args[2]);
-                                    spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-remove")).replace("%type%", "Player").replace("%player%", args[2]));
-                                    spigotControl.getControl(Files.EDITABLE).set("whitelist.players-name", list);
+                            if (args[3].contains("-")) {
+                                if (spigotUtils.getPlayers(WhitelistMembers.UUIDs,args[2]).contains(args[3])) {
+                                    spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-remove")).replace("%type%", "UUID").replace("%player%", args[3])));
+                                    List<String> list = spigotUtils.getPlayers(WhitelistMembers.UUIDs, args[2]);
+                                    list.remove(args[3]);
+                                    spigotControl.getControl(Files.EDITABLE).set(Extras.getWorldPath(Whitelist.PLAYERS_UUID, args[2]), list);
                                     spigotControl.save(SaveMode.EDITABLE);
                                     spigotControl.reloadFile(SaveMode.EDITABLE);
                                     return true;
                                 }
-                                spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.not-whitelisted")).replace("%type%", "Player").replace("%player%", args[2]));
+                            }
+                            if (spigotUtils.getPlayers(WhitelistMembers.NAMEs,args[2]).contains(args[3])) {
+                                spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-player-remove")).replace("%type%", "Player").replace("%player%", args[3])));
+                                List<String> list = spigotUtils.getPlayers(WhitelistMembers.NAMEs,args[2]);
+                                list.remove(args[3]);
+                                spigotControl.getControl(Files.EDITABLE).set(Extras.getWorldPath(Whitelist.PLAYERS_NAME,args[2]), list);
+                                spigotControl.save(SaveMode.EDITABLE);
+                                spigotControl.reloadFile(SaveMode.EDITABLE);
                                 return true;
                             }
-                            spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.not-whitelisted")).replace("%type%", "Player").replace("%player%", args[2]));
+                            spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.not-whitelisted")).replace("%type%", "Player").replace("%player%", args[3])));
                             return true;
                         }
                         if (args[1].equalsIgnoreCase("blacklist")) {
@@ -366,41 +480,72 @@ public class spigotCommand implements CommandExecutor {
                                 sendMain(sender);
                                 return true;
                             }
-                            if (args[2].contains("-")) {
-                                if (spigotControl.getControl(Files.EDITABLE).get("blacklist.players-uuid") != null) {
-                                    if(spigotControl.getControl(Files.EDITABLE).getStringList("blacklist.players-uuid").contains(args[2])){
-                                        spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-remove")).replace("%type%", "UUID").replace("%player%", args[2]));
-                                        List<String> list = spigotControl.getControl(Files.EDITABLE).getStringList("blacklist.players-uuid");
-                                        list.remove(args[2]);
-                                        spigotControl.getControl(Files.EDITABLE).set("blacklist.players-uuid",list);
-                                        spigotControl.save(SaveMode.EDITABLE);
-                                        spigotControl.reloadFile(SaveMode.EDITABLE);
-                                    }
-                                    spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.not-blacklisted")).replace("%type%", "UUID").replace("%player%", args[2]));
-                                    return true;
-
-                                }
-                                spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-remove")).replace("%type%", "UUID").replace("%player%", args[2]));
+                            if (args.length == 3) {
+                                sendMain(sender);
                                 return true;
                             }
-                            if (spigotControl.getControl(Files.EDITABLE).get("blacklist.players-name") != null) {
-                                if(spigotControl.getControl(Files.EDITABLE).getStringList("blacklist.players-name").contains(args[2])) {
+                            if(args[2].equalsIgnoreCase("Global")) {
+                                if (args[3].contains("-")) {
+                                    if (spigotControl.getControl(Files.EDITABLE).get("blacklist.players-uuid") != null) {
+                                        List<String> list = spigotControl.getControl(Files.EDITABLE).getStringList("blacklist.players-uuid");
+                                        list.add(args[3]);
+                                        spigotControl.getControl(Files.EDITABLE).set("blacklist.players-uuid", list);
+                                        spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-remove")).replace("%type%", "UUID").replace("%player%", args[3]));
+                                        spigotControl.save(SaveMode.EDITABLE);
+                                        spigotControl.reloadFile(SaveMode.EDITABLE);
+                                        return true;
+                                    }
+                                    spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-remove")).replace("%type%", "UUID").replace("%player%", args[3]));
+                                    List<String> list = new ArrayList<>();
+                                    list.add(args[3]);
+                                    spigotControl.getControl(Files.EDITABLE).set("blacklist.players-uuid", list);
+                                    spigotControl.save(SaveMode.EDITABLE);
+                                    spigotControl.reloadFile(SaveMode.EDITABLE);
+                                    return true;
+                                }
+                                if (spigotControl.getControl(Files.EDITABLE).get("blacklist.players-name") != null) {
                                     List<String> list = spigotControl.getControl(Files.EDITABLE).getStringList("blacklist.players-name");
-                                    list.remove(args[2]);
-                                    spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-remove")).replace("%type%", "Player").replace("%player%", args[2]));
+                                    list.add(args[3]);
+                                    spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-remove")).replace("%type%", "Player").replace("%player%", args[3]));
                                     spigotControl.getControl(Files.EDITABLE).set("blacklist.players-name", list);
                                     spigotControl.save(SaveMode.EDITABLE);
                                     spigotControl.reloadFile(SaveMode.EDITABLE);
                                     return true;
                                 }
-                                spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.not-blacklisted")).replace("%type%", "Player").replace("%player%", args[2]));
+                                List<String> list = new ArrayList<>();
+                                list.add(args[3]);
+                                spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-remove")).replace("%type%", "Player").replace("%player%", args[3]));
+                                spigotControl.getControl(Files.EDITABLE).set("blacklist.players-name", list);
+                                spigotControl.save(SaveMode.EDITABLE);
+                                spigotControl.reloadFile(SaveMode.EDITABLE);
                                 return true;
                             }
-                            spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.not-blacklisted")).replace("%type%", "Player").replace("%player%", args[2]));
+                            if (args[3].contains("-")) {
+                                if (spigotUtils.getPlayers(BlacklistMembers.UUIDs,args[2]).contains(args[3])) {
+                                    List<String> list = spigotUtils.getPlayers(BlacklistMembers.UUIDs, args[2]);
+                                    list.remove(args[3]);
+                                    spigotControl.getControl(Files.EDITABLE).set(Extras.getWorldPath(Blacklist.PLAYERS_UUID, args[2]), list);
+                                    spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-remove")).replace("%type%", "UUID").replace("%player%", args[3]));
+                                    spigotControl.save(SaveMode.EDITABLE);
+                                    spigotControl.reloadFile(SaveMode.EDITABLE);
+                                    return true;
+                                }
+                                spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.not-blacklisted")).replace("%type%", "UUID").replace("%player%", args[3])));
+                                return true;
+                            }
+                            if (spigotUtils.getPlayers(BlacklistMembers.NAMEs,args[2]).contains(args[3])) {
+                                List<String> list = spigotUtils.getPlayers(BlacklistMembers.NAMEs,args[2]);
+                                list.remove(args[3]);
+                                spigotUtils.sendColored(sender, Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.blacklist-player-remove")).replace("%type%", "Player").replace("%player%", args[3]));
+                                spigotControl.getControl(Files.EDITABLE).set(Extras.getWorldPath(Blacklist.PLAYERS_NAME,args[2]), list);
+                                spigotControl.save(SaveMode.EDITABLE);
+                                spigotControl.reloadFile(SaveMode.EDITABLE);
+                                return true;
+                            }
+                            spigotUtils.sendColored(sender, getMsg(Objects.requireNonNull(spigotControl.getControl(Files.EDITABLE).getString("messages.not-blacklisted")).replace("%type%", "Player").replace("%player%", args[3])));
                             return true;
                         }
                     }
-                    return true;
                 }
                 if(args[0].equalsIgnoreCase("modules")) {
                     spigotUtils.sendColored(sender,"&cCurrently working");

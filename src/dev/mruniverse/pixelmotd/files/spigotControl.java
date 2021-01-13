@@ -16,7 +16,6 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static dev.mruniverse.pixelmotd.init.spigotPixelMOTD.getFiles;
-import static dev.mruniverse.pixelmotd.init.spigotPixelMOTD.sendConsole;
 
 public class spigotControl {
     private static FileConfiguration rEditable, rModules, rSettings, rWhitelist, rNormal,rTimer,rCommand;

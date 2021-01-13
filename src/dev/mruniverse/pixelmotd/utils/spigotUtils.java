@@ -13,7 +13,7 @@ import java.text.ParseException;
 import java.util.*;
 
 public class spigotUtils {
-    public List<String> getPlayers(WhitelistMembers mode, String worldName) {
+    public static List<String> getPlayers(WhitelistMembers mode, String worldName) {
         if(mode.equals(WhitelistMembers.NAMEs)) {
             if(spigotControl.getControl(Files.MODULES).get(Extras.getWorldPath(Whitelist.PLAYERS_NAME,worldName)) != null)
             if(spigotControl.getControl(Files.MODULES).get("modules.world-whitelist.worlds." + worldName + " .players-name") != null) {
@@ -23,6 +23,19 @@ public class spigotUtils {
         }
         if(spigotControl.getControl(Files.MODULES).get("modules.world-whitelist.worlds." + worldName + " .players-uuid") != null) {
             return spigotControl.getControl(Files.MODULES).getStringList("modules.world-whitelist.worlds." + worldName + " .players-uuid");
+        }
+        return new ArrayList<>();
+    }
+    public static List<String> getPlayers(BlacklistMembers mode, String worldName) {
+        if(mode.equals(BlacklistMembers.NAMEs)) {
+            if(spigotControl.getControl(Files.MODULES).get(Extras.getWorldPath(Blacklist.PLAYERS_NAME,worldName)) != null)
+                if(spigotControl.getControl(Files.MODULES).get("modules.world-blacklist.worlds." + worldName + " .players-name") != null) {
+                    return spigotControl.getControl(Files.MODULES).getStringList("modules.world-blacklist.worlds." + worldName + " .players-name");
+                }
+            return new ArrayList<>();
+        }
+        if(spigotControl.getControl(Files.MODULES).get("modules.world-blacklist.worlds." + worldName + " .players-uuid") != null) {
+            return spigotControl.getControl(Files.MODULES).getStringList("modules.world-blacklist.worlds." + worldName + " .players-uuid");
         }
         return new ArrayList<>();
     }
