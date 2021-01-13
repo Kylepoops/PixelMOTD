@@ -161,7 +161,22 @@ public class bungeeCommand extends Command {
                             }
                             return;
                         }
-                        return;
+                        if(args[2].equalsIgnoreCase("on")) {
+                            bungeeControl.getControl(Files.EDITABLE).set("whitelist.toggle",true);
+                            bungeeControl.getControl(Files.EDITABLE).set("whitelist.author","Console");
+                            bungeeControl.save(SaveMode.EDITABLE);
+                            bungeeControl.reloadFile(SaveMode.EDITABLE);
+                            bungeeUtils.sendColored(sender,bungeeControl.getControl(Files.EDITABLE).getString("messages.whitelist-enabled"));
+                            return;
+                        }
+                        if(args[2].equalsIgnoreCase("off")) {
+                            bungeeControl.getControl(Files.EDITABLE).set("whitelist.toggle",false);
+                            bungeeControl.getControl(Files.EDITABLE).set("whitelist.author","Console");
+                            bungeeControl.save(SaveMode.EDITABLE);
+                            bungeeControl.reloadFile(SaveMode.EDITABLE);
+                            bungeeUtils.sendColored(sender,bungeeControl.getControl(Files.EDITABLE).getString("messages.whitelist-disabled"));
+                            return;
+                        }
                     }
                     if (args.length == 2) {
                         for(String lines : bungeeControl.getControl(Files.COMMAND).getStringList("command.whitelist.list.top")) {

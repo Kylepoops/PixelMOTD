@@ -2,7 +2,6 @@ package dev.mruniverse.pixelmotd.commands;
 
 import dev.mruniverse.pixelmotd.enums.Files;
 import dev.mruniverse.pixelmotd.enums.SaveMode;
-import dev.mruniverse.pixelmotd.enums.WhitelistMembers;
 import dev.mruniverse.pixelmotd.files.spigotControl;
 import dev.mruniverse.pixelmotd.init.spigotPixelMOTD;
 import dev.mruniverse.pixelmotd.utils.spigotUtils;
@@ -157,6 +156,22 @@ public class spigotCommand implements CommandExecutor {
                                 if(lines.contains("%your_uuid%")) lines = lines.replace("%your_uuid%",getUniqueId(sender));
                                 spigotUtils.sendColored(sender,lines);
                             }
+                            return true;
+                        }
+                        if(args[2].equalsIgnoreCase("on")) {
+                            spigotControl.getControl(Files.EDITABLE).set("whitelist.toggle",true);
+                            spigotControl.getControl(Files.EDITABLE).set("whitelist.author","Console");
+                            spigotControl.save(SaveMode.EDITABLE);
+                            spigotControl.reloadFile(SaveMode.EDITABLE);
+                            spigotUtils.sendColored(sender,spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-enabled"));
+                            return true;
+                        }
+                        if(args[2].equalsIgnoreCase("off")) {
+                            spigotControl.getControl(Files.EDITABLE).set("whitelist.toggle",false);
+                            spigotControl.getControl(Files.EDITABLE).set("whitelist.author","Console");
+                            spigotControl.save(SaveMode.EDITABLE);
+                            spigotControl.reloadFile(SaveMode.EDITABLE);
+                            spigotUtils.sendColored(sender,spigotControl.getControl(Files.EDITABLE).getString("messages.whitelist-disabled"));
                             return true;
                         }
                         return true;
