@@ -111,34 +111,6 @@ public class bungeeEvents implements Listener {
     @EventHandler
     public void onServerSwitch(ServerConnectEvent event) {
         if(event.isCancelled()) return;
-        //if (getControl(Files.MODULES).getBoolean("modules.servers-whitelist.toggle")) {
-        //    if (getControl(Files.MODULES).contains("modules.servers-whitelist.servers." + event.getTarget().getName() + ".whitelist-status")) {
-        //        if (getControl(Files.MODULES).getBoolean("modules.servers-whitelist.servers." + event.getTarget().getName() + ".whitelist-status")) {
-        //            if (!getControl(Files.EDITABLE).getStringList("whitelist.players-name").contains(event.getPlayer().getName())) {
-        //                for (String message : getControl(Files.MODULES).getStringList("modules.servers-whitelist.kickMessage")) {
-        //                    message = message.replace("%whitelist_author%", getControl(Files.MODULES).getString("modules.servers-whitelist.servers." + event.getTarget().getName() + ".whitelist-author"))
-        //                            .replace("%whitelist_reason%", getControl(Files.MODULES).getString("modules.servers-whitelist.servers." + event.getTarget().getName() + ".whitelist-reason"));
-        //                    event.getPlayer().sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', message)));
-        //                }
-        //                event.setCancelled(true);
-        //            }
-        //        }
-        //    }
-        //}
-        //if (getControl(Files.MODULES).getBoolean("modules.servers-blacklist.toggle")) {
-        //    if (getControl(Files.MODULES).contains("modules.servers-blacklist.servers." + event.getTarget().getName() + ".blacklist-status")) {
-        //        if (getControl(Files.MODULES).getBoolean("modules.servers-whitelist.servers." + event.getTarget().getName() + ".blacklist-status")) {
-        //            if (!getControl(Files.EDITABLE).getStringList("whitelist.players-name").contains(event.getPlayer().getName())) {
-        //                for (String message : getControl(Files.MODULES).getStringList("modules.servers-whitelist.kickMessage")) {
-        //                    message = message.replace("%whitelist_author%", getControl(Files.MODULES).getString("modules.servers-whitelist.servers." + event.getTarget().getName() + ".whitelist-author"))
-        //                            .replace("%whitelist_reason%", getControl(Files.MODULES).getString("modules.servers-whitelist.servers." + event.getTarget().getName() + ".whitelist-reason"));
-        //                    event.getPlayer().sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', message)));
-        //                }
-        //                event.setCancelled(true);
-        //            }
-        //        }
-        //    }
-        //}
         String name = event.getTarget().getName();
         ProxiedPlayer player = event.getPlayer();
         if(getControl(Files.MODULES).getBoolean("modules.servers-whitelist.toggle")) {
@@ -153,6 +125,7 @@ public class bungeeEvents implements Listener {
                 }
             }
         }
+        if(event.isCancelled()) return;
         if(getControl(Files.MODULES).getBoolean("modules.servers-blacklist.toggle")) {
             if(bungeeControl.getControl(Files.MODULES).contains(Extras.getServerPath(Blacklist.STATUS,name))) {
                 if(!bungeeUtils.getPlayers(BlacklistMembers.NAMEs,name).contains(player.getName()) || !bungeeUtils.getPlayers(BlacklistMembers.UUIDs,name).contains(player.getUniqueId().toString())) {
