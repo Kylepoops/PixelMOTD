@@ -1,8 +1,11 @@
 package dev.mruniverse.pixelmotd.listeners;
 
+import dev.mruniverse.pixelmotd.enums.BlacklistMembers;
 import dev.mruniverse.pixelmotd.enums.Files;
+import dev.mruniverse.pixelmotd.enums.WhitelistMembers;
 import dev.mruniverse.pixelmotd.files.spigotControl;
 import dev.mruniverse.pixelmotd.utils.PixelConverter;
+import dev.mruniverse.pixelmotd.utils.spigotUtils;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.World;
 import org.bukkit.event.Listener;
@@ -89,19 +92,38 @@ public class spigotEvents implements Listener {
     @EventHandler
     public void teleport(PlayerTeleportEvent event) {
         if(event.isCancelled()) return;
+        World actualWorld = event.getPlayer().getWorld();
+        World nextWorld = Objects.requireNonNull(event.getTo()).getWorld();
+        if(nextWorld == null) nextWorld = actualWorld;
         if (spigotControl.getControl(Files.MODULES).getBoolean("modules.worlds-whitelist.toggle")) {
-            World actualWorld = event.getPlayer().getWorld();
-            World nextWorld = Objects.requireNonNull(event.getTo()).getWorld();
-            if(nextWorld == null) nextWorld = actualWorld;
             if (actualWorld != nextWorld &&
                     spigotControl.getControl(Files.MODULES).contains("modules.worlds-whitelist.worlds." + nextWorld.getName() + ".whitelist-status") &&
-                    spigotControl.getControl(Files.MODULES).getBoolean("modules.worlds-whitelist.worlds." + nextWorld.getName() + ".whitelist-status") &&
-                    !spigotControl.getControl(Files.EDITABLE).getStringList("whitelist.players-name").contains(event.getPlayer().getName())) {
-                for (String message : spigotControl.getControl(Files.MODULES).getStringList("modules.worlds-whitelist.kickMessage")) {
-                    message = message.replace("%whitelist_author%", Objects.requireNonNull(getControl(Files.MODULES).getString("modules.worlds-whitelist.worlds." + nextWorld.getName() + ".whitelist-author"))).replace("%whitelist_reason%", Objects.requireNonNull(getControl(Files.MODULES).getString("modules.worlds-whitelist.worlds." + nextWorld.getName() + ".whitelist-reason")));
-                    event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                    spigotControl.getControl(Files.MODULES).getBoolean("modules.worlds-whitelist.worlds." + nextWorld.getName() + ".whitelist-status")) {
+                if(!spigotUtils.getPlayers(WhitelistMembers.NAMEs,nextWorld.getName()).contains(event.getPlayer().getName()) || !spigotUtils.getPlayers(WhitelistMembers.UUIDs,nextWorld.getName()).contains(event.getPlayer().getUniqueId().toString())) {
+                    for (String message : spigotControl.getControl(Files.MODULES).getStringList("modules.worlds-whitelist.kickMessage")) {
+                        message = message.replace("%whitelist_author%", Objects.requireNonNull(getControl(Files.MODULES).getString("modules.worlds-whitelist.worlds." + nextWorld.getName() + ".whitelist-author"))).replace("%whitelist_reason%", Objects.requireNonNull(getControl(Files.MODULES).getString("modules.worlds-whitelist.worlds." + nextWorld.getName() + ".whitelist-reason")))
+                                .replace("%type%","world").replace("%value%",nextWorld.getName());
+                        event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                    }
+                    event.setCancelled(true);
                 }
-                event.setCancelled(true);
+            }
+
+        }
+        if (spigotControl.getControl(Files.MODULES).getBoolean("modules.worlds-blacklist.toggle")) {
+            if (!event.isCancelled()) {
+                if (actualWorld != nextWorld &&
+                        spigotControl.getControl(Files.MODULES).contains("modules.worlds-blacklist.worlds." + nextWorld.getName() + ".blacklist-status") &&
+                        spigotControl.getControl(Files.MODULES).getBoolean("modules.worlds-blacklist.worlds." + nextWorld.getName() + ".blacklist-status")) {
+                    if (spigotUtils.getPlayers(BlacklistMembers.NAMEs, nextWorld.getName()).contains(event.getPlayer().getName()) || spigotUtils.getPlayers(BlacklistMembers.UUIDs, nextWorld.getName()).contains(event.getPlayer().getUniqueId().toString())) {
+                        for (String message : spigotControl.getControl(Files.MODULES).getStringList("modules.worlds-whitelist.kickMessage")) {
+                            message = message.replace("%blacklist_author%", "??").replace("%blacklist_reason%", Objects.requireNonNull(getControl(Files.MODULES).getString("modules.worlds-blacklist.worlds." + nextWorld.getName() + ".blacklist-reason")))
+                                    .replace("%type%","world").replace("%value%",nextWorld.getName());
+                            event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                        }
+                        event.setCancelled(true);
+                    }
+                }
             }
         }
     }
