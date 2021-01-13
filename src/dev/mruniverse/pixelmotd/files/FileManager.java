@@ -426,11 +426,13 @@ public class FileManager {
         motdLists.add("&e/%cmd% &e- &fMain Command");
         if (bungeeMode) {
             motdLists.add("&e/%cmd% whitelist (global-serverName) [on-off]");
+            motdLists.add("&e/%cmd% add (whitelist-blacklist) (Global-serverName) (playerName-playerUUID) &e- &fadd a player to your list.");
+            motdLists.add("&e/%cmd% remove (whitelist-blacklist) (Global-serverName) (playerName-playerUUID) &e- &fremove a player from your list.");
         } else {
             motdLists.add("&e/%cmd% whitelist (global-worldName) [on-off]");
+            motdLists.add("&e/%cmd% add (whitelist-blacklist) (Global-worldName) (playerName-playerUUID) &e- &fadd a player to your list.");
+            motdLists.add("&e/%cmd% remove (whitelist-blacklist) (Global-worldName) (playerName-playerUUID) &e- &fremove a player from your list.");
         }
-        motdLists.add("&e/%cmd% add (whitelist-blacklist) (playerName-playerUUID) &e- &fadd a player to your list.");
-        motdLists.add("&e/%cmd% remove (whitelist-blacklist) (playerName-playerUUID) &e- &fremove a player from your list.");
         motdLists.add("&e/%cmd% reload (all-settings-edit-modules-cmd-motds)");
         motdLists.add("&e/%cmd% modules toggle (moduleName)");
         motdLists.add("&e/%cmd% modules info (moduleName)");
