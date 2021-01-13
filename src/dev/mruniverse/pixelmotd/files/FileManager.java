@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileManager {
-    private boolean bungeeMode;
+    private final boolean bungeeMode;
     public static File dataFolder, serverIcon, normalIcon, whitelistIcon, Normal, Whitelist, Settings, Editable, Modules, Timer, Command  = null;
 
     // Extras (Added in 8.8.6-Alpha3)
@@ -210,9 +210,7 @@ public class FileManager {
             if(result) {
                 sendConsole("File: &b" + fileName + "&f created!");
             }
-            return;
         }
-        sendConsole("File: &b" + fileName + "&f loaded!");
     }
     private void sendConsole(String message) {
         if(bungeeMode) {
@@ -226,9 +224,7 @@ public class FileManager {
         if(!folderToLoad.exists()) result = folderToLoad.mkdir();
         if(result) {
             sendConsole("Folder: &b" + folderName + "&f created!");
-            return;
         }
-        sendConsole("Folder: &b" + folderName + "&f verified!");
     }
 
     //load settings.yml and other files path's.
