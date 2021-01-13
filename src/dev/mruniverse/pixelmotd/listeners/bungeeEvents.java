@@ -146,7 +146,7 @@ public class bungeeEvents implements Listener {
                 if(!bungeeUtils.getPlayers(WhitelistMembers.NAMEs,name).contains(player.getName()) || !bungeeUtils.getPlayers(WhitelistMembers.UUIDs,name).contains(player.getUniqueId().toString())) {
                     for (String message : getControl(Files.MODULES).getStringList("modules.servers-whitelist.kickMessage")) {
                         message = message.replace("%whitelist_author%", getControl(Files.MODULES).getString(Extras.getServerPath(Whitelist.AUTHOR,name)))
-                            .replace("%whitelist_reason%", getControl(Files.MODULES).getString(Extras.getServerPath(Whitelist.REASON,name)));
+                            .replace("%whitelist_reason%", getControl(Files.MODULES).getString(Extras.getServerPath(Whitelist.REASON,name))).replace("%type%","server").replace("%value%",name);
                         player.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', message)));
                     }
                     event.setCancelled(true);
@@ -158,7 +158,7 @@ public class bungeeEvents implements Listener {
                 if(!bungeeUtils.getPlayers(BlacklistMembers.NAMEs,name).contains(player.getName()) || !bungeeUtils.getPlayers(BlacklistMembers.UUIDs,name).contains(player.getUniqueId().toString())) {
                     for (String message : getControl(Files.MODULES).getStringList("modules.servers-blacklist.kickMessage")) {
                         message = message.replace("%blacklist_author%", "??")
-                                .replace("%blacklist_reason%", getControl(Files.MODULES).getString(Extras.getServerPath(Blacklist.REASON,name)));
+                                .replace("%blacklist_reason%", getControl(Files.MODULES).getString(Extras.getServerPath(Blacklist.REASON,name))).replace("%type%","server").replace("%value%",name);
                         player.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', message)));
                     }
                     event.setCancelled(true);
