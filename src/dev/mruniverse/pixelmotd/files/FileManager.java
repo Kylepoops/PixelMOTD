@@ -291,8 +291,8 @@ public class FileManager {
         addConfig(Files.EDITABLE, "messages.no-perms", "&cYou need permission <permission> for this command.");
         addConfig(Files.EDITABLE, "messages.whitelist-enabled", "&aWhitelist Status now is &b&lENABLED&a.");
         addConfig(Files.EDITABLE, "messages.whitelist-disabled", "&aWhitelist Status now is &c&lDISABLED&a.");
-        addConfig(Files.EDITABLE, "messages.status-enabled", "&aThe whitelist status of the %type% &b%value% &anow is &b&lENABLED&a.");
-        addConfig(Files.EDITABLE, "messages.status-disabled", "&aThe whitelist status of the %type% &b%value% &anow is &c&lDISABLED&a.");
+        addConfig(Files.EDITABLE, "messages.status-enabled", "&aThe %list% status of the %type% &b%value% &anow is &b&lENABLED&a.");
+        addConfig(Files.EDITABLE, "messages.status-disabled", "&aThe %list% status of the %type% &b%value% &anow is &c&lDISABLED&a.");
         addConfig(Files.EDITABLE, "messages.whitelist-player-add", "&a%type% &e%player% &awas &badded &ato the whitelist.");
         addConfig(Files.EDITABLE, "messages.whitelist-player-remove", "&a%type% &e%player% &awas &cremoved &afrom the whitelist.");
         addConfig(Files.EDITABLE, "messages.not-whitelisted", "&a%type% &e%player% &ais not in the whitelist!");
