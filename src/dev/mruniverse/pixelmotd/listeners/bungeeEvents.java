@@ -1,12 +1,17 @@
 package dev.mruniverse.pixelmotd.listeners;
 
-import dev.mruniverse.pixelmotd.enums.Files;
+import dev.mruniverse.pixelmotd.enums.*;
+
 import static dev.mruniverse.pixelmotd.files.bungeeControl.getControl;
 import static dev.mruniverse.pixelmotd.files.bungeeControl.getWhitelistAuthor;
 
+import dev.mruniverse.pixelmotd.files.bungeeControl;
+import dev.mruniverse.pixelmotd.utils.Extras;
 import dev.mruniverse.pixelmotd.utils.PixelConverter;
+import dev.mruniverse.pixelmotd.utils.bungeeUtils;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent;
@@ -106,23 +111,59 @@ public class bungeeEvents implements Listener {
     @EventHandler
     public void onServerSwitch(ServerConnectEvent event) {
         if(event.isCancelled()) return;
-        if (getControl(Files.MODULES).getBoolean("modules.servers-whitelist.toggle")) {
-            if (getControl(Files.MODULES).contains("modules.servers-whitelist.worlds." + event.getTarget().getName() + ".whitelist-status")) {
-                if (getControl(Files.MODULES).getBoolean("modules.servers-whitelist.servers." + event.getTarget().getName() + ".whitelist-status")) {
-                    if (!getControl(Files.EDITABLE).getStringList("whitelist.players-name").contains(event.getPlayer().getName())) {
-                        for (String message : getControl(Files.MODULES).getStringList("modules.servers-whitelist.kickMessage")) {
-                            message = message.replace("%whitelist_author%", getControl(Files.MODULES).getString("modules.servers-whitelist.servers." + event.getTarget().getName() + ".whitelist-author"))
-                                    .replace("%whitelist_reason%", getControl(Files.MODULES).getString("modules.servers-whitelist.servers." + event.getTarget().getName() + ".whitelist-reason"));
-                            event.getPlayer().sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', message)));
-                        }
-                        event.setCancelled(true);
+        //if (getControl(Files.MODULES).getBoolean("modules.servers-whitelist.toggle")) {
+        //    if (getControl(Files.MODULES).contains("modules.servers-whitelist.servers." + event.getTarget().getName() + ".whitelist-status")) {
+        //        if (getControl(Files.MODULES).getBoolean("modules.servers-whitelist.servers." + event.getTarget().getName() + ".whitelist-status")) {
+        //            if (!getControl(Files.EDITABLE).getStringList("whitelist.players-name").contains(event.getPlayer().getName())) {
+        //                for (String message : getControl(Files.MODULES).getStringList("modules.servers-whitelist.kickMessage")) {
+        //                    message = message.replace("%whitelist_author%", getControl(Files.MODULES).getString("modules.servers-whitelist.servers." + event.getTarget().getName() + ".whitelist-author"))
+        //                            .replace("%whitelist_reason%", getControl(Files.MODULES).getString("modules.servers-whitelist.servers." + event.getTarget().getName() + ".whitelist-reason"));
+        //                    event.getPlayer().sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', message)));
+        //                }
+        //                event.setCancelled(true);
+        //            }
+        //        }
+        //    }
+        //}
+        //if (getControl(Files.MODULES).getBoolean("modules.servers-blacklist.toggle")) {
+        //    if (getControl(Files.MODULES).contains("modules.servers-blacklist.servers." + event.getTarget().getName() + ".blacklist-status")) {
+        //        if (getControl(Files.MODULES).getBoolean("modules.servers-whitelist.servers." + event.getTarget().getName() + ".blacklist-status")) {
+        //            if (!getControl(Files.EDITABLE).getStringList("whitelist.players-name").contains(event.getPlayer().getName())) {
+        //                for (String message : getControl(Files.MODULES).getStringList("modules.servers-whitelist.kickMessage")) {
+        //                    message = message.replace("%whitelist_author%", getControl(Files.MODULES).getString("modules.servers-whitelist.servers." + event.getTarget().getName() + ".whitelist-author"))
+        //                            .replace("%whitelist_reason%", getControl(Files.MODULES).getString("modules.servers-whitelist.servers." + event.getTarget().getName() + ".whitelist-reason"));
+        //                    event.getPlayer().sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', message)));
+        //                }
+        //                event.setCancelled(true);
+        //            }
+        //        }
+        //    }
+        //}
+        String name = event.getTarget().getName();
+        ProxiedPlayer player = event.getPlayer();
+        if(getControl(Files.MODULES).getBoolean("modules.servers-whitelist.toggle")) {
+            if(bungeeControl.getControl(Files.MODULES).contains(Extras.getServerPath(Whitelist.STATUS,name))) {
+                if(!bungeeUtils.getPlayers(WhitelistMembers.NAMEs,name).contains(player.getName()) || !bungeeUtils.getPlayers(WhitelistMembers.UUIDs,name).contains(player.getUniqueId().toString())) {
+                    for (String message : getControl(Files.MODULES).getStringList("modules.servers-whitelist.kickMessage")) {
+                        message = message.replace("%whitelist_author%", getControl(Files.MODULES).getString(Extras.getServerPath(Whitelist.AUTHOR,name)))
+                            .replace("%whitelist_reason%", getControl(Files.MODULES).getString(Extras.getServerPath(Whitelist.REASON,name)));
+                        player.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', message)));
                     }
+                    event.setCancelled(true);
+                }
+            }
+        }
+        if(getControl(Files.MODULES).getBoolean("modules.servers-blacklist.toggle")) {
+            if(bungeeControl.getControl(Files.MODULES).contains(Extras.getServerPath(Blacklist.STATUS,name))) {
+                if(!bungeeUtils.getPlayers(BlacklistMembers.NAMEs,name).contains(player.getName()) || !bungeeUtils.getPlayers(BlacklistMembers.UUIDs,name).contains(player.getUniqueId().toString())) {
+                    for (String message : getControl(Files.MODULES).getStringList("modules.servers-blacklist.kickMessage")) {
+                        message = message.replace("%blacklist_author%", "??")
+                                .replace("%blacklist_reason%", getControl(Files.MODULES).getString(Extras.getServerPath(Blacklist.REASON,name)));
+                        player.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', message)));
+                    }
+                    event.setCancelled(true);
                 }
             }
         }
     }
-
-
-
-
 }
