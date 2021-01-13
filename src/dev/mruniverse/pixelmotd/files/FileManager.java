@@ -460,6 +460,26 @@ public class FileManager {
         motdLists.add("<isUser>&fYour UUID: &7%your_uuid%");
         motdLists.add("&b------------ &aPixelMotd &b------------");
         addConfig(Files.COMMAND, "command.whitelist.list.bot",motdLists);
+
+        motdLists = new ArrayList<>();
+        motdLists.add("&b------------ &aPixelMotd &b------------");
+        motdLists.add("&e%blacklist% - Blacklist");
+        motdLists.add("&fStatus: &7%status%");
+        motdLists.add(" ");
+        motdLists.add("&fPlayers Name:");
+        addConfig(Files.COMMAND, "command.blacklist.list.top",motdLists);
+        addConfig(Files.COMMAND, "command.blacklist.list.playersNameFormat","&e&l* &8[&7%online_status%&8] &7%player_name%");
+        motdLists = new ArrayList<>();
+        motdLists.add(" ");
+        motdLists.add("&fPlayers UUID:");
+        addConfig(Files.COMMAND, "command.blacklist.list.mid",motdLists);
+        addConfig(Files.COMMAND, "command.blacklist.list.playersUuidFormat","&e&l* &8[&7UUID&8] &7%player_uuid%");
+        motdLists = new ArrayList<>();
+        motdLists.add(" ");
+        motdLists.add("<isUser>&fYour UUID: &7%your_uuid%");
+        motdLists.add("&b------------ &aPixelMotd &b------------");
+        addConfig(Files.COMMAND, "command.blacklist.list.bot",motdLists);
+
         motdLists = new ArrayList<>();
         motdLists.add("&b------------ &aPixelMotd &b------------");
         motdLists.add("&6PixelMOTD - Module List");
