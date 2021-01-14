@@ -397,6 +397,7 @@ public class FileManager {
         motdLists.add("&c%type%: &f%value%");
         motdLists.add("&cReason: &f%blacklist_reason%");
         motdLists.add("&b------------ &aPixelMotd &b------------");
+        addConfig(Files.MODULES, "modules.%type%-blacklist.toggle", false);
         addConfig(Files.MODULES, "modules.%type%-blacklist.kickMessage", motdLists);
         addConfig(Files.MODULES, "modules.%type%-blacklist.%type%s.%type%Name.blacklist-status", false);
         addConfig(Files.MODULES, "modules.%type%-blacklist.%type%s.%type%Name.blacklist-reason", "You're a bad player!");
