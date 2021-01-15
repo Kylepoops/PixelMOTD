@@ -1,8 +1,8 @@
 package dev.mruniverse.pixelmotd.listeners;
 
 import dev.mruniverse.pixelmotd.enums.*;
-import dev.mruniverse.pixelmotd.files.bungeeControl;
-import dev.mruniverse.pixelmotd.init.bungeePixelMOTD;
+import dev.mruniverse.pixelmotd.files.BungeeControl;
+import dev.mruniverse.pixelmotd.init.BungeePixel;
 import dev.mruniverse.pixelmotd.utils.bungeeUtils;
 import net.md_5.bungee.api.Favicon;
 import net.md_5.bungee.api.ServerPing;
@@ -57,11 +57,11 @@ public class bungeeMotd implements Listener {
 
 
         //* generate the motd name & get the server whitelist status
-        if(bungeeControl.getControl(Files.EDITABLE).getBoolean("whitelist.toggle")) {
-            ShowMotd = bungeeControl.getMotd(true);
+        if(BungeeControl.getControl(Files.EDITABLE).getBoolean("whitelist.toggle")) {
+            ShowMotd = BungeeControl.getMotd(true);
             ShowMode = MotdType.WHITELIST_MOTD;
         } else {
-            ShowMotd = bungeeControl.getMotd(false);
+            ShowMotd = BungeeControl.getMotd(false);
             ShowMode = MotdType.NORMAL_MOTD;
         }
         showType = ShowType.FIRST;
@@ -88,9 +88,9 @@ public class bungeeMotd implements Listener {
                 icons = bungeeUtils.getIcons(ShowMode,ShowMotd).listFiles();
             } else {
                 if(ShowMode.equals(MotdType.NORMAL_MOTD)) {
-                    icons = bungeePixelMOTD.getFiles().getFile(Icons.NORMAL).listFiles();
+                    icons = BungeePixel.getFiles().getFile(Icons.NORMAL).listFiles();
                 } else {
-                    icons = bungeePixelMOTD.getFiles().getFile(Icons.WHITELIST).listFiles();
+                    icons = BungeePixel.getFiles().getFile(Icons.WHITELIST).listFiles();
                 }
             }
             List<File> validIcons = new ArrayList<>();
@@ -203,34 +203,34 @@ public class bungeeMotd implements Listener {
             return ImageIO.read(file);
         } catch(IOException exception) {
             reportBadImage(file.getPath());
-            if(bungeeControl.isDetailed()) {
-                bungeePixelMOTD.sendConsole("&a[Pixel MOTD] [Detailed Error] Information: ");
+            if(BungeeControl.isDetailed()) {
+                BungeePixel.sendConsole("&a[Pixel MOTD] [Detailed Error] Information: ");
                 if(exception.getCause().toString() != null) {
-                    bungeePixelMOTD.sendConsole("&a[Pixel MOTD] Cause: " + exception.getCause().toString());
+                    BungeePixel.sendConsole("&a[Pixel MOTD] Cause: " + exception.getCause().toString());
                 }
                 if(exception.getMessage() != null) {
-                    bungeePixelMOTD.sendConsole("&a[Pixel MOTD] Message: " + exception.getMessage());
+                    BungeePixel.sendConsole("&a[Pixel MOTD] Message: " + exception.getMessage());
                 }
                 if(exception.getLocalizedMessage() != null) {
-                    bungeePixelMOTD.sendConsole("&a[Pixel MOTD] LocalizedMessage: " + exception.getLocalizedMessage());
+                    BungeePixel.sendConsole("&a[Pixel MOTD] LocalizedMessage: " + exception.getLocalizedMessage());
                 }
                 if(exception.getStackTrace() != null) {
-                    bungeePixelMOTD.sendConsole("&a[Pixel MOTD] StackTrace: ");
+                    BungeePixel.sendConsole("&a[Pixel MOTD] StackTrace: ");
                     for(StackTraceElement line : exception.getStackTrace()) {
-                        bungeePixelMOTD.sendConsole("&a[Pixel MOTD] (" + line.getLineNumber() + ") " + line.toString());
+                        BungeePixel.sendConsole("&a[Pixel MOTD] (" + line.getLineNumber() + ") " + line.toString());
                     }
                 }
                 if(Arrays.toString(exception.getSuppressed()) != null) {
-                    bungeePixelMOTD.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(exception.getSuppressed()));
+                    BungeePixel.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(exception.getSuppressed()));
                 }
-                bungeePixelMOTD.sendConsole("&a[Pixel MOTD] Class: " + exception.getClass().getName() +".class");
-                bungeePixelMOTD.sendConsole("&a[Pixel MOTD] Plugin version:" + bungeePixelMOTD.getInstance().getDescription().getVersion());
-                bungeePixelMOTD.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
+                BungeePixel.sendConsole("&a[Pixel MOTD] Class: " + exception.getClass().getName() +".class");
+                BungeePixel.sendConsole("&a[Pixel MOTD] Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
+                BungeePixel.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
             }
             return null;
         }
     }
     private void reportBadImage(String filePath) {
-        bungeePixelMOTD.sendConsole("Can't read image: &b" + filePath + "&f. Please check image size: 64x64 or check if the image isn't corrupted.");
+        BungeePixel.sendConsole("Can't read image: &b" + filePath + "&f. Please check image size: 64x64 or check if the image isn't corrupted.");
     }
 }

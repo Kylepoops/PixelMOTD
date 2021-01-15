@@ -1,40 +1,46 @@
 package dev.mruniverse.pixelmotd.init;
 
-import dev.mruniverse.pixelmotd.bstats.bungee.Metrics;
-import dev.mruniverse.pixelmotd.commands.bungeeCommand;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import dev.mruniverse.pixelmotd.commands.SpigotCMD;
 import dev.mruniverse.pixelmotd.enums.Files;
 import dev.mruniverse.pixelmotd.enums.SaveMode;
-import dev.mruniverse.pixelmotd.enums.initMode;
-import dev.mruniverse.pixelmotd.listeners.bungeeEvents;
-import dev.mruniverse.pixelmotd.listeners.bungeeMotd;
+
+import dev.mruniverse.pixelmotd.bstats.bukkit.Metrics;
+
+import dev.mruniverse.pixelmotd.enums.InitMode;
+import dev.mruniverse.pixelmotd.listeners.spigotEvents;
+import dev.mruniverse.pixelmotd.listeners.spigotMotd;
 import dev.mruniverse.pixelmotd.files.FileManager;
-import dev.mruniverse.pixelmotd.files.bungeeControl;
+import dev.mruniverse.pixelmotd.files.SpigotControl;
+
 import dev.mruniverse.pixelmotd.utils.HexManager;
 import dev.mruniverse.pixelmotd.utils.PixelUpdater;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.api.plugin.Plugin;
 
-public class bungeePixelMOTD extends Plugin implements Listener {
-    private static bungeePixelMOTD instance;
-    private static FileManager fManager;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class SpigotPixel extends JavaPlugin implements Listener {
+    private static SpigotPixel instance;
     private static HexManager hManager;
+    private static FileManager fManager;
+    public static HexManager getHex() {
+        return hManager;
+    }
     @Override
     public void onLoad() {
         instance = this;
-        fManager = new FileManager(initMode.BUNGEE_VERSION);
+        long temporalTimer = System.currentTimeMillis();
+        fManager = new FileManager(InitMode.SPIGOT_VERSION);
         fManager.loadFiles();
-        hManager = new HexManager();
         fManager.loadConfiguration();
-        bungeeControl.save(SaveMode.ALL);
-
-        hManager.setHex(bungeeControl.getControl(Files.SETTINGS).getBoolean("settings.hexColors"));
-        for(String command : bungeeControl.getControl(Files.COMMAND).getStringList("command.list")) {
-            getProxy().getPluginManager().registerCommand(this,new bungeeCommand(command));
-        }
-        if(bungeeControl.getControl(Files.SETTINGS).getBoolean("settings.update-check")) {
-            PixelUpdater updater = new PixelUpdater(true, 37177);
+        SpigotControl.save(SaveMode.ALL);
+        hManager = new HexManager();
+        hManager.setHex(SpigotControl.getControl(Files.SETTINGS).getBoolean("settings.hexColors"));
+        if(SpigotControl.getControl(Files.SETTINGS).getBoolean("settings.update-check")) {
+            PixelUpdater updater = new PixelUpdater(false, 37177);
             String UpdateResult = updater.getUpdateResult();
             if (UpdateResult.equalsIgnoreCase("UPDATED")) {
                 sendConsole("&aYou're using latest version of PixelMOTD, You're Awesome!");
@@ -62,7 +68,7 @@ public class bungeePixelMOTD extends Plugin implements Listener {
                 sendConsole("&cYou are Running a &aPre Alpha version&c, it is normal to find several errors, please report these errors so that they can be solved. &eWARNING: &cI (MrUniverse) recommend a Stable version, PreAlpha aren't stable versions!");
             }
         }
-        sendConsole("All files loaded");
+        sendConsole("All files loaded in &b" + (System.currentTimeMillis() - temporalTimer) + "&fms.");
     }
     @Override
     public void onDisable() {
@@ -74,20 +80,48 @@ public class bungeePixelMOTD extends Plugin implements Listener {
         int pluginId = 8509;
         Metrics metrics = new Metrics(this, pluginId);
         sendConsole("Metrics: &b" + metrics.isEnabled());
-        getProxy().getPluginManager().registerListener(this, new bungeeEvents());
-        getProxy().getPluginManager().registerListener(this, new bungeeMotd());
+        if(cantWork()) {
+            reportDependencies();
+        }
+        getCommand("pmotd").setExecutor(new SpigotCMD("pmotd"));
+        Bukkit.getPluginManager().registerEvents(new spigotEvents(),this);
+        getCommand("pixelmotd").setExecutor(new SpigotCMD("pixelmotd"));
+        ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+        protocolManager.addPacketListener((new spigotMotd()).getPacketAdapter());
         sendConsole("All events loaded in &b" + (System.currentTimeMillis() - temporalTimer) + "&fms.");
+    }
+    private boolean cantWork() {
+        if (Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            usingPAPI();
+        }
+        return Bukkit.getServer().getPluginManager().getPlugin("ProtocolLib") == null;
+    }
+    private void usingPAPI() {
+        if(!SpigotControl.getControl(Files.SETTINGS).getBoolean("hooks.PlaceholderAPI")) {
+            sendConsole("If you want you can enable PlaceholderAPI hook, you have installed PlaceholderAPI.");
+            return;
+        }
+        sendConsole("You have enabled PlaceholderAPI hook, Amazing :).");
     }
     public static FileManager getFiles() {
         return fManager;
     }
-    public static bungeePixelMOTD getInstance() { return instance; }
-    public static HexManager getHex() { return hManager; }
+    private void reportDependencies() {
+        getServer().getConsoleSender().sendMessage(color("&c[Pixel MOTD] &fPixelMOTD Need ProtocolLib to work."));
+    }
     public static void redIssue() {
-        instance.getProxy().getConsole().sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&',"&b[Pixel MOTD] &fCan't connect to SpigotMC and bStats, please check host internet or disable plugin autoUpdater and bStats to hide this message.")));
+        instance.getServer().getConsoleSender().sendMessage(color("&b[Pixel MOTD] &fCan't connect to SpigotMC and bStats, please check host internet or disable plugin autoUpdater and bStats to hide this message."));
+    }
+    public static void motdIssue(String type,String name) {
+        sendConsole("Can't generate a correct motd, Latest issue was generated by the next motd: (" + type + "-" + name + ")");
+    }
+    private static String color(String message) {
+        return ChatColor.translateAlternateColorCodes('&',message);
+    }
+    public static SpigotPixel getInstance() {
+        return instance;
     }
     public static void sendConsole(String message) {
-        instance.getProxy().getConsole().sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&',"&b[Pixel MOTD] &f" + message)));
+        instance.getServer().getConsoleSender().sendMessage(color("&b[Pixel MOTD] &f" + message));
     }
 }
-

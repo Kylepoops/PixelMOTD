@@ -3,90 +3,64 @@ package dev.mruniverse.pixelmotd.files;
 import dev.mruniverse.pixelmotd.enums.Files;
 import dev.mruniverse.pixelmotd.enums.MotdType;
 import dev.mruniverse.pixelmotd.enums.SaveMode;
-import dev.mruniverse.pixelmotd.init.spigotPixelMOTD;
+import dev.mruniverse.pixelmotd.init.BungeePixel;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.World;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.config.Configuration;
+import net.md_5.bungee.config.ConfigurationProvider;
+import net.md_5.bungee.config.YamlConfiguration;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static dev.mruniverse.pixelmotd.init.spigotPixelMOTD.getFiles;
+import static dev.mruniverse.pixelmotd.init.BungeePixel.getFiles;
 
-public class spigotControl {
-    private static FileConfiguration rEditable, rModules, rSettings, rWhitelist, rNormal,rTimer,rCommand;
-    public static void reloadFiles() {
-        getFiles().loadFiles();
-        rEditable = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.EDITABLE));
-        rCommand = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.COMMAND));
-        rModules = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.MODULES));
-        rSettings = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.SETTINGS));
-        rWhitelist = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.WHITELIST_MOTD));
-        rNormal = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.NORMAL_MOTD));
-        rTimer = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.TIMER_MOTD));
-    }
-    public static boolean isCommandEnabled() {
-        return true;
-    }
-    public static FileConfiguration getControl(Files fileToControl) {
-        if(fileToControl.equals(Files.WHITELIST_MOTD)) {
-            if(rWhitelist == null) reloadFiles();
-            return rWhitelist;
-        }
-        if(fileToControl.equals(Files.COMMAND)) {
-            if(rCommand == null) reloadFiles();
-            return rCommand;
-        }
-        if(fileToControl.equals(Files.NORMAL_MOTD)) {
-            if(rNormal == null) reloadFiles();
-            return rNormal;
-        }
-        if(fileToControl.equals(Files.TIMER_MOTD)) {
-            if(rTimer == null) reloadFiles();
-            return rTimer;
-        }
-        if(fileToControl.equals(Files.EDITABLE)) {
-            if(rEditable == null) reloadFiles();
-            return rEditable;
-        }
-        if(fileToControl.equals(Files.MODULES)) {
-            if(rModules == null) reloadFiles();
-            return rModules;
-        }
-        if(fileToControl.equals(Files.SETTINGS)) {
-            if(rSettings == null) reloadFiles();
-            return rSettings;
-        }
-        getFiles().reportSpigotGetControlError();
-        return rSettings;
-    }
-    public static boolean getWhitelistStatus() {
-        return getControl(Files.EDITABLE).getBoolean("whitelist.toggle");
-    }
-    public static MotdType getMotdType(boolean whitelistStatus) {
-        if(whitelistStatus) {
-            return MotdType.WHITELIST_MOTD;
-        }
-        return MotdType.NORMAL_MOTD;
-    }
-    public static String getMotd(boolean isWhitelistMotd) {
-        List<String> motdToGet = new ArrayList<>();
-        if(isWhitelistMotd) {
-            motdToGet.addAll(Objects.requireNonNull(getControl(Files.WHITELIST_MOTD).getConfigurationSection("whitelist")).getKeys(false));
-            return motdToGet.get(new Random().nextInt(motdToGet.size()));
-        }
-        motdToGet.addAll(Objects.requireNonNull(getControl(Files.NORMAL_MOTD).getConfigurationSection("normal")).getKeys(false));
-        return motdToGet.get(new Random().nextInt(motdToGet.size()));
+@SuppressWarnings("ConstantConditions")
+public class BungeeControl {
+    private static Configuration pEditable,pTimer, pModules ,pSettings, pWhitelist, pNormal,pCommand;
 
+    private static File getFile(Files fileToGet) {
+        if(fileToGet.equals(Files.NORMAL_MOTD)) {
+            return new File(BungeePixel.getInstance().getDataFolder(), "normal-motd.yml");
+        }
+        if(fileToGet.equals(Files.COMMAND)) {
+            return new File(BungeePixel.getInstance().getDataFolder(), "command.yml");
+        }
+        if(fileToGet.equals(Files.WHITELIST_MOTD)) {
+            return new File(BungeePixel.getInstance().getDataFolder(), "whitelist-motd.yml");
+        }
+        if(fileToGet.equals(Files.EDITABLE)) {
+            return new File(BungeePixel.getInstance().getDataFolder(), "edit.yml");
+        }
+        if(fileToGet.equals(Files.TIMER_MOTD)) {
+            return new File(BungeePixel.getInstance().getDataFolder(), "timer-motd.yml");
+        }
+        if(fileToGet.equals(Files.MODULES)) {
+            return new File(BungeePixel.getInstance().getDataFolder(), "modules.yml");
+        }
+        return new File(BungeePixel.getInstance().getDataFolder(), "settings.yml");
     }
-    public static String getWorlds(String msg) throws ParseException {
+    public static boolean callMotds(MotdType motdType) {
+        try {
+            if (motdType.equals(MotdType.NORMAL_MOTD)) {
+                return getControl(Files.NORMAL_MOTD).get("normal") == null;
+            }
+            if (motdType.equals(MotdType.WHITELIST_MOTD)) {
+                return getControl(Files.WHITELIST_MOTD).get("whitelist") == null;
+            }
+            return getControl(Files.TIMER_MOTD).get("timers") == null;
+        } catch(Throwable throwable) {
+            return true;
+        }
+    }
+    public static String getServers(String msg) throws ParseException {
         if(msg.contains("%online_")) {
-            for (World world : spigotPixelMOTD.getInstance().getServer().getWorlds()) {
-                msg = msg.replace("%online_" + world.getName() + "%", world.getPlayers().size() + "");
+            for (ServerInfo svs : BungeePixel.getInstance().getProxy().getServers().values()) {
+                msg = msg.replace("%online_" + svs.getName() + "%", svs.getPlayers().size() + "");
             }
         }
         return replaceEventInfo(msg);
@@ -102,28 +76,27 @@ public class spigotControl {
         if(motdLineOrHoverLine.contains("%event_")) {
             Date CurrentDate;
             CurrentDate = new Date();
-            for(String event : Objects.requireNonNull(getControl(Files.SETTINGS).getConfigurationSection("events")).getKeys(false)) {
+            for(String event : getControl(Files.SETTINGS).getSection("events").getKeys()) {
                 String TimeLeft = "<Invalid format-Type>";
                 long difference = getEventDate(event).getTime() - CurrentDate.getTime();
                 if(difference >= 0L) {
-                    if(Objects.requireNonNull(getControl(Files.SETTINGS).getString("events." + event + ".format-Type")).equalsIgnoreCase("FIRST")) {
+                    if(getControl(Files.SETTINGS).getString("events." + event + ".format-Type").equalsIgnoreCase("FIRST")) {
                         TimeLeft = convertToFinalResult(difference,"FIRST");
-                    } else if(Objects.requireNonNull(getControl(Files.SETTINGS).getString("events." + event + ".format-Type")).equalsIgnoreCase("SECOND")) {
+                    } else if(getControl(Files.SETTINGS).getString("events." + event + ".format-Type").equalsIgnoreCase("SECOND")) {
                         TimeLeft = convertToFinalResult(difference, "SECOND");
-                    } else if(Objects.requireNonNull(getControl(Files.SETTINGS).getString("events." + event + ".format-Type")).equalsIgnoreCase("THIRD")) {
+                    } else if(getControl(Files.SETTINGS).getString("events." + event + ".format-Type").equalsIgnoreCase("THIRD")) {
                         TimeLeft = convertToFinalResult(difference,"THIRD");
                     }
                 } else {
-                    TimeLeft = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(getControl(Files.SETTINGS).getString("events." + event + ".endMessage")));
+                    TimeLeft = ChatColor.translateAlternateColorCodes('&',getControl(Files.SETTINGS).getString("events." + event + ".endMessage"));
                 }
-                motdLineOrHoverLine = motdLineOrHoverLine.replace("%event_" + event +  "_name%", Objects.requireNonNull(getControl(Files.SETTINGS).getString("events." + event + ".eventName")))
-                        .replace("%event_" + event + "_TimeZone%", Objects.requireNonNull(getControl(Files.SETTINGS).getString("events." + event + ".TimeZone")))
+                motdLineOrHoverLine = motdLineOrHoverLine.replace("%event_" + event +  "_name%",getControl(Files.SETTINGS).getString("events." + event + ".eventName"))
+                        .replace("%event_" + event + "_TimeZone%",getControl(Files.SETTINGS).getString("events." + event + ".TimeZone"))
                         .replace("%event_" + event + "_TimeLeft%",TimeLeft);
             }
         }
         return motdLineOrHoverLine;
     }
-
     public static String convertToFinalResult(long time,String formatType) {
         StringJoiner joiner = new StringJoiner(" ");
         if (formatType.equalsIgnoreCase("SECOND")) {
@@ -236,6 +209,196 @@ public class spigotControl {
             return joiner.toString().replace(" ","");
         } else {
             return joiner.toString();
+        }
+    }
+    public static boolean getWhitelistStatus() {
+        return getControl(Files.EDITABLE).getBoolean("whitelist.toggle");
+    }
+    public static String getMotd(boolean isWhitelistMotd) {
+        List<String> motdToGet = new ArrayList<>();
+        if(isWhitelistMotd) {
+            motdToGet.addAll(getControl(Files.WHITELIST_MOTD).getSection("whitelist").getKeys());
+            return motdToGet.get(new Random().nextInt(motdToGet.size()));
+        }
+        motdToGet.addAll(getControl(Files.NORMAL_MOTD).getSection("normal").getKeys());
+        return motdToGet.get(new Random().nextInt(motdToGet.size()));
+
+    }
+    public static boolean isCommandEnabled() {
+        return true;
+    }
+    public static void reloadFile(SaveMode saveMode) {
+        try {
+            if(saveMode.equals(SaveMode.COMMAND) || saveMode.equals(SaveMode.ALL)) {
+                pCommand = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile(Files.COMMAND));
+            }
+            if(saveMode.equals(SaveMode.TIMER_MOTD) || saveMode.equals(SaveMode.ALL)) {
+                pTimer = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile(Files.TIMER_MOTD));
+            }
+            if(saveMode.equals(SaveMode.EDITABLE) || saveMode.equals(SaveMode.ALL)) {
+                pEditable = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile(Files.EDITABLE));
+            }
+            if(saveMode.equals(SaveMode.MODULES) || saveMode.equals(SaveMode.ALL)) {
+                pModules = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile(Files.MODULES));
+            }
+            if(saveMode.equals(SaveMode.SETTINGS) || saveMode.equals(SaveMode.ALL)) {
+                pSettings = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile(Files.SETTINGS));
+            }
+            if(saveMode.equals(SaveMode.WHITELIST_MOTD) || saveMode.equals(SaveMode.ALL)) {
+                pWhitelist = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile(Files.WHITELIST_MOTD));
+            }
+            if(saveMode.equals(SaveMode.NORMAL_MOTD) || saveMode.equals(SaveMode.ALL)) {
+                pNormal = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile(Files.NORMAL_MOTD));
+            }
+        } catch (IOException exp) {
+            BungeePixel.getFiles().reportControlError();
+            if(BungeeControl.isDetailed()) {
+                BungeePixel.sendConsole("&a[Pixel MOTD] [Detailed Error] Information: ");
+                //if(exp.getCause().toString() != null) {
+                //    bungeePixelMOTD.sendConsole("&a[Pixel MOTD] Cause: " + exp.getCause().toString());
+                //}
+                if(exp.getMessage() != null) {
+                    BungeePixel.sendConsole("&a[Pixel MOTD] Message: " + exp.getMessage());
+                }
+                if(exp.getLocalizedMessage() != null) {
+                    BungeePixel.sendConsole("&a[Pixel MOTD] LocalizedMessage: " + exp.getLocalizedMessage());
+                }
+                if(exp.getStackTrace() != null) {
+                    BungeePixel.sendConsole("&a[Pixel MOTD] StackTrace: ");
+                    for(StackTraceElement line : exp.getStackTrace()) {
+                        BungeePixel.sendConsole("&a[Pixel MOTD] (" + line.getLineNumber() + ") " + line.toString());
+                    }
+                }
+                if(Arrays.toString(exp.getSuppressed()) != null) {
+                    BungeePixel.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(exp.getSuppressed()));
+                }
+                BungeePixel.sendConsole("&a[Pixel MOTD] Class: " + exp.getClass().getName() +".class");
+                BungeePixel.sendConsole("&a[Pixel MOTD] Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
+                BungeePixel.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
+            }
+        }
+    }
+    public static void reloadFiles() {
+        try {
+            pCommand = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile(Files.COMMAND));
+            pTimer = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile(Files.TIMER_MOTD));
+            pEditable = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile(Files.EDITABLE));
+            pModules = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile(Files.MODULES));
+            pSettings = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile(Files.SETTINGS));
+            pWhitelist = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile(Files.WHITELIST_MOTD));
+            pNormal = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile(Files.NORMAL_MOTD));
+        } catch (IOException exp) {
+            BungeePixel.getFiles().reportControlError();
+            if(BungeeControl.isDetailed()) {
+                BungeePixel.sendConsole("&a[Pixel MOTD] [Detailed Error] Information: ");
+                //if(exp.getCause().toString() != null) {
+                //    bungeePixelMOTD.sendConsole("&a[Pixel MOTD] Cause: " + exp.getCause().toString());
+                //}
+                if(exp.getMessage() != null) {
+                    BungeePixel.sendConsole("&a[Pixel MOTD] Message: " + exp.getMessage());
+                }
+                if(exp.getLocalizedMessage() != null) {
+                    BungeePixel.sendConsole("&a[Pixel MOTD] LocalizedMessage: " + exp.getLocalizedMessage());
+                }
+                if(exp.getStackTrace() != null) {
+                    BungeePixel.sendConsole("&a[Pixel MOTD] StackTrace: ");
+                    for(StackTraceElement line : exp.getStackTrace()) {
+                        BungeePixel.sendConsole("&a[Pixel MOTD] (" + line.getLineNumber() + ") " + line.toString());
+                    }
+                }
+                if(Arrays.toString(exp.getSuppressed()) != null) {
+                    BungeePixel.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(exp.getSuppressed()));
+                }
+                BungeePixel.sendConsole("&a[Pixel MOTD] Class: " + exp.getClass().getName() +".class");
+                BungeePixel.sendConsole("&a[Pixel MOTD] Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
+                BungeePixel.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
+            }
+        }
+    }
+    public static boolean isDetailed() {
+        return getControl(Files.SETTINGS).getBoolean("settings.show-detailed-errors");
+    }
+    public static Configuration getControl(Files fileToControl) {
+        if(fileToControl.equals(Files.SETTINGS)) {
+            if(pSettings == null) reloadFiles();
+            return pSettings;
+        }
+        if(fileToControl.equals(Files.MODULES)) {
+            if(pModules == null) reloadFiles();
+            return pModules;
+        }
+        if(fileToControl.equals(Files.EDITABLE)) {
+            if(pEditable == null) reloadFiles();
+            return pEditable;
+        }
+        if(fileToControl.equals(Files.COMMAND)) {
+            if(pCommand == null) reloadFiles();
+            return pCommand;
+        }
+        if(fileToControl.equals(Files.NORMAL_MOTD)) {
+            if(pNormal == null) reloadFiles();
+            return pNormal;
+        }
+        if(fileToControl.equals(Files.TIMER_MOTD)) {
+            if(pTimer == null) reloadFiles();
+            return pTimer;
+        }
+        if(fileToControl.equals(Files.WHITELIST_MOTD)) {
+            if(pWhitelist == null) reloadFiles();
+            return pWhitelist;
+        }
+        BungeePixel.getFiles().reportBungeeGetControlError();
+        return pSettings;
+    }
+    public static void save(SaveMode Mode) {
+        try {
+            if(Mode.equals(SaveMode.MODULES) || Mode.equals(SaveMode.ALL)) {
+                ConfigurationProvider.getProvider(YamlConfiguration.class).save(getControl(Files.MODULES), getFile(Files.MODULES));
+            }
+            if(Mode.equals(SaveMode.TIMER_MOTD) || Mode.equals(SaveMode.ALL)) {
+                ConfigurationProvider.getProvider(YamlConfiguration.class).save(getControl(Files.TIMER_MOTD), getFile(Files.TIMER_MOTD));
+            }
+            if(Mode.equals(SaveMode.EDITABLE) || Mode.equals(SaveMode.ALL)) {
+                ConfigurationProvider.getProvider(YamlConfiguration.class).save(getControl(Files.EDITABLE), getFile(Files.EDITABLE));
+            }
+            if(Mode.equals(SaveMode.NORMAL_MOTD) || Mode.equals(SaveMode.ALL)) {
+                ConfigurationProvider.getProvider(YamlConfiguration.class).save(getControl(Files.NORMAL_MOTD), getFile(Files.NORMAL_MOTD));
+            }
+            if(Mode.equals(SaveMode.COMMAND) || Mode.equals(SaveMode.ALL)) {
+                ConfigurationProvider.getProvider(YamlConfiguration.class).save(getControl(Files.COMMAND), getFile(Files.COMMAND));
+            }
+            if(Mode.equals(SaveMode.WHITELIST_MOTD) || Mode.equals(SaveMode.ALL)) {
+                ConfigurationProvider.getProvider(YamlConfiguration.class).save(getControl(Files.WHITELIST_MOTD), getFile(Files.WHITELIST_MOTD));
+            }
+            if(Mode.equals(SaveMode.SETTINGS) || Mode.equals(SaveMode.ALL)) {
+                ConfigurationProvider.getProvider(YamlConfiguration.class).save(getControl(Files.SETTINGS), getFile(Files.SETTINGS));
+            }
+        } catch(IOException exception) {
+            BungeePixel.getFiles().reportControlError();
+            if(isDetailed()) {
+                BungeePixel.sendConsole("&a[Pixel MOTD] [Detailed Error] Information: ");
+                if (exception.getCause().toString() != null) {
+                    BungeePixel.sendConsole("&a[Pixel MOTD] Cause: " + exception.getCause().toString());
+                }
+                if (exception.getMessage() != null) {
+                    BungeePixel.sendConsole("&a[Pixel MOTD] Message: " + exception.getMessage());
+                }
+                if (exception.getLocalizedMessage() != null) {
+                    BungeePixel.sendConsole("&a[Pixel MOTD] LocalizedMessage: " + exception.getLocalizedMessage());
+                }
+                if(exception.getStackTrace() != null) {
+                    BungeePixel.sendConsole("&a[Pixel MOTD] StackTrace: ");
+                    for(StackTraceElement line : exception.getStackTrace()) {
+                        BungeePixel.sendConsole("&a[Pixel MOTD] (" + line.getLineNumber() + ") " + line.toString());
+                    }
+                }
+                if (Arrays.toString(exception.getSuppressed()) != null) {
+                    BungeePixel.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(exception.getSuppressed()));
+                }
+                BungeePixel.sendConsole("&a[Pixel MOTD] Class: " + exception.getClass().getName() + ".class");
+                BungeePixel.sendConsole("&a[Pixel MOTD] Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
+                BungeePixel.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
+            }
         }
     }
     public static boolean pendingPath(MotdType motdType,String motdName) {
@@ -382,91 +545,23 @@ public class spigotControl {
     }
     public static void loadMotdPaths(MotdType motdType) {
         if(motdType.equals(MotdType.NORMAL_MOTD)) {
-            for (String motdName : Objects.requireNonNull(getControl(Files.NORMAL_MOTD).getConfigurationSection("normal")).getKeys(false)) {
+            for (String motdName : Objects.requireNonNull(getControl(Files.NORMAL_MOTD).getSection("normal")).getKeys()) {
                 loadMotdPath(motdType,motdName);
             }
             return;
         }
         if(motdType.equals(MotdType.WHITELIST_MOTD)) {
-            for (String motdName : Objects.requireNonNull(getControl(Files.WHITELIST_MOTD).getConfigurationSection("whitelist")).getKeys(false)) {
+            for (String motdName : Objects.requireNonNull(getControl(Files.WHITELIST_MOTD).getSection("whitelist")).getKeys()) {
                 loadMotdPath(motdType,motdName);
             }
             return;
         }
-        for (String motdName : Objects.requireNonNull(getControl(Files.TIMER_MOTD).getConfigurationSection("timers")).getKeys(false)) {
+        for (String motdName : Objects.requireNonNull(getControl(Files.TIMER_MOTD).getSection("timers")).getKeys()) {
             loadMotdPath(motdType,motdName);
         }
     }
-    public static boolean callMotds(MotdType motdType) {
-        try {
-            if (motdType.equals(MotdType.NORMAL_MOTD)) {
-                return getControl(Files.NORMAL_MOTD).get("normal") == null;
-            }
-            if (motdType.equals(MotdType.WHITELIST_MOTD)) {
-                return getControl(Files.WHITELIST_MOTD).get("whitelist") == null;
-            }
-            return getControl(Files.TIMER_MOTD).get("timers") == null;
-        } catch(Throwable throwable) {
-            return true;
-        }
-    }
-    public static boolean isDetailed() {
-        return getControl(Files.SETTINGS).getBoolean("settings.show-detailed-errors");
-    }
-    public static void reloadFile(SaveMode Mode) {
-        getFiles().loadFiles();
-        if(Mode.equals(SaveMode.EDITABLE) || Mode.equals(SaveMode.ALL)) {
-            rEditable = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.EDITABLE));
-        }
-        if(Mode.equals(SaveMode.COMMAND) || Mode.equals(SaveMode.ALL)) {
-            rCommand = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.COMMAND));
-        }
-        if(Mode.equals(SaveMode.MODULES) || Mode.equals(SaveMode.ALL)) {
-            rModules = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.MODULES));
-        }
-        if(Mode.equals(SaveMode.SETTINGS) || Mode.equals(SaveMode.ALL)) {
-            rSettings = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.SETTINGS));
-        }
-        if(Mode.equals(SaveMode.MOTDS) || Mode.equals(SaveMode.ALL)) {
-            rWhitelist = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.WHITELIST_MOTD));
-            rNormal = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.NORMAL_MOTD));
-            rTimer = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.TIMER_MOTD));
-        }
-    }
-    public static void save(SaveMode Mode) {
-        try {
-            if(Mode.equals(SaveMode.MODULES) || Mode.equals(SaveMode.ALL)) {
-                getControl(Files.MODULES).save(getFiles().getFile(Files.MODULES));
-            }
-            if(Mode.equals(SaveMode.TIMER_MOTD) || Mode.equals(SaveMode.ALL)) {
-                getControl(Files.TIMER_MOTD).save(getFiles().getFile(Files.TIMER_MOTD));
-            }
-            if(Mode.equals(SaveMode.COMMAND) || Mode.equals(SaveMode.ALL)) {
-                getControl(Files.COMMAND).save(getFiles().getFile(Files.COMMAND));
-            }
-            if(Mode.equals(SaveMode.EDITABLE) || Mode.equals(SaveMode.ALL)) {
-                getControl(Files.EDITABLE).save(getFiles().getFile(Files.EDITABLE));
-            }
-            if(Mode.equals(SaveMode.NORMAL_MOTD) || Mode.equals(SaveMode.ALL)) {
-                getControl(Files.NORMAL_MOTD).save(getFiles().getFile(Files.NORMAL_MOTD));
-            }
-            if(Mode.equals(SaveMode.WHITELIST_MOTD) || Mode.equals(SaveMode.ALL)) {
-                getControl(Files.WHITELIST_MOTD).save(getFiles().getFile(Files.WHITELIST_MOTD));
-            }
-            if(Mode.equals(SaveMode.SETTINGS) || Mode.equals(SaveMode.ALL)) {
-                getControl(Files.SETTINGS).save(getFiles().getFile(Files.SETTINGS));
-            }
-            if(Mode.equals(SaveMode.MOTDS) || Mode.equals(SaveMode.ALL)) {
-                getControl(Files.NORMAL_MOTD).save(getFiles().getFile(Files.NORMAL_MOTD));
-                getControl(Files.WHITELIST_MOTD).save(getFiles().getFile(Files.WHITELIST_MOTD));
-                getControl(Files.TIMER_MOTD).save(getFiles().getFile(Files.TIMER_MOTD));
-            }
-        } catch(IOException exception) {
-            spigotPixelMOTD.getFiles().reportControlError();
-        }
-    }
     public static String getWhitelistAuthor() {
-        if(!Objects.requireNonNull(getControl(Files.EDITABLE).getString("whitelist.author")).equalsIgnoreCase("CONSOLE")) {
+        if(!getControl(Files.EDITABLE).getString("whitelist.author").equalsIgnoreCase("CONSOLE")) {
             return getControl(Files.EDITABLE).getString("whitelist.author");
         } else {
             if(getControl(Files.EDITABLE).getBoolean("whitelist.customConsoleName.toggle")) {

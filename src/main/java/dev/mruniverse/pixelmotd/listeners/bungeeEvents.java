@@ -2,10 +2,10 @@ package dev.mruniverse.pixelmotd.listeners;
 
 import dev.mruniverse.pixelmotd.enums.*;
 
-import static dev.mruniverse.pixelmotd.files.bungeeControl.getControl;
-import static dev.mruniverse.pixelmotd.files.bungeeControl.getWhitelistAuthor;
+import static dev.mruniverse.pixelmotd.files.BungeeControl.getControl;
+import static dev.mruniverse.pixelmotd.files.BungeeControl.getWhitelistAuthor;
 
-import dev.mruniverse.pixelmotd.files.bungeeControl;
+import dev.mruniverse.pixelmotd.files.BungeeControl;
 import dev.mruniverse.pixelmotd.utils.Extras;
 import dev.mruniverse.pixelmotd.utils.PixelConverter;
 import dev.mruniverse.pixelmotd.utils.bungeeUtils;
@@ -114,7 +114,7 @@ public class bungeeEvents implements Listener {
         String name = event.getTarget().getName();
         ProxiedPlayer player = event.getPlayer();
         if(getControl(Files.MODULES).getBoolean("modules.servers-whitelist.toggle")) {
-            if(bungeeControl.getControl(Files.MODULES).contains(Extras.getServerPath(Whitelist.STATUS,name))) {
+            if(BungeeControl.getControl(Files.MODULES).contains(Extras.getServerPath(Whitelist.STATUS,name))) {
                 if(!bungeeUtils.getPlayers(WhitelistMembers.NAMEs,name).contains(player.getName()) || !bungeeUtils.getPlayers(WhitelistMembers.UUIDs,name).contains(player.getUniqueId().toString())) {
                     for (String message : getControl(Files.MODULES).getStringList("modules.servers-whitelist.kickMessage")) {
                         message = message.replace("%whitelist_author%", getControl(Files.MODULES).getString(Extras.getServerPath(Whitelist.AUTHOR,name)))
@@ -127,7 +127,7 @@ public class bungeeEvents implements Listener {
         }
         if(event.isCancelled()) return;
         if(getControl(Files.MODULES).getBoolean("modules.servers-blacklist.toggle")) {
-            if(bungeeControl.getControl(Files.MODULES).contains(Extras.getServerPath(Blacklist.STATUS,name))) {
+            if(BungeeControl.getControl(Files.MODULES).contains(Extras.getServerPath(Blacklist.STATUS,name))) {
                 if(!bungeeUtils.getPlayers(BlacklistMembers.NAMEs,name).contains(player.getName()) || !bungeeUtils.getPlayers(BlacklistMembers.UUIDs,name).contains(player.getUniqueId().toString())) {
                     for (String message : getControl(Files.MODULES).getStringList("modules.servers-blacklist.kickMessage")) {
                         message = message.replace("%blacklist_author%", "??")

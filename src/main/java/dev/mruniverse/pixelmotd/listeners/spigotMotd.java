@@ -7,10 +7,10 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.WrappedServerPing;
 import dev.mruniverse.pixelmotd.enums.*;
-import dev.mruniverse.pixelmotd.files.spigotControl;
-import dev.mruniverse.pixelmotd.init.spigotPixelMOTD;
+import dev.mruniverse.pixelmotd.files.SpigotControl;
+import dev.mruniverse.pixelmotd.init.SpigotPixel;
 import dev.mruniverse.pixelmotd.manager.WrappedStatus;
-import dev.mruniverse.pixelmotd.utils.spigotUtils;
+import dev.mruniverse.pixelmotd.utils.SpigotUtils;
 import org.bukkit.entity.Player;
 
 import javax.imageio.ImageIO;
@@ -23,7 +23,7 @@ import java.util.Random;
 
 @SuppressWarnings({"UnstableApiUsage", "CatchMayIgnoreException"})
 public class spigotMotd {
-    private final PacketAdapter packetAdapter = new PacketAdapter(spigotPixelMOTD.getInstance(), ListenerPriority.HIGH, PacketType.Status.Server.SERVER_INFO) {
+    private final PacketAdapter packetAdapter = new PacketAdapter(SpigotPixel.getInstance(), ListenerPriority.HIGH, PacketType.Status.Server.SERVER_INFO) {
         public void onPacketSending(PacketEvent e) {
             if (e.getPacketType() != PacketType.Status.Server.SERVER_INFO)
                 return;
@@ -41,33 +41,33 @@ public class spigotMotd {
             max = ping.getPlayersMaximum();
             online = ping.getPlayersOnline();
 
-                if (spigotControl.getControl(Files.EDITABLE).getBoolean("whitelist.toggle")) {
-                    motdName = spigotControl.getMotd(true);
+                if (SpigotControl.getControl(Files.EDITABLE).getBoolean("whitelist.toggle")) {
+                    motdName = SpigotControl.getMotd(true);
                     motdType = MotdType.WHITELIST_MOTD;
                 } else {
-                    motdName = spigotControl.getMotd(false);
+                    motdName = SpigotControl.getMotd(false);
                     motdType = MotdType.NORMAL_MOTD;
                 }
                 showType = ShowType.FIRST;
 
                 //* Motd Version Setup
                 if (ProtocolLibrary.getProtocolManager().getProtocolVersion(e.getPlayer()) >= 721) {
-                    if (spigotUtils.getHexMotdStatus(motdType, motdName)) {
+                    if (SpigotUtils.getHexMotdStatus(motdType, motdName)) {
                         showType = ShowType.SECOND;
                     }
                 }
             try {
                 //* Favicon Setup
                 //* Custom Server Icon Setup
-                if(spigotUtils.getIconStatus(motdType,motdName,false)) {
+                if(SpigotUtils.getIconStatus(motdType,motdName,false)) {
                     File[] icons;
-                    if(spigotUtils.getIconStatus(motdType,motdName,true)) {
-                        icons = spigotUtils.getIcons(motdType,motdName).listFiles();
+                    if(SpigotUtils.getIconStatus(motdType,motdName,true)) {
+                        icons = SpigotUtils.getIcons(motdType,motdName).listFiles();
                     } else {
                         if(motdType.equals(MotdType.NORMAL_MOTD)) {
-                            icons = spigotPixelMOTD.getFiles().getFile(Icons.NORMAL).listFiles();
+                            icons = SpigotPixel.getFiles().getFile(Icons.NORMAL).listFiles();
                         } else {
-                            icons = spigotPixelMOTD.getFiles().getFile(Icons.WHITELIST).listFiles();
+                            icons = SpigotPixel.getFiles().getFile(Icons.WHITELIST).listFiles();
                         }
                     }
                     if (icons != null && icons.length != 0) {
@@ -84,21 +84,21 @@ public class spigotMotd {
                     }
                 }
                 //* Players Setup
-                if(spigotUtils.getPlayersStatus(motdType,motdName)) {
-                    if(spigotUtils.getPlayersMode(motdType,motdName).equals(ValueMode.ADD)) {
+                if(SpigotUtils.getPlayersStatus(motdType,motdName)) {
+                    if(SpigotUtils.getPlayersMode(motdType,motdName).equals(ValueMode.ADD)) {
                         max = online + 1;
                     }
-                    if(spigotUtils.getPlayersMode(motdType,motdName).equals(ValueMode.CUSTOM)) {
-                        max = spigotUtils.getPlayersValue(motdType,motdName);
+                    if(SpigotUtils.getPlayersMode(motdType,motdName).equals(ValueMode.CUSTOM)) {
+                        max = SpigotUtils.getPlayersValue(motdType,motdName);
                     }
-                    if(spigotUtils.getPlayersMode(motdType,motdName).equals(ValueMode.HALF)) {
+                    if(SpigotUtils.getPlayersMode(motdType,motdName).equals(ValueMode.HALF)) {
                         if(online >= 2) {
                             max = online / 2;
                         } else {
                             max = 0;
                         }
                     }
-                    if(spigotUtils.getPlayersMode(motdType,motdName).equals(ValueMode.HALF_ADD)) {
+                    if(SpigotUtils.getPlayersMode(motdType,motdName).equals(ValueMode.HALF_ADD)) {
                         int add;
                         if(online >= 2) {
                             add = online / 2;
@@ -107,25 +107,25 @@ public class spigotMotd {
                         }
                         max = online + add;
                     }
-                    if(spigotUtils.getPlayersMode(motdType,motdName).equals(ValueMode.EQUAL)) {
+                    if(SpigotUtils.getPlayersMode(motdType,motdName).equals(ValueMode.EQUAL)) {
                         max = online;
                     }
                 }
-                if(spigotUtils.getOnlineStatus(motdType,motdName)) {
-                    if(spigotUtils.getOnlineMode(motdType,motdName).equals(ValueMode.ADD)) {
+                if(SpigotUtils.getOnlineStatus(motdType,motdName)) {
+                    if(SpigotUtils.getOnlineMode(motdType,motdName).equals(ValueMode.ADD)) {
                         online = online + 1;
                     }
-                    if(spigotUtils.getOnlineMode(motdType,motdName).equals(ValueMode.CUSTOM)) {
-                        online = spigotUtils.getOnlineValue(motdType,motdName);
+                    if(SpigotUtils.getOnlineMode(motdType,motdName).equals(ValueMode.CUSTOM)) {
+                        online = SpigotUtils.getOnlineValue(motdType,motdName);
                     }
-                    if(spigotUtils.getOnlineMode(motdType,motdName).equals(ValueMode.HALF)) {
+                    if(SpigotUtils.getOnlineMode(motdType,motdName).equals(ValueMode.HALF)) {
                         if(online >= 2) {
                             online = online / 2;
                         } else {
                             online = 0;
                         }
                     }
-                    if(spigotUtils.getOnlineMode(motdType,motdName).equals(ValueMode.HALF_ADD)) {
+                    if(SpigotUtils.getOnlineMode(motdType,motdName).equals(ValueMode.HALF_ADD)) {
                         int add;
                         if(online >= 2) {
                             add = online / 2;
@@ -134,52 +134,52 @@ public class spigotMotd {
                         }
                         online = online + add;
                     }
-                    if(spigotUtils.getOnlineMode(motdType,motdName).equals(ValueMode.EQUAL)) {
+                    if(SpigotUtils.getOnlineMode(motdType,motdName).equals(ValueMode.EQUAL)) {
                         online = max;
                     }
                 }
                 ping.setPlayersOnline(online);
                 ping.setPlayersMaximum(max);
                 //* Motd hover Setup
-                if (spigotUtils.getHoverStatus(motdType, motdName)) {
-                    ping.setPlayers(spigotUtils.getHover(motdType, motdName, online, max));
+                if (SpigotUtils.getHoverStatus(motdType, motdName)) {
+                    ping.setPlayers(SpigotUtils.getHover(motdType, motdName, online, max));
                 }
-                if (spigotUtils.getProtocolStatus(motdType, motdName)) {
-                    ping.setVersionName(spigotPixelMOTD.getHex().applyColor(spigotUtils.replaceProtocolVariables(spigotUtils.getProtocolMessage(motdType, motdName), online, max, getName(e.getPlayer().getName(), e.getPlayer()))));
-                    if (spigotUtils.getProtocolVersion(motdType, motdName)) { ping.setVersionProtocol(-1); } else { ping.setVersionProtocol(ProtocolLibrary.getProtocolManager().getProtocolVersion(e.getPlayer()));}
+                if (SpigotUtils.getProtocolStatus(motdType, motdName)) {
+                    ping.setVersionName(SpigotPixel.getHex().applyColor(SpigotUtils.replaceProtocolVariables(SpigotUtils.getProtocolMessage(motdType, motdName), online, max, getName(e.getPlayer().getName(), e.getPlayer()))));
+                    if (SpigotUtils.getProtocolVersion(motdType, motdName)) { ping.setVersionProtocol(-1); } else { ping.setVersionProtocol(ProtocolLibrary.getProtocolManager().getProtocolVersion(e.getPlayer()));}
                 }
 
                 //* Motd Setup
-                line1 = spigotUtils.getLine1(motdType, motdName, showType);
-                line2 = spigotUtils.getLine2(motdType, motdName, showType);
-                motd = spigotUtils.replaceVariables(line1, online, max) + "\n" + spigotUtils.replaceVariables(line2, online, max);
+                line1 = SpigotUtils.getLine1(motdType, motdName, showType);
+                line2 = SpigotUtils.getLine2(motdType, motdName, showType);
+                motd = SpigotUtils.replaceVariables(line1, online, max) + "\n" + SpigotUtils.replaceVariables(line2, online, max);
                 ping.setMotD(motd);
 
             } catch(Throwable ignored) {
-                spigotPixelMOTD.motdIssue(motdType.name(), motdName);
-                if(spigotControl.isDetailed()) {
-                    spigotPixelMOTD.sendConsole("&a[Pixel MOTD] [Detailed Error] Information: ");
+                SpigotPixel.motdIssue(motdType.name(), motdName);
+                if(SpigotControl.isDetailed()) {
+                    SpigotPixel.sendConsole("&a[Pixel MOTD] [Detailed Error] Information: ");
                     //if(ignored.getCause().toString() != null) {
                     //    spigotPixelMOTD.sendConsole("&a[Pixel MOTD] Cause: " + ignored.getCause().toString());
                     //}
                     if(ignored.getMessage() != null) {
-                        spigotPixelMOTD.sendConsole("&a[Pixel MOTD] Message: " + ignored.getMessage());
+                        SpigotPixel.sendConsole("&a[Pixel MOTD] Message: " + ignored.getMessage());
                     }
                     if(ignored.getLocalizedMessage() != null) {
-                        spigotPixelMOTD.sendConsole("&a[Pixel MOTD] LocalizedMessage: " + ignored.getLocalizedMessage());
+                        SpigotPixel.sendConsole("&a[Pixel MOTD] LocalizedMessage: " + ignored.getLocalizedMessage());
                     }
                     if(ignored.getStackTrace() != null) {
-                        spigotPixelMOTD.sendConsole("&a[Pixel MOTD] StackTrace: ");
+                        SpigotPixel.sendConsole("&a[Pixel MOTD] StackTrace: ");
                         for(StackTraceElement line : ignored.getStackTrace()) {
-                            spigotPixelMOTD.sendConsole("&a[Pixel MOTD] (" + line.getLineNumber() + ") " + line.toString());
+                            SpigotPixel.sendConsole("&a[Pixel MOTD] (" + line.getLineNumber() + ") " + line.toString());
                         }
                     }
                     if(Arrays.toString(ignored.getSuppressed()) != null) {
-                        spigotPixelMOTD.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(ignored.getSuppressed()));
+                        SpigotPixel.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(ignored.getSuppressed()));
                     }
-                    spigotPixelMOTD.sendConsole("&a[Pixel MOTD] Class: " + ignored.getClass().getName() +".class");
-                    spigotPixelMOTD.sendConsole("&a[Pixel MOTD] Plugin version:" + spigotPixelMOTD.getInstance().getDescription().getVersion());
-                    spigotPixelMOTD.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
+                    SpigotPixel.sendConsole("&a[Pixel MOTD] Class: " + ignored.getClass().getName() +".class");
+                    SpigotPixel.sendConsole("&a[Pixel MOTD] Plugin version:" + SpigotPixel.getInstance().getDescription().getVersion());
+                    SpigotPixel.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
                 }
             }
         }
@@ -193,12 +193,12 @@ public class spigotMotd {
         }
     }
     private void reportBadImage(String filePath) {
-        spigotPixelMOTD.sendConsole("Can't read image: &b" + filePath + "&f. Please check image size: 64x64 or check if the image isn't corrupted.");
+        SpigotPixel.sendConsole("Can't read image: &b" + filePath + "&f. Please check image size: 64x64 or check if the image isn't corrupted.");
     }
     private String getName(String userName, Player player) {
         if (userName.contains("UNKNOWN") &&
                 userName.contains(player.getAddress() + ""))
-            userName = spigotControl.getControl(Files.SETTINGS).getString("settings.defaultUnknownUserName");
+            userName = SpigotControl.getControl(Files.SETTINGS).getString("settings.defaultUnknownUserName");
         return userName;
     }
     @SuppressWarnings("unused")
