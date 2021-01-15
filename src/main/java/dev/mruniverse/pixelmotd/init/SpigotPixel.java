@@ -9,8 +9,8 @@ import dev.mruniverse.pixelmotd.enums.SaveMode;
 import dev.mruniverse.pixelmotd.bstats.bukkit.Metrics;
 
 import dev.mruniverse.pixelmotd.enums.InitMode;
-import dev.mruniverse.pixelmotd.listeners.spigotEvents;
-import dev.mruniverse.pixelmotd.listeners.spigotMotd;
+import dev.mruniverse.pixelmotd.listeners.SpigotEvents;
+import dev.mruniverse.pixelmotd.listeners.SpigotMotd;
 import dev.mruniverse.pixelmotd.files.FileManager;
 import dev.mruniverse.pixelmotd.files.SpigotControl;
 
@@ -84,10 +84,10 @@ public class SpigotPixel extends JavaPlugin implements Listener {
             reportDependencies();
         }
         getCommand("pmotd").setExecutor(new SpigotCMD("pmotd"));
-        Bukkit.getPluginManager().registerEvents(new spigotEvents(),this);
+        Bukkit.getPluginManager().registerEvents(new SpigotEvents(),this);
         getCommand("pixelmotd").setExecutor(new SpigotCMD("pixelmotd"));
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-        protocolManager.addPacketListener((new spigotMotd()).getPacketAdapter());
+        protocolManager.addPacketListener((new SpigotMotd()).getPacketAdapter());
         sendConsole("All events loaded in &b" + (System.currentTimeMillis() - temporalTimer) + "&fms.");
     }
     private boolean cantWork() {

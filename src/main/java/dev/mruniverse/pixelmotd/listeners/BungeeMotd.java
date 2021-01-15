@@ -3,7 +3,7 @@ package dev.mruniverse.pixelmotd.listeners;
 import dev.mruniverse.pixelmotd.enums.*;
 import dev.mruniverse.pixelmotd.files.BungeeControl;
 import dev.mruniverse.pixelmotd.init.BungeePixel;
-import dev.mruniverse.pixelmotd.utils.bungeeUtils;
+import dev.mruniverse.pixelmotd.utils.BungeeUtils;
 import net.md_5.bungee.api.Favicon;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -28,7 +28,7 @@ import java.util.Random;
 import static dev.mruniverse.pixelmotd.enums.ShowType.FIRST;
 
 @SuppressWarnings("UnstableApiUsage")
-public class bungeeMotd implements Listener {
+public class BungeeMotd implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPing(ProxyPingEvent e) {
@@ -68,7 +68,7 @@ public class bungeeMotd implements Listener {
         //* Motd Version Setup
         if(connection != null) {
             if (e.getConnection().getVersion() >= 735) {
-                if (bungeeUtils.getHexMotdStatus(ShowMode, ShowMotd)) {
+                if (BungeeUtils.getHexMotdStatus(ShowMode, ShowMotd)) {
                     showType = ShowType.SECOND;
                 }
             }
@@ -78,14 +78,14 @@ public class bungeeMotd implements Listener {
         //e.getConnection().getVirtualHost().getAddress();
 
         //* Motd Hover Setup
-        motdHover = bungeeUtils.getHover(ShowMode,ShowMotd,online,max);
-        mHover = bungeeUtils.getHoverStatus(ShowMode,ShowMotd);
+        motdHover = BungeeUtils.getHover(ShowMode,ShowMotd,online,max);
+        mHover = BungeeUtils.getHoverStatus(ShowMode,ShowMotd);
 
         //* Custom Server Icon Setup
-        if(bungeeUtils.getIconStatus(ShowMode,ShowMotd,false)) {
+        if(BungeeUtils.getIconStatus(ShowMode,ShowMotd,false)) {
             File[] icons;
-            if(bungeeUtils.getIconStatus(ShowMode,ShowMotd,true)) {
-                icons = bungeeUtils.getIcons(ShowMode,ShowMotd).listFiles();
+            if(BungeeUtils.getIconStatus(ShowMode,ShowMotd,true)) {
+                icons = BungeeUtils.getIcons(ShowMode,ShowMotd).listFiles();
             } else {
                 if(ShowMode.equals(MotdType.NORMAL_MOTD)) {
                     icons = BungeePixel.getFiles().getFile(Icons.NORMAL).listFiles();
@@ -116,21 +116,21 @@ public class bungeeMotd implements Listener {
         }
 
         //* player setup
-        if(bungeeUtils.getPlayersStatus(ShowMode,ShowMotd)) {
-            if(bungeeUtils.getPlayersMode(ShowMode,ShowMotd).equals(ValueMode.ADD)) {
+        if(BungeeUtils.getPlayersStatus(ShowMode,ShowMotd)) {
+            if(BungeeUtils.getPlayersMode(ShowMode,ShowMotd).equals(ValueMode.ADD)) {
                 max = online + 1;
             }
-            if(bungeeUtils.getPlayersMode(ShowMode,ShowMotd).equals(ValueMode.CUSTOM)) {
-                max = bungeeUtils.getPlayersValue(ShowMode,ShowMotd);
+            if(BungeeUtils.getPlayersMode(ShowMode,ShowMotd).equals(ValueMode.CUSTOM)) {
+                max = BungeeUtils.getPlayersValue(ShowMode,ShowMotd);
             }
-            if(bungeeUtils.getPlayersMode(ShowMode,ShowMotd).equals(ValueMode.HALF)) {
+            if(BungeeUtils.getPlayersMode(ShowMode,ShowMotd).equals(ValueMode.HALF)) {
                 if(online >= 2) {
                     max = online / 2;
                 } else {
                     max = 0;
                 }
             }
-            if(bungeeUtils.getPlayersMode(ShowMode,ShowMotd).equals(ValueMode.HALF_ADD)) {
+            if(BungeeUtils.getPlayersMode(ShowMode,ShowMotd).equals(ValueMode.HALF_ADD)) {
                 int add;
                 if(online >= 2) {
                     add = online / 2;
@@ -139,16 +139,16 @@ public class bungeeMotd implements Listener {
                 }
                 max = online + add;
             }
-            if(bungeeUtils.getPlayersMode(ShowMode,ShowMotd).equals(ValueMode.EQUAL)) {
+            if(BungeeUtils.getPlayersMode(ShowMode,ShowMotd).equals(ValueMode.EQUAL)) {
                 max = online;
             }
         }
 
         //*custom Protocol Setup
-        if(bungeeUtils.getProtocolStatus(ShowMode,ShowMotd)) {
+        if(BungeeUtils.getProtocolStatus(ShowMode,ShowMotd)) {
             ServerPing.Protocol Received = response.getVersion();
-            Received.setName(bungeeUtils.applyColor(bungeeUtils.replaceVariables(bungeeUtils.getProtocolMessage(ShowMode,ShowMotd),online,max).replace("%server_icon%", bungeeUtils.getServerIcon())));
-            if(bungeeUtils.getProtocolVersion(ShowMode,ShowMotd)) {
+            Received.setName(BungeeUtils.applyColor(BungeeUtils.replaceVariables(BungeeUtils.getProtocolMessage(ShowMode,ShowMotd),online,max).replace("%server_icon%", BungeeUtils.getServerIcon())));
+            if(BungeeUtils.getProtocolVersion(ShowMode,ShowMotd)) {
                 Received.setProtocol(-1);
             }
             protocol = Received;
@@ -158,8 +158,8 @@ public class bungeeMotd implements Listener {
 
         //* motd Lines Setup
 
-        line1 = bungeeUtils.getLine1(ShowMode,ShowMotd,showType);
-        line2 = bungeeUtils.getLine2(ShowMode,ShowMotd,showType);
+        line1 = BungeeUtils.getLine1(ShowMode,ShowMotd,showType);
+        line2 = BungeeUtils.getLine2(ShowMode,ShowMotd,showType);
         if(mHover) {
             MotdPlayers = new ServerPing.Players(max, online, motdHover);
         } else {
@@ -168,7 +168,7 @@ public class bungeeMotd implements Listener {
 
         //* motd Lines to show - Setup
         String motdL;
-        motdL = bungeeUtils.applyColor(bungeeUtils.replaceVariables(line1,online,max),showType) + "\n" + bungeeUtils.applyColor(bungeeUtils.replaceVariables(line2,online,max),showType);
+        motdL = BungeeUtils.applyColor(BungeeUtils.replaceVariables(line1,online,max),showType) + "\n" + BungeeUtils.applyColor(BungeeUtils.replaceVariables(line2,online,max),showType);
         if(connection != null) {
             InetSocketAddress virtualHost = connection.getVirtualHost();
             if (virtualHost != null) {

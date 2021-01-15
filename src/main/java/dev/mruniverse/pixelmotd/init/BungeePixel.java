@@ -5,8 +5,8 @@ import dev.mruniverse.pixelmotd.commands.BungeeCMD;
 import dev.mruniverse.pixelmotd.enums.Files;
 import dev.mruniverse.pixelmotd.enums.SaveMode;
 import dev.mruniverse.pixelmotd.enums.InitMode;
-import dev.mruniverse.pixelmotd.listeners.bungeeEvents;
-import dev.mruniverse.pixelmotd.listeners.bungeeMotd;
+import dev.mruniverse.pixelmotd.listeners.BungeeEvents;
+import dev.mruniverse.pixelmotd.listeners.BungeeMotd;
 import dev.mruniverse.pixelmotd.files.FileManager;
 import dev.mruniverse.pixelmotd.files.BungeeControl;
 import dev.mruniverse.pixelmotd.utils.HexManager;
@@ -74,8 +74,8 @@ public class BungeePixel extends Plugin implements Listener {
         int pluginId = 8509;
         Metrics metrics = new Metrics(this, pluginId);
         sendConsole("Metrics: &b" + metrics.isEnabled());
-        getProxy().getPluginManager().registerListener(this, new bungeeEvents());
-        getProxy().getPluginManager().registerListener(this, new bungeeMotd());
+        getProxy().getPluginManager().registerListener(this, new BungeeEvents());
+        getProxy().getPluginManager().registerListener(this, new BungeeMotd());
         sendConsole("All events loaded in &b" + (System.currentTimeMillis() - temporalTimer) + "&fms.");
     }
     public static FileManager getFiles() {

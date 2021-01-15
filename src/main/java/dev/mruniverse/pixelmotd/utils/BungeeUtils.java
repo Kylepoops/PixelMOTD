@@ -13,7 +13,7 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.*;
 
-public class bungeeUtils {
+public class BungeeUtils {
     public static List<String> getPlayers(WhitelistMembers mode, String serverName) {
         if(mode.equals(WhitelistMembers.NAMEs)) {
             if(BungeeControl.getControl(Files.MODULES).get(Extras.getServerPath(Whitelist.PLAYERS_NAME,serverName)) != null)

@@ -20,7 +20,7 @@ import java.util.Objects;
 import static dev.mruniverse.pixelmotd.files.SpigotControl.getControl;
 import static dev.mruniverse.pixelmotd.files.SpigotControl.getWhitelistAuthor;
 @SuppressWarnings("unused")
-public class spigotEvents implements Listener {
+public class SpigotEvents implements Listener {
     @EventHandler
     public void playerLoginEvent(PlayerLoginEvent event) {
         //database - Setup

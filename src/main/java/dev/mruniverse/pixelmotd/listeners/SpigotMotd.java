@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Random;
 
 @SuppressWarnings({"UnstableApiUsage", "CatchMayIgnoreException"})
-public class spigotMotd {
+public class SpigotMotd {
     private final PacketAdapter packetAdapter = new PacketAdapter(SpigotPixel.getInstance(), ListenerPriority.HIGH, PacketType.Status.Server.SERVER_INFO) {
         public void onPacketSending(PacketEvent e) {
             if (e.getPacketType() != PacketType.Status.Server.SERVER_INFO)
