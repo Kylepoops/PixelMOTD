@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="PixelMOTD:jar">
-    <output-path>$USER_HOME$/OneDrive/Escritorio/PluginImports</output-path>
-    <root id="archive" name="PixelMOTD.jar">
-      <element id="module-output" name="PixelMOTD" />
-    </root>
-  </artifact>
-</component>

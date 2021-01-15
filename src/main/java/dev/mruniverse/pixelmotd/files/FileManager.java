@@ -1,8 +1,8 @@
 package dev.mruniverse.pixelmotd.files;
 
 import dev.mruniverse.pixelmotd.enums.*;
-import dev.mruniverse.pixelmotd.init.bungeePixelMOTD;
-import dev.mruniverse.pixelmotd.init.spigotPixelMOTD;
+import dev.mruniverse.pixelmotd.init.BungeePixel;
+import dev.mruniverse.pixelmotd.init.SpigotPixel;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,13 +17,13 @@ public class FileManager {
 
     // Class Load - bungeeManagement & DataFolder Setup.
 
-    public FileManager(initMode startMode) {
-        bungeeMode= startMode.equals(initMode.BUNGEE_VERSION);
+    public FileManager(InitMode startMode) {
+        bungeeMode= startMode.equals(InitMode.BUNGEE_VERSION);
         if(bungeeMode) {
-            dataFolder = bungeePixelMOTD.getInstance().getDataFolder();
+            dataFolder = BungeePixel.getInstance().getDataFolder();
             return;
         }
-        dataFolder = spigotPixelMOTD.getInstance().getDataFolder();
+        dataFolder = SpigotPixel.getInstance().getDataFolder();
     }
     private String callConvert(String path) {
         if(bungeeMode) {
@@ -34,54 +34,54 @@ public class FileManager {
     private boolean getMotdControl(MotdType motdType) {
         if(motdType.equals(MotdType.WHITELIST_MOTD)) {
             if (bungeeMode) {
-                return bungeeControl.callMotds(MotdType.WHITELIST_MOTD);
+                return BungeeControl.callMotds(MotdType.WHITELIST_MOTD);
             }
-            return spigotControl.callMotds(MotdType.WHITELIST_MOTD);
+            return SpigotControl.callMotds(MotdType.WHITELIST_MOTD);
         }
         if(motdType.equals(MotdType.TIMER_MOTD)) {
             if (bungeeMode) {
-                return bungeeControl.callMotds(MotdType.TIMER_MOTD);
+                return BungeeControl.callMotds(MotdType.TIMER_MOTD);
             }
-            return spigotControl.callMotds(MotdType.TIMER_MOTD);
+            return SpigotControl.callMotds(MotdType.TIMER_MOTD);
         }
         if (bungeeMode) {
-            return bungeeControl.callMotds(MotdType.NORMAL_MOTD);
+            return BungeeControl.callMotds(MotdType.NORMAL_MOTD);
         }
-        return spigotControl.callMotds(MotdType.NORMAL_MOTD);
+        return SpigotControl.callMotds(MotdType.NORMAL_MOTD);
     }
     private boolean callEventsExists() {
         if (bungeeMode) {
-            return bungeeControl.getControl(Files.SETTINGS).contains("events");
+            return BungeeControl.getControl(Files.SETTINGS).contains("events");
         }
-        return spigotControl.getControl(Files.SETTINGS).contains("events");
+        return SpigotControl.getControl(Files.SETTINGS).contains("events");
     }
     private void callMotdVerificator(MotdType motdType) {
         if(motdType.equals(MotdType.WHITELIST_MOTD)) {
             if (bungeeMode) {
-                bungeeControl.loadMotdPaths(MotdType.WHITELIST_MOTD);
+                BungeeControl.loadMotdPaths(MotdType.WHITELIST_MOTD);
                 return;
             }
-            spigotControl.loadMotdPaths(MotdType.WHITELIST_MOTD);
+            SpigotControl.loadMotdPaths(MotdType.WHITELIST_MOTD);
         }
         if(motdType.equals(MotdType.TIMER_MOTD)) {
             if (bungeeMode) {
-                bungeeControl.loadMotdPaths(MotdType.TIMER_MOTD);
+                BungeeControl.loadMotdPaths(MotdType.TIMER_MOTD);
                 return;
             }
-            spigotControl.loadMotdPaths(MotdType.TIMER_MOTD);
+            SpigotControl.loadMotdPaths(MotdType.TIMER_MOTD);
         }
         if (bungeeMode) {
-            bungeeControl.loadMotdPaths(MotdType.NORMAL_MOTD);
+            BungeeControl.loadMotdPaths(MotdType.NORMAL_MOTD);
             return;
         }
-        spigotControl.loadMotdPaths(MotdType.NORMAL_MOTD);
+        SpigotControl.loadMotdPaths(MotdType.NORMAL_MOTD);
     }
     private void callDataFolder() {
         if(bungeeMode) {
-            dataFolder = bungeePixelMOTD.getInstance().getDataFolder();
+            dataFolder = BungeePixel.getInstance().getDataFolder();
             return;
         }
-        dataFolder = spigotPixelMOTD.getInstance().getDataFolder();
+        dataFolder = SpigotPixel.getInstance().getDataFolder();
     }
     private void callMotdGeneration(MotdType motdType) {
         List<Object> stringList = new ArrayList<Object>();
@@ -214,10 +214,10 @@ public class FileManager {
     }
     private void sendConsole(String message) {
         if(bungeeMode) {
-            bungeePixelMOTD.sendConsole(message);
+            BungeePixel.sendConsole(message);
             return;
         }
-        spigotPixelMOTD.sendConsole(message);
+        SpigotPixel.sendConsole(message);
     }
     public void loadFolder(File folderToLoad,String folderName) {
         boolean result = false;
@@ -527,82 +527,82 @@ public class FileManager {
         path = callConvert(path);
         if(!bungeeMode) {
             if(fileToControl.equals(Files.WHITELIST_MOTD)) {
-                if(!spigotControl.getControl(Files.WHITELIST_MOTD).contains(path)) {
-                    spigotControl.getControl(Files.WHITELIST_MOTD).set(path,value);
+                if(!SpigotControl.getControl(Files.WHITELIST_MOTD).contains(path)) {
+                    SpigotControl.getControl(Files.WHITELIST_MOTD).set(path,value);
                 }
                 return;
             }
             if(fileToControl.equals(Files.COMMAND)) {
-                if(!spigotControl.getControl(Files.COMMAND).contains(path)) {
-                    spigotControl.getControl(Files.COMMAND).set(path,value);
+                if(!SpigotControl.getControl(Files.COMMAND).contains(path)) {
+                    SpigotControl.getControl(Files.COMMAND).set(path,value);
                 }
                 return;
             }
             if(fileToControl.equals(Files.NORMAL_MOTD)) {
-                if(!spigotControl.getControl(Files.NORMAL_MOTD).contains(path)) {
-                    spigotControl.getControl(Files.NORMAL_MOTD).set(path,value);
+                if(!SpigotControl.getControl(Files.NORMAL_MOTD).contains(path)) {
+                    SpigotControl.getControl(Files.NORMAL_MOTD).set(path,value);
                 }
                 return;
             }
             if(fileToControl.equals(Files.EDITABLE)) {
-                if(!spigotControl.getControl(Files.EDITABLE).contains(path)) {
-                    spigotControl.getControl(Files.EDITABLE).set(path,value);
+                if(!SpigotControl.getControl(Files.EDITABLE).contains(path)) {
+                    SpigotControl.getControl(Files.EDITABLE).set(path,value);
                 }
                 return;
             }
             if(fileToControl.equals(Files.MODULES)) {
-                if(!spigotControl.getControl(Files.MODULES).contains(path)) {
-                    spigotControl.getControl(Files.MODULES).set(path,value);
+                if(!SpigotControl.getControl(Files.MODULES).contains(path)) {
+                    SpigotControl.getControl(Files.MODULES).set(path,value);
                 }
                 return;
             }
             if(fileToControl.equals(Files.SETTINGS)) {
-                if(!spigotControl.getControl(Files.SETTINGS).contains(path)) {
-                    spigotControl.getControl(Files.SETTINGS).set(path,value);
+                if(!SpigotControl.getControl(Files.SETTINGS).contains(path)) {
+                    SpigotControl.getControl(Files.SETTINGS).set(path,value);
                 }
                 return;
             }
             return;
         }
         if(fileToControl.equals(Files.WHITELIST_MOTD)) {
-            if(!bungeeControl.getControl(Files.WHITELIST_MOTD).contains(path)) {
-                bungeeControl.getControl(Files.WHITELIST_MOTD).set(path,value);
+            if(!BungeeControl.getControl(Files.WHITELIST_MOTD).contains(path)) {
+                BungeeControl.getControl(Files.WHITELIST_MOTD).set(path,value);
             }
             return;
         }
         if(fileToControl.equals(Files.NORMAL_MOTD)) {
-            if(!bungeeControl.getControl(Files.NORMAL_MOTD).contains(path)) {
-                bungeeControl.getControl(Files.NORMAL_MOTD).set(path,value);
+            if(!BungeeControl.getControl(Files.NORMAL_MOTD).contains(path)) {
+                BungeeControl.getControl(Files.NORMAL_MOTD).set(path,value);
             }
             return;
         }
         if(fileToControl.equals(Files.COMMAND)) {
-            if(!bungeeControl.getControl(Files.COMMAND).contains(path)) {
-                bungeeControl.getControl(Files.COMMAND).set(path,value);
+            if(!BungeeControl.getControl(Files.COMMAND).contains(path)) {
+                BungeeControl.getControl(Files.COMMAND).set(path,value);
             }
             return;
         }
         if(fileToControl.equals(Files.EDITABLE)) {
-            if(!bungeeControl.getControl(Files.EDITABLE).contains(path)) {
-                bungeeControl.getControl(Files.EDITABLE).set(path,value);
+            if(!BungeeControl.getControl(Files.EDITABLE).contains(path)) {
+                BungeeControl.getControl(Files.EDITABLE).set(path,value);
             }
             return;
         }
         if(fileToControl.equals(Files.MODULES)) {
-            if(!bungeeControl.getControl(Files.MODULES).contains(path)) {
-                bungeeControl.getControl(Files.MODULES).set(path,value);
+            if(!BungeeControl.getControl(Files.MODULES).contains(path)) {
+                BungeeControl.getControl(Files.MODULES).set(path,value);
             }
             return;
         }
         if(fileToControl.equals(Files.TIMER_MOTD)) {
-            if(!bungeeControl.getControl(Files.TIMER_MOTD).contains(path)) {
-                bungeeControl.getControl(Files.TIMER_MOTD).set(path,value);
+            if(!BungeeControl.getControl(Files.TIMER_MOTD).contains(path)) {
+                BungeeControl.getControl(Files.TIMER_MOTD).set(path,value);
             }
             return;
         }
         if(fileToControl.equals(Files.SETTINGS)) {
-            if(!bungeeControl.getControl(Files.SETTINGS).contains(path)) {
-                bungeeControl.getControl(Files.SETTINGS).set(path,value);
+            if(!BungeeControl.getControl(Files.SETTINGS).contains(path)) {
+                BungeeControl.getControl(Files.SETTINGS).set(path,value);
             }
         }
     }

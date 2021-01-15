@@ -1,9 +1,9 @@
 package dev.mruniverse.pixelmotd.utils;
 
-import dev.mruniverse.pixelmotd.files.bungeeControl;
-import dev.mruniverse.pixelmotd.files.spigotControl;
-import dev.mruniverse.pixelmotd.init.bungeePixelMOTD;
-import dev.mruniverse.pixelmotd.init.spigotPixelMOTD;
+import dev.mruniverse.pixelmotd.files.BungeeControl;
+import dev.mruniverse.pixelmotd.files.SpigotControl;
+import dev.mruniverse.pixelmotd.init.BungeePixel;
+import dev.mruniverse.pixelmotd.init.SpigotPixel;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,9 +18,9 @@ public class PixelUpdater {
     private String newestVersion;
     public PixelUpdater(boolean isBungee,int projectID) {
         if(isBungee) {
-            currentVersion = bungeePixelMOTD.getInstance().getDescription().getVersion();
+            currentVersion = BungeePixel.getInstance().getDescription().getVersion();
         } else {
-            currentVersion = spigotPixelMOTD.getInstance().getDescription().getVersion();
+            currentVersion = SpigotPixel.getInstance().getDescription().getVersion();
         }
         try {
             URL url = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + projectID);
@@ -37,54 +37,54 @@ public class PixelUpdater {
             newestVersion = sb.toString();
         } catch (IOException ignored) {
             if(isBungee) {
-                bungeePixelMOTD.redIssue();
-                if(bungeeControl.isDetailed()) {
-                    bungeePixelMOTD.sendConsole("&a[Pixel MOTD] [Detailed Error] Information:");
+                BungeePixel.redIssue();
+                if(BungeeControl.isDetailed()) {
+                    BungeePixel.sendConsole("&a[Pixel MOTD] [Detailed Error] Information:");
                     if(ignored.getMessage() != null) {
-                        bungeePixelMOTD.sendConsole("&a[Pixel MOTD] Message: " + ignored.getMessage());
+                        BungeePixel.sendConsole("&a[Pixel MOTD] Message: " + ignored.getMessage());
                     }
                     if(ignored.getLocalizedMessage() != null) {
-                        bungeePixelMOTD.sendConsole("&a[Pixel MOTD] LocalizedMessage: " + ignored.getLocalizedMessage());
+                        BungeePixel.sendConsole("&a[Pixel MOTD] LocalizedMessage: " + ignored.getLocalizedMessage());
                     }
                     if(ignored.getStackTrace() != null) {
-                        bungeePixelMOTD.sendConsole("&a[Pixel MOTD] StackTrace: ");
+                        BungeePixel.sendConsole("&a[Pixel MOTD] StackTrace: ");
                         for(StackTraceElement line : ignored.getStackTrace()) {
-                            bungeePixelMOTD.sendConsole("&a[Pixel MOTD] (" + line.getLineNumber() + ") " + line.toString());
+                            BungeePixel.sendConsole("&a[Pixel MOTD] (" + line.getLineNumber() + ") " + line.toString());
                         }
                     }
                     if(ignored.getSuppressed() != null) {
-                        bungeePixelMOTD.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(ignored.getSuppressed()));
+                        BungeePixel.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(ignored.getSuppressed()));
                     }
                     if(ignored.getClass() != null) {
-                        bungeePixelMOTD.sendConsole("&a[Pixel MOTD] Class: " + ignored.getClass().getName());
+                        BungeePixel.sendConsole("&a[Pixel MOTD] Class: " + ignored.getClass().getName());
                     }
-                    bungeePixelMOTD.sendConsole("&a[Pixel MOTD] Plugin version:" + bungeePixelMOTD.getInstance().getDescription().getVersion());
-                    bungeePixelMOTD.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
+                    BungeePixel.sendConsole("&a[Pixel MOTD] Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
+                    BungeePixel.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
                 }
             } else {
-                spigotPixelMOTD.redIssue();
-                if(spigotControl.isDetailed()) {
-                    spigotPixelMOTD.sendConsole("&a[Pixel MOTD] [Detailed Error] Information:");
+                SpigotPixel.redIssue();
+                if(SpigotControl.isDetailed()) {
+                    SpigotPixel.sendConsole("&a[Pixel MOTD] [Detailed Error] Information:");
                     if(ignored.getMessage() != null) {
-                        spigotPixelMOTD.sendConsole("&a[Pixel MOTD] Message: " + ignored.getMessage());
+                        SpigotPixel.sendConsole("&a[Pixel MOTD] Message: " + ignored.getMessage());
                     }
                     if(ignored.getLocalizedMessage() != null) {
-                        spigotPixelMOTD.sendConsole("&a[Pixel MOTD] LocalizedMessage: " + ignored.getLocalizedMessage());
+                        SpigotPixel.sendConsole("&a[Pixel MOTD] LocalizedMessage: " + ignored.getLocalizedMessage());
                     }
                     if(ignored.getStackTrace() != null) {
-                        spigotPixelMOTD.sendConsole("&a[Pixel MOTD] StackTrace: ");
+                        SpigotPixel.sendConsole("&a[Pixel MOTD] StackTrace: ");
                         for(StackTraceElement line : ignored.getStackTrace()) {
-                            spigotPixelMOTD.sendConsole("&a[Pixel MOTD] (" + line.getLineNumber() + ") " + line.toString());
+                            SpigotPixel.sendConsole("&a[Pixel MOTD] (" + line.getLineNumber() + ") " + line.toString());
                         }
                     }
                     if(ignored.getSuppressed() != null) {
-                        spigotPixelMOTD.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(ignored.getSuppressed()));
+                        SpigotPixel.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(ignored.getSuppressed()));
                     }
                     if(ignored.getClass() != null) {
-                        spigotPixelMOTD.sendConsole("&a[Pixel MOTD] Class: " + ignored.getClass().getName());
+                        SpigotPixel.sendConsole("&a[Pixel MOTD] Class: " + ignored.getClass().getName());
                     }
-                    spigotPixelMOTD.sendConsole("&a[Pixel MOTD] Plugin version:" + spigotPixelMOTD.getInstance().getDescription().getVersion());
-                    spigotPixelMOTD.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
+                    SpigotPixel.sendConsole("&a[Pixel MOTD] Plugin version:" + SpigotPixel.getInstance().getDescription().getVersion());
+                    SpigotPixel.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
                 }
             }
         }

@@ -1,7 +1,6 @@
 package dev.mruniverse.pixelmotd.utils;
 
 import dev.mruniverse.pixelmotd.enums.MotdType;
-import dev.mruniverse.pixelmotd.files.spigotControl;
 
 public class DevAPI {
     public DevAPI() {
