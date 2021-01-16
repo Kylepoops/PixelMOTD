@@ -22,6 +22,7 @@ public class IconManager {
         return iCustomFolder;
     }
     public Favicon getIcon() {
+        if(iFile == null) return null;
         try {
             return Favicon.create(ImageIO.read(iFile));
         } catch (IOException ignored) {
@@ -29,6 +30,7 @@ public class IconManager {
         }
     }
     public BufferedImage getOriginalIcon() {
+        if(iFile == null) return null;
         try {
             return ImageIO.read(iFile);
         } catch (IOException ignored) {

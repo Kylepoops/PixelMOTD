@@ -9,6 +9,7 @@ import com.comphenix.protocol.wrappers.WrappedServerPing;
 import dev.mruniverse.pixelmotd.enums.*;
 import dev.mruniverse.pixelmotd.files.SpigotControl;
 import dev.mruniverse.pixelmotd.init.SpigotPixel;
+import dev.mruniverse.pixelmotd.listeners.spigot.MotdLoadEvent;
 import dev.mruniverse.pixelmotd.manager.WrappedStatus;
 import dev.mruniverse.pixelmotd.utils.SpigotUtils;
 import org.bukkit.entity.Player;
@@ -34,7 +35,7 @@ public class SpigotMotd {
             //** load MotdType
             MotdType motdType;
             ShowType showType;
-
+            File iconFile = null;
             //* load strings & integers
             String line1,line2,motd,motdName;
             int max,online;
@@ -78,7 +79,8 @@ public class SpigotMotd {
                             }
                         }
                         if (validIcons.size() != 0) {
-                            WrappedServerPing.CompressedImage image = getImage(validIcons.get(new Random().nextInt(validIcons.size())));
+                            iconFile = validIcons.get(new Random().nextInt(validIcons.size()));
+                            WrappedServerPing.CompressedImage image = getImage(iconFile);
                             if (image != null) ping.setFavicon(image);
                         }
                     }
@@ -153,6 +155,13 @@ public class SpigotMotd {
                 line1 = SpigotUtils.getLine1(motdType, motdName, showType);
                 line2 = SpigotUtils.getLine2(motdType, motdName, showType);
                 motd = SpigotUtils.replaceVariables(line1, online, max) + "\n" + SpigotUtils.replaceVariables(line2, online, max);
+                MotdLoadEvent event;
+                if(showType.equals(ShowType.FIRST)) {
+                    event = new MotdLoadEvent(false,motdType,motdName,line1,line2,motd,ping.getVersionName(),iconFile);
+                } else {
+                    event = new MotdLoadEvent(true,motdType,motdName,line1,line2,motd,ping.getVersionName(),iconFile);
+                }
+                plugin.getServer().getPluginManager().callEvent(event);
                 ping.setMotD(motd);
 
             } catch(Throwable ignored) {
@@ -174,9 +183,7 @@ public class SpigotMotd {
                             SpigotPixel.sendConsole("&a[Pixel MOTD] (" + line.getLineNumber() + ") " + line.toString());
                         }
                     }
-                    if(Arrays.toString(ignored.getSuppressed()) != null) {
-                        SpigotPixel.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(ignored.getSuppressed()));
-                    }
+                    SpigotPixel.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(ignored.getSuppressed()));
                     SpigotPixel.sendConsole("&a[Pixel MOTD] Class: " + ignored.getClass().getName() +".class");
                     SpigotPixel.sendConsole("&a[Pixel MOTD] Plugin version:" + SpigotPixel.getInstance().getDescription().getVersion());
                     SpigotPixel.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
