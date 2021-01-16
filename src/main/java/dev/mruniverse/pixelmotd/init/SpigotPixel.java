@@ -26,9 +26,11 @@ public class SpigotPixel extends JavaPlugin implements Listener {
     private static SpigotPixel instance;
     private static HexManager hManager;
     private static FileManager fManager;
+
     public static HexManager getHex() {
         return hManager;
     }
+
     @Override
     public void onLoad() {
         instance = this;

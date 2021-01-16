@@ -20,20 +20,26 @@ public class BungeePixel extends Plugin implements Listener {
     private static BungeePixel instance;
     private static FileManager fManager;
     private static HexManager hManager;
+
     @Override
     public void onLoad() {
         instance = this;
+
         fManager = new FileManager(InitMode.BUNGEE_VERSION);
         fManager.loadFiles();
+
         hManager = new HexManager();
         fManager.loadConfiguration();
+
         BungeeControl.save(SaveMode.ALL);
 
         hManager.setHex(BungeeControl.getControl(Files.SETTINGS).getBoolean("settings.hexColors"));
+
         for(String command : BungeeControl.getControl(Files.COMMAND).getStringList("command.list")) {
             getProxy().getPluginManager().registerCommand(this,new BungeeCMD(command));
         }
-        if(BungeeControl.getControl(Files.SETTINGS).getBoolean("settings.update-check")) {
+
+        if (BungeeControl.getControl(Files.SETTINGS).getBoolean("settings.update-check")) {
             PixelUpdater updater = new PixelUpdater(true, 37177);
             String UpdateResult = updater.getUpdateResult();
             if (UpdateResult.equalsIgnoreCase("UPDATED")) {
@@ -78,11 +84,13 @@ public class BungeePixel extends Plugin implements Listener {
         getProxy().getPluginManager().registerListener(this, new BungeeMotd());
         sendConsole("All events loaded in &b" + (System.currentTimeMillis() - temporalTimer) + "&fms.");
     }
+
     public static FileManager getFiles() {
         return fManager;
     }
     public static BungeePixel getInstance() { return instance; }
     public static HexManager getHex() { return hManager; }
+
     public static void redIssue() {
         instance.getProxy().getConsole().sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&',"&b[Pixel MOTD] &fCan't connect to SpigotMC and bStats, please check host internet or disable plugin autoUpdater and bStats to hide this message.")));
     }
