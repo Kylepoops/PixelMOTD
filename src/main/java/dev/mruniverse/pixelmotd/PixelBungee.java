@@ -5,8 +5,10 @@ import dev.mruniverse.pixelmotd.enums.InitMode;
 import dev.mruniverse.pixelmotd.enums.SaveMode;
 import dev.mruniverse.pixelmotd.files.BungeeControl;
 import dev.mruniverse.pixelmotd.files.FileManager;
+import dev.mruniverse.pixelmotd.utils.BungeeUtils;
 import dev.mruniverse.pixelmotd.utils.LoaderUtils;
 import dev.mruniverse.pixelmotd.utils.HexManager;
+import dev.mruniverse.pixelmotd.utils.Logger;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -14,26 +16,35 @@ import static dev.mruniverse.pixelmotd.utils.Logger.info;
 
 public class PixelBungee extends Plugin implements Listener {
     private static PixelBungee instance;
-    private static FileManager fManager;
-    private static HexManager hManager;
+
+    private FileManager fManager;
+    private HexManager hManager;
+
+    private BungeeControl bungeeControl;
+    private BungeeUtils bungeeUtils;
 
     private LoaderUtils loaderUtils;
 
     @Override
     public void onLoad() {
         instance = this;
+        Logger.isBungee = true;
 
-        fManager = new FileManager(InitMode.BUNGEE_VERSION);
+        bungeeControl = new BungeeControl(this);
+        bungeeControl.save(SaveMode.ALL);
+
+        bungeeUtils = new BungeeUtils(this);
+
+        hManager.setHex(bungeeControl.getControl(Files.SETTINGS).getBoolean("settings.hexColors"));
+
+        loaderUtils = new LoaderUtils(true);
+
+        fManager = new FileManager();
         fManager.loadFiles();
 
         hManager = new HexManager();
         fManager.loadConfiguration();
 
-        BungeeControl.save(SaveMode.ALL);
-
-        hManager.setHex(BungeeControl.getControl(Files.SETTINGS).getBoolean("settings.hexColors"));
-
-        loaderUtils = new LoaderUtils(true);
         loaderUtils.pluginUpdater();
         loaderUtils.registerCommands();
 
@@ -55,7 +66,7 @@ public class PixelBungee extends Plugin implements Listener {
         info("The plugin was unloaded.");
     }
 
-    public static FileManager getFiles() {
+    public FileManager getFiles() {
         return fManager;
     }
 
@@ -63,8 +74,16 @@ public class PixelBungee extends Plugin implements Listener {
         return instance;
     }
 
-    public static HexManager getHex() {
+    public HexManager getHex() {
         return hManager;
+    }
+
+    public BungeeControl getBungeeControl() {
+        return bungeeControl;
+    }
+
+    public BungeeUtils getBungeeUtils() {
+        return bungeeUtils;
     }
 }
 

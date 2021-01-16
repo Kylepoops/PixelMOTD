@@ -1,4 +1,3 @@
-dev\mruniverse\pixelmotd\init\LoaderUtils.class
 dev\mruniverse\pixelmotd\bstats\BungeeMetrics$SingleLineChart.class
 dev\mruniverse\pixelmotd\bstats\BukkitMetrics$DrilldownPie.class
 dev\mruniverse\pixelmotd\listeners\bungeecord\PlayerManager.class
@@ -10,14 +9,15 @@ dev\mruniverse\pixelmotd\files\BungeeControl.class
 dev\mruniverse\pixelmotd\utils\CenterMotd.class
 dev\mruniverse\pixelmotd\files\FileManager.class
 dev\mruniverse\pixelmotd\utils\Extras.class
-dev\mruniverse\pixelmotd\init\SpigotPixel.class
 dev\mruniverse\pixelmotd\utils\HexManager.class
 dev\mruniverse\pixelmotd\listeners\bungeecord\IconManager.class
 dev\mruniverse\pixelmotd\enums\SaveMode.class
+dev\mruniverse\pixelmotd\PixelSpigot.class
 dev\mruniverse\pixelmotd\bstats\BungeeMetrics$SimplePie.class
 dev\mruniverse\pixelmotd\listeners\SpigotEvents.class
 dev\mruniverse\pixelmotd\utils\Logger.class
 dev\mruniverse\pixelmotd\utils\PixelConverter.class
+dev\mruniverse\pixelmotd\PixelBungee.class
 dev\mruniverse\pixelmotd\enums\Blacklist.class
 dev\mruniverse\pixelmotd\bstats\BukkitMetrics$SimplePie.class
 dev\mruniverse\pixelmotd\files\SpigotControl.class
@@ -39,12 +39,12 @@ dev\mruniverse\pixelmotd\manager\AbstractPacket.class
 dev\mruniverse\pixelmotd\bstats\BukkitMetrics$CustomChart.class
 dev\mruniverse\pixelmotd\bstats\BungeeMetrics$SimpleBarChart.class
 dev\mruniverse\pixelmotd\bstats\BukkitMetrics$SingleLineChart.class
-dev\mruniverse\pixelmotd\init\BungeePixel.class
 dev\mruniverse\pixelmotd\enums\WhitelistMembers.class
 dev\mruniverse\pixelmotd\bstats\BungeeMetrics$MultiLineChart.class
 dev\mruniverse\pixelmotd\enums\Files.class
 dev\mruniverse\pixelmotd\bstats\BungeeMetrics.class
 dev\mruniverse\pixelmotd\listeners\spigot\PlayerManager.class
+dev\mruniverse\pixelmotd\files\BungeeControl$1.class
 dev\mruniverse\pixelmotd\enums\MotdType.class
 dev\mruniverse\pixelmotd\bstats\BukkitMetrics$AdvancedPie.class
 dev\mruniverse\pixelmotd\enums\Icons.class
@@ -52,6 +52,7 @@ dev\mruniverse\pixelmotd\listeners\BungeeMotd.class
 dev\mruniverse\pixelmotd\enums\InitMode.class
 dev\mruniverse\pixelmotd\utils\BungeeUtils.class
 dev\mruniverse\pixelmotd\listeners\SpigotMotd.class
+dev\mruniverse\pixelmotd\utils\LoaderUtils.class
 dev\mruniverse\pixelmotd\manager\WrappedStatus.class
 dev\mruniverse\pixelmotd\enums\ValueMode.class
 dev\mruniverse\pixelmotd\listeners\SpigotMotd$1.class

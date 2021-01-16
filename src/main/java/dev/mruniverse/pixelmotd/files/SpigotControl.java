@@ -16,6 +16,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static dev.mruniverse.pixelmotd.PixelSpigot.getFiles;
+import static dev.mruniverse.pixelmotd.utils.Logger.info;
 
 public class SpigotControl {
     private static FileConfiguration rEditable, rModules, rSettings, rWhitelist, rNormal,rTimer,rCommand;
@@ -61,7 +62,7 @@ public class SpigotControl {
             if(rSettings == null) reloadFiles();
             return rSettings;
         }
-        getFiles().reportSpigotGetControlError();
+        info("The plugin can't load or save configuration files! (Spigot Control Issue - Caused by: One plugin is using bad the <getControl() from FileManager.class>)");
         return rSettings;
     }
     public static boolean getWhitelistStatus() {
@@ -462,7 +463,7 @@ public class SpigotControl {
                 getControl(Files.TIMER_MOTD).save(getFiles().getFile(Files.TIMER_MOTD));
             }
         } catch(IOException exception) {
-            PixelSpigot.getFiles().reportControlError();
+            info("The plugin can't load or save configuration files! (Spigot Control Issue - Caused by: One plugin is using bad the <getControl() from FileManager.class>)");
         }
     }
     public static String getWhitelistAuthor() {

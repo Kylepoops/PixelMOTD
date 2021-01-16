@@ -1,9 +1,11 @@
 package dev.mruniverse.pixelmotd.files;
 
-import dev.mruniverse.pixelmotd.enums.*;
 import dev.mruniverse.pixelmotd.PixelBungee;
-import dev.mruniverse.pixelmotd.utils.LoaderUtils;
 import dev.mruniverse.pixelmotd.PixelSpigot;
+import dev.mruniverse.pixelmotd.enums.Files;
+import dev.mruniverse.pixelmotd.enums.Icons;
+import dev.mruniverse.pixelmotd.enums.MotdType;
+import dev.mruniverse.pixelmotd.utils.LoaderUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,23 +15,38 @@ import java.util.List;
 import static dev.mruniverse.pixelmotd.utils.Logger.info;
 
 public class FileManager {
-    private final boolean bungeeMode;
-    public static File dataFolder, serverIcon, normalIcon, whitelistIcon, Normal, Whitelist, Settings, Editable, Modules, Timer, Command  = null;
+    private final boolean bungeeMode = LoaderUtils.isBungee;
+    private BungeeControl bControl;
+//    private SpigotControl sControl;
 
-    // Extras (Added in 8.8.6-Alpha3)
+    public FileManager(PixelBungee bPlugin) {
+         bControl = bPlugin.getBungeeControl();
 
-    // Class Load - bungeeManagement & DataFolder Setup.
+    }
 
-    public FileManager(InitMode startMode) {
-        bungeeMode= startMode.equals(InitMode.BUNGEE_VERSION);
-        if(LoaderUtils.isBungee ) {
+    public static File dataFolder,
+            serverIcon,
+            normalIcon,
+            whitelistIcon,
+            Normal,
+            Whitelist,
+            Settings,
+            Editable,
+            Modules,
+            Timer,
+            Command = null;
+
+    public FileManager() {
+        if (bungeeMode) {
             dataFolder = PixelBungee.getInstance().getDataFolder();
             return;
         }
+
         dataFolder = PixelSpigot.getInstance().getDataFolder();
     }
+
     private String callConvert(String path) {
-        if(bungeeMode) {
+        if (bungeeMode) {
             return path.replace("%type%","server");
         }
         return path.replace("%type%","world");
@@ -37,44 +54,44 @@ public class FileManager {
     private boolean getMotdControl(MotdType motdType) {
         if(motdType.equals(MotdType.WHITELIST_MOTD)) {
             if (bungeeMode) {
-                return BungeeControl.callMotds(MotdType.WHITELIST_MOTD);
+                return bControl.callMotds(MotdType.WHITELIST_MOTD);
             }
             return SpigotControl.callMotds(MotdType.WHITELIST_MOTD);
         }
         if(motdType.equals(MotdType.TIMER_MOTD)) {
             if (bungeeMode) {
-                return BungeeControl.callMotds(MotdType.TIMER_MOTD);
+                return bControl.callMotds(MotdType.TIMER_MOTD);
             }
             return SpigotControl.callMotds(MotdType.TIMER_MOTD);
         }
         if (bungeeMode) {
-            return BungeeControl.callMotds(MotdType.NORMAL_MOTD);
+            return bControl.callMotds(MotdType.NORMAL_MOTD);
         }
         return SpigotControl.callMotds(MotdType.NORMAL_MOTD);
     }
     private boolean callEventsExists() {
         if (bungeeMode) {
-            return BungeeControl.getControl(Files.SETTINGS).contains("events");
+            return bControl.getControl(Files.SETTINGS).contains("events");
         }
         return SpigotControl.getControl(Files.SETTINGS).contains("events");
     }
     private void callMotdVerificator(MotdType motdType) {
         if(motdType.equals(MotdType.WHITELIST_MOTD)) {
             if (bungeeMode) {
-                BungeeControl.loadMotdPaths(MotdType.WHITELIST_MOTD);
+                bControl.loadMotdPaths(MotdType.WHITELIST_MOTD);
                 return;
             }
             SpigotControl.loadMotdPaths(MotdType.WHITELIST_MOTD);
         }
         if(motdType.equals(MotdType.TIMER_MOTD)) {
             if (bungeeMode) {
-                BungeeControl.loadMotdPaths(MotdType.TIMER_MOTD);
+                bControl.loadMotdPaths(MotdType.TIMER_MOTD);
                 return;
             }
             SpigotControl.loadMotdPaths(MotdType.TIMER_MOTD);
         }
         if (bungeeMode) {
-            BungeeControl.loadMotdPaths(MotdType.NORMAL_MOTD);
+            bControl.loadMotdPaths(MotdType.NORMAL_MOTD);
             return;
         }
         SpigotControl.loadMotdPaths(MotdType.NORMAL_MOTD);
@@ -208,7 +225,7 @@ public class FileManager {
             try {
                 result = fileToLoad.createNewFile();
             } catch (IOException exception) {
-                reportError();
+                info("The plugin can't load or save configuration files!");
             }
             if(result) {
                 info("File: &b" + fileName + "&f created!");
@@ -561,44 +578,44 @@ public void loadFolder(File folderToLoad, String folderName) {
             return;
         }
         if(fileToControl.equals(Files.WHITELIST_MOTD)) {
-            if(!BungeeControl.getControl(Files.WHITELIST_MOTD).contains(path)) {
-                BungeeControl.getControl(Files.WHITELIST_MOTD).set(path,value);
+            if(!bControl.getControl(Files.WHITELIST_MOTD).contains(path)) {
+                bControl.getControl(Files.WHITELIST_MOTD).set(path,value);
             }
             return;
         }
         if(fileToControl.equals(Files.NORMAL_MOTD)) {
-            if(!BungeeControl.getControl(Files.NORMAL_MOTD).contains(path)) {
-                BungeeControl.getControl(Files.NORMAL_MOTD).set(path,value);
+            if(!bControl.getControl(Files.NORMAL_MOTD).contains(path)) {
+                bControl.getControl(Files.NORMAL_MOTD).set(path,value);
             }
             return;
         }
         if(fileToControl.equals(Files.COMMAND)) {
-            if(!BungeeControl.getControl(Files.COMMAND).contains(path)) {
-                BungeeControl.getControl(Files.COMMAND).set(path,value);
+            if(!bControl.getControl(Files.COMMAND).contains(path)) {
+                bControl.getControl(Files.COMMAND).set(path,value);
             }
             return;
         }
         if(fileToControl.equals(Files.EDITABLE)) {
-            if(!BungeeControl.getControl(Files.EDITABLE).contains(path)) {
-                BungeeControl.getControl(Files.EDITABLE).set(path,value);
+            if(!bControl.getControl(Files.EDITABLE).contains(path)) {
+                bControl.getControl(Files.EDITABLE).set(path,value);
             }
             return;
         }
         if(fileToControl.equals(Files.MODULES)) {
-            if(!BungeeControl.getControl(Files.MODULES).contains(path)) {
-                BungeeControl.getControl(Files.MODULES).set(path,value);
+            if(!bControl.getControl(Files.MODULES).contains(path)) {
+                bControl.getControl(Files.MODULES).set(path,value);
             }
             return;
         }
         if(fileToControl.equals(Files.TIMER_MOTD)) {
-            if(!BungeeControl.getControl(Files.TIMER_MOTD).contains(path)) {
-                BungeeControl.getControl(Files.TIMER_MOTD).set(path,value);
+            if(!bControl.getControl(Files.TIMER_MOTD).contains(path)) {
+                bControl.getControl(Files.TIMER_MOTD).set(path,value);
             }
             return;
         }
         if(fileToControl.equals(Files.SETTINGS)) {
-            if(!BungeeControl.getControl(Files.SETTINGS).contains(path)) {
-                BungeeControl.getControl(Files.SETTINGS).set(path,value);
+            if(!bControl.getControl(Files.SETTINGS).contains(path)) {
+                bControl.getControl(Files.SETTINGS).set(path,value);
             }
         }
     }
@@ -631,18 +648,5 @@ public void loadFolder(File folderToLoad, String folderName) {
             return whitelistIcon;
         }
         return serverIcon;
-    }
-
-    private void reportError() {
-        info("The plugin can't load or save configuration files!");
-    }
-    public void reportControlError() {
-        info("The plugin can't load or save configuration files! (Bungee | Spigot Control Issue - Caused by: IO Exception)");
-    }
-    public void reportBungeeGetControlError() {
-        info("The plugin can't load or save configuration files! (Bungee Control Issue - Caused by: One plugin is using bad the <getControl() from FileManager.class>)");
-    }
-    public void reportSpigotGetControlError() {
-        info("The plugin can't load or save configuration files! (Spigot Control Issue - Caused by: One plugin is using bad the <getControl() from FileManager.class>)");
     }
 }

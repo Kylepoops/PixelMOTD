@@ -7,7 +7,6 @@ import dev.mruniverse.pixelmotd.bstats.BungeeMetrics;
 import dev.mruniverse.pixelmotd.commands.BungeeCMD;
 import dev.mruniverse.pixelmotd.commands.SpigotCMD;
 import dev.mruniverse.pixelmotd.enums.Files;
-import dev.mruniverse.pixelmotd.files.BungeeControl;
 import dev.mruniverse.pixelmotd.files.SpigotControl;
 import dev.mruniverse.pixelmotd.listeners.BungeeEvents;
 import dev.mruniverse.pixelmotd.listeners.BungeeMotd;
@@ -32,7 +31,7 @@ public class LoaderUtils {
         LoaderUtils.isBungee = isBungee;
 
         if (isBungee) {
-            control = BungeeControl.getControl(Files.SETTINGS).getBoolean("settings.update-check");
+            control = PixelBungee.getInstance().getBungeeControl().getControl(Files.SETTINGS).getBoolean("settings.update-check");
             return;
         }
         control = SpigotControl.getControl(Files.SETTINGS).getBoolean("settings.update-check");
@@ -129,10 +128,10 @@ public class LoaderUtils {
         }
 
         PixelBungee plugin = PixelBungee.getInstance();
-        List<String> cmdList = BungeeControl.getControl(Files.COMMAND).getStringList("command.list");
+        List<String> cmdList = plugin.getBungeeControl().getControl(Files.COMMAND).getStringList("command.list");
 
         for (String command : cmdList) {
-            plugin.getProxy().getPluginManager().registerCommand(plugin, new BungeeCMD(command));
+            plugin.getProxy().getPluginManager().registerCommand(plugin, new BungeeCMD(plugin, command));
         }
 
         debug("Proxy commands has been registered.");

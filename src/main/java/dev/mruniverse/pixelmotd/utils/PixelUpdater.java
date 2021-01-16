@@ -18,12 +18,17 @@ import static dev.mruniverse.pixelmotd.utils.Logger.warn;
 
 public class PixelUpdater {
     private final String currentVersion;
+    private boolean isDetailed;
+
     private String newestVersion;
-    public PixelUpdater(boolean isBungee,int projectID) {
+
+    public PixelUpdater(boolean isBungee, int projectID) {
         if(isBungee) {
             currentVersion = PixelBungee.getInstance().getDescription().getVersion();
+            isDetailed     = PixelBungee.getInstance().getBungeeControl().isDetailed();
         } else {
             currentVersion = PixelSpigot.getInstance().getDescription().getVersion();
+            // TODO ISDETAILED FOR SPIGOT
         }
         try {
             URL url = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + projectID);
@@ -41,7 +46,7 @@ public class PixelUpdater {
         } catch (IOException ignored) {
             if(isBungee) {
                 warn("Can't connect to SpigotMC and bStats");
-                if(BungeeControl.isDetailed()) {
+                if(isDetailed) {
                     error("Information:");
                     if(ignored.getMessage() != null) {
                         error("Message: " + ignored.getMessage());

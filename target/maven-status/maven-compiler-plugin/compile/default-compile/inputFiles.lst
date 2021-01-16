@@ -6,7 +6,6 @@ C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\bst
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\utils\CenterMotd.java
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\enums\Icons.java
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\utils\Extras.java
-C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\init\LoaderUtils.java
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\enums\Get.java
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\enums\InitMode.java
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\listeners\BungeeMotd.java
@@ -20,7 +19,6 @@ C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\lis
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\enums\BlacklistMembers.java
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\listeners\SpigotMotd.java
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\utils\DevAPI.java
-C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\init\SpigotPixel.java
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\listeners\spigot\PlayerManager.java
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\enums\ShowType.java
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\files\BungeeControl.java
@@ -34,11 +32,13 @@ C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\uti
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\enums\SaveMode.java
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\manager\WrappedStatus.java
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\utils\SpigotUtils.java
+C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\PixelSpigot.java
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\commands\SpigotCMD.java
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\listeners\bungeecord\PlayerManager.java
+C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\utils\LoaderUtils.java
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\enums\Whitelist.java
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\files\SpigotControl.java
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\utils\HexManager.java
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\listeners\bungeecord\MotdLoadEvent.java
-C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\init\BungeePixel.java
+C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\PixelBungee.java
 C:\Users\sebas\IdeaProjects\PixelMOTD\src\main\java\dev\mruniverse\pixelmotd\bstats\BungeeMetrics.java

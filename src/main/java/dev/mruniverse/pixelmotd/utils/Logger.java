@@ -1,15 +1,13 @@
 package dev.mruniverse.pixelmotd.utils;
 
 import dev.mruniverse.pixelmotd.PixelBungee;
-
 import net.md_5.bungee.api.chat.ComponentBuilder;
-
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 public class Logger {
+    public static boolean isBungee;
     /**
      * Colorize a string provided to method
      *
@@ -68,7 +66,7 @@ public class Logger {
      * @param player Proxied Player
      * @param message Message to send.
      */
-    public static void sendMessage(ProxiedPlayer player, String message) {
+    public static void sendMessage(net.md_5.bungee.api.CommandSender player, String message) {
         player.sendMessage(new ComponentBuilder(color(message)).create());
     }
 

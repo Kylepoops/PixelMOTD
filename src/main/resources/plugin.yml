@@ -1,4 +1,4 @@
-main: dev.mruniverse.pixelmotd.SpigotPixel
+main: dev.mruniverse.pixelmotd.PixelSpigot
 name: PixelMOTD
 version: 8.8.6-Alpha3
 author: MrUniverse44

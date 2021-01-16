@@ -30,7 +30,9 @@ public class PixelSpigot extends JavaPlugin implements Listener {
 
         long temporalTimer = System.currentTimeMillis();
 
-        fManager = new FileManager(InitMode.SPIGOT_VERSION);
+        loaderUtils = new LoaderUtils(false);
+
+        fManager = new FileManager();
         fManager.loadFiles();
         fManager.loadConfiguration();
 
@@ -39,7 +41,6 @@ public class PixelSpigot extends JavaPlugin implements Listener {
         hManager = new HexManager();
         hManager.setHex(SpigotControl.getControl(Files.SETTINGS).getBoolean("settings.hexColors"));
 
-        loaderUtils = new LoaderUtils(false);
         loaderUtils.pluginUpdater();
 
         info("All files loaded in &b" + (System.currentTimeMillis() - temporalTimer) + "&fms.");

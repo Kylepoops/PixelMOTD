@@ -1,5 +1,6 @@
 package dev.mruniverse.pixelmotd.listeners.bungeecord;
 
+import dev.mruniverse.pixelmotd.PixelBungee;
 import dev.mruniverse.pixelmotd.enums.Files;
 import dev.mruniverse.pixelmotd.enums.MotdType;
 import dev.mruniverse.pixelmotd.files.BungeeControl;
@@ -7,24 +8,33 @@ import net.md_5.bungee.api.plugin.Event;
 
 import java.io.File;
 import java.util.List;
+
 @SuppressWarnings("unused")
 public class MotdLoadEvent extends Event {
     private final String motdLine1;
     private final String motdLine2;
     private final String fullMotd;
     private final String customProtocol;
-    private String path;
     private final String motdID;
+
+    private String path;
+
     private final MotdType motdType;
     private final List<String> motdHover;
+
     private final boolean isHoverEnabled;
     private final boolean CustomHexMotdStatus;
     private final boolean customProtocolStatus;
     private final boolean protocolVersion;
+
     private Files motdFile;
+
     private final IconManager iconManager;
-    private PlayerManager maxManager,onlineManager;
-    public MotdLoadEvent(boolean customHex,MotdType type, String id, String line1, String line2, String motd, String protocolMessage, File icon,int online,int max) {
+
+    private final PlayerManager maxManager, onlineManager;
+
+    public MotdLoadEvent(PixelBungee plugin, boolean customHex, MotdType type, String id, String line1, String line2, String motd, String protocolMessage, File icon,int online,int max) {
+
         motdFile = Files.NORMAL_MOTD;
         motdType = type;
         fullMotd = motd;
@@ -43,15 +53,15 @@ public class MotdLoadEvent extends Event {
             motdFile = Files.TIMER_MOTD;
             path = "timers." + id + ".";
         }
-        maxManager = new PlayerManager(motdType,id,max);
-        onlineManager = new PlayerManager(motdType,id,online);
-        protocolVersion = BungeeControl.getControl(motdFile).getBoolean(path + "otherSettings.customProtocol.changeProtocolVersion");
-        motdHover = BungeeControl.getControl(motdFile).getStringList(path + "otherSettings.customHover.hover");
-        isHoverEnabled = BungeeControl.getControl(motdFile).getBoolean(path + "otherSettings.customHover.toggle");
+        maxManager = new PlayerManager(plugin, motdType, id, max);
+        onlineManager = new PlayerManager(plugin, motdType, id, online);
+        protocolVersion = plugin.getBungeeControl().getControl(motdFile).getBoolean(path + "otherSettings.customProtocol.changeProtocolVersion");
+        motdHover = plugin.getBungeeControl().getControl(motdFile).getStringList(path + "otherSettings.customHover.hover");
+        isHoverEnabled = plugin.getBungeeControl().getControl(motdFile).getBoolean(path + "otherSettings.customHover.toggle");
         CustomHexMotdStatus = customHex;
-        customProtocolStatus = BungeeControl.getControl(motdFile).getBoolean(path + "otherSettings.customProtocol.toggle");
-        iconManager = new IconManager(BungeeControl.getControl(motdFile).getBoolean(path + "otherSettings.customIcon.toggle"),
-                BungeeControl.getControl(motdFile).getBoolean(path + "otherSettings.customIcon.customFile"),icon);
+        customProtocolStatus = plugin.getBungeeControl().getControl(motdFile).getBoolean(path + "otherSettings.customProtocol.toggle");
+        iconManager = new IconManager(plugin.getBungeeControl().getControl(motdFile).getBoolean(path + "otherSettings.customIcon.toggle"),
+                plugin.getBungeeControl().getControl(motdFile).getBoolean(path + "otherSettings.customIcon.customFile"),icon);
     }
     public PlayerManager getMax() {
         return maxManager;
