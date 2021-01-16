@@ -11,17 +11,15 @@ import dev.mruniverse.pixelmotd.listeners.BungeeEvents;
 import dev.mruniverse.pixelmotd.listeners.BungeeMotd;
 import dev.mruniverse.pixelmotd.listeners.SpigotEvents;
 import dev.mruniverse.pixelmotd.utils.PixelUpdater;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.ConsoleCommandSender;
 
 import java.util.List;
 
+import static dev.mruniverse.pixelmotd.utils.Logger.debug;
+import static dev.mruniverse.pixelmotd.utils.Logger.info;
+
 public class LoaderUtils {
-    private final boolean isBungee;
-    private boolean control;
+    public static boolean isBungee;
+    private final boolean control;
 
     /**
      * Specify if it's Bungee or Spigot
@@ -30,7 +28,7 @@ public class LoaderUtils {
      * @param isBungee spigot if false.
      */
     public LoaderUtils (boolean isBungee) {
-        this.isBungee = isBungee;
+        LoaderUtils.isBungee = isBungee;
 
         if (isBungee) {
             control = BungeeControl.getControl(Files.SETTINGS).getBoolean("settings.update-check");
@@ -47,45 +45,45 @@ public class LoaderUtils {
 
             switch (updaterResult.toUpperCase()) {
                 case "UPDATED":
-                    sendConsole("&aYou're using latest version of PixelMOTD, You're Awesome!");
+                    info("&aYou're using latest version of PixelMOTD, You're Awesome!");
                     switch (versionResult.toUpperCase()) {
                         case "RED_PROBLEM":
-                            sendConsole("&aPixelMOTD can't connect to WiFi to check plugin version.");
+                            info("&aPixelMOTD can't connect to WiFi to check plugin version.");
                             break;
                         case "PRE_ALPHA_VERSION":
-                            sendConsole("&cYou are Running a &aPre Alpha version&c, it is normal to find several errors, please report these errors so that they can be solved. &eWARNING: &cI (MrUniverse) recommend a Stable version, PreAlpha aren't stable versions!");
+                            info("&cYou are Running a &aPre Alpha version&c, it is normal to find several errors, please report these errors so that they can be solved. &eWARNING: &cI (MrUniverse) recommend a Stable version, PreAlpha aren't stable versions!");
                             break;
                         case "ALPHA_VERSION":
-                            sendConsole("&bYou are Running a &aAlpha version&b, it is normal to find several errors, please report these errors so that they can be solved.");
+                            info("&bYou are Running a &aAlpha version&b, it is normal to find several errors, please report these errors so that they can be solved.");
                             break;
                         case "RELEASE":
-                            sendConsole("&aYou are Running a &bRelease Version&a, this is a stable version, awesome!");
+                            info("&aYou are Running a &bRelease Version&a, this is a stable version, awesome!");
                             break;
                         case "PRE_RELEASE":
-                            sendConsole("&aYou are Running a &bPreRelease Version&a, this is a stable version but is not the final version or don't have finished all things of the final version, but is a stable version,awesome!");
+                            info("&aYou are Running a &bPreRelease Version&a, this is a stable version but is not the final version or don't have finished all things of the final version, but is a stable version,awesome!");
                             break;
                         default:
-                            sendConsole("DEBUG... 1");
+                            info("DEBUG... 1");
                             break;
                     }
                     break;
                 case "NEW_VERSION":
-                    sendConsole("&aA new update is available: &bhttps://www.spigotmc.org/resources/37177/");
+                    info("&aA new update is available: &bhttps://www.spigotmc.org/resources/37177/");
                     break;
                 case "BETA_VERSION":
-                    sendConsole("&aYou are Running a Pre-Release version, please report bugs ;)");
+                    info("&aYou are Running a Pre-Release version, please report bugs ;)");
                     break;
                 case "RED_PROBLEM":
-                    sendConsole("&aPixelMOTD can't connect to WiFi to check plugin version.");
+                    info("&aPixelMOTD can't connect to WiFi to check plugin version.");
                     break;
                 case "ALPHA_VERSION":
-                    sendConsole("&bYou are Running a &aAlpha version&b, it is normal to find several errors, please report these errors so that they can be solved.");
+                    info("&bYou are Running a &aAlpha version&b, it is normal to find several errors, please report these errors so that they can be solved.");
                     break;
                 case "PRE_ALPHA_VERSION":
-                    sendConsole("&cYou are Running a &aPre Alpha version&c, it is normal to find several errors, please report these errors so that they can be solved. &eWARNING: &cI (MrUniverse) recommend a Stable version, PreAlpha aren't stable versions!");
+                    info("&cYou are Running a &aPre Alpha version&c, it is normal to find several errors, please report these errors so that they can be solved. &eWARNING: &cI (MrUniverse) recommend a Stable version, PreAlpha aren't stable versions!");
                     break;
                 default:
-                    sendConsole("DEBUG... 2");
+                    info("DEBUG... 2");
                     break;
             }
         }
@@ -137,41 +135,5 @@ public class LoaderUtils {
         }
 
         debug("Proxy commands has been registered.");
-    }
-
-    /**
-     * Sends a message depending on isBungee
-     * boolean value.
-     *
-     * @param message string to send on.
-     */
-    private void sendConsole(String message) {
-        if (!isBungee) {
-            Bukkit.getServer().getConsoleSender().sendMessage(color("&b[Pixel MOTD] &f" + message));
-            return;
-        }
-
-        CommandSender bungeeConsole = BungeePixel.getInstance().getProxy().getConsole();
-        bungeeConsole.sendMessage(new TextComponent(color("&b[Pixel MOTD] &f" + message)));
-    }
-
-    private void debug(String message) {
-        if (!isBungee) {
-            Bukkit.getServer().getConsoleSender().sendMessage(color("&9[DEBUG &7| Pixel MOTD] &f" + message));
-            return;
-        }
-
-        CommandSender bungeeConsole = BungeePixel.getInstance().getProxy().getConsole();
-        bungeeConsole.sendMessage(new TextComponent(color("&9[DEBUG &7| Pixel MOTD] &f" + message)));
-    }
-
-    /**
-     * Colorize a string provided to method
-     *
-     * @param message Message to transform.
-     * @return transformed message with colors.
-     */
-    private String color(String message) {
-        return ChatColor.translateAlternateColorCodes('&',message);
     }
 }
