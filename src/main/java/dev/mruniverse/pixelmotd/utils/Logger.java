@@ -1,6 +1,6 @@
 package dev.mruniverse.pixelmotd.utils;
 
-import dev.mruniverse.pixelmotd.BungeePixel;
+import dev.mruniverse.pixelmotd.PixelBungee;
 
 import net.md_5.bungee.api.chat.ComponentBuilder;
 
@@ -83,7 +83,7 @@ public class Logger {
             Bukkit.getConsoleSender().sendMessage(color(message));
         }
 
-        BungeePixel plugin = BungeePixel.getInstance();
+        PixelBungee plugin = PixelBungee.getInstance();
         plugin.getProxy().getConsole().sendMessage(new ComponentBuilder(color(message)).create());
     }
 }

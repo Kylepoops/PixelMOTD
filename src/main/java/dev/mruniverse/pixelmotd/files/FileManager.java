@@ -1,9 +1,9 @@
 package dev.mruniverse.pixelmotd.files;
 
 import dev.mruniverse.pixelmotd.enums.*;
-import dev.mruniverse.pixelmotd.BungeePixel;
+import dev.mruniverse.pixelmotd.PixelBungee;
 import dev.mruniverse.pixelmotd.utils.LoaderUtils;
-import dev.mruniverse.pixelmotd.SpigotPixel;
+import dev.mruniverse.pixelmotd.PixelSpigot;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,10 +23,10 @@ public class FileManager {
     public FileManager(InitMode startMode) {
         bungeeMode= startMode.equals(InitMode.BUNGEE_VERSION);
         if(LoaderUtils.isBungee ) {
-            dataFolder = BungeePixel.getInstance().getDataFolder();
+            dataFolder = PixelBungee.getInstance().getDataFolder();
             return;
         }
-        dataFolder = SpigotPixel.getInstance().getDataFolder();
+        dataFolder = PixelSpigot.getInstance().getDataFolder();
     }
     private String callConvert(String path) {
         if(bungeeMode) {
@@ -81,10 +81,10 @@ public class FileManager {
     }
     private void callDataFolder() {
         if(bungeeMode) {
-            dataFolder = BungeePixel.getInstance().getDataFolder();
+            dataFolder = PixelBungee.getInstance().getDataFolder();
             return;
         }
-        dataFolder = SpigotPixel.getInstance().getDataFolder();
+        dataFolder = PixelSpigot.getInstance().getDataFolder();
     }
     private void callMotdGeneration(MotdType motdType) {
         List<Object> stringList = new ArrayList<>();

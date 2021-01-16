@@ -8,7 +8,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.WrappedServerPing;
 import dev.mruniverse.pixelmotd.enums.*;
 import dev.mruniverse.pixelmotd.files.SpigotControl;
-import dev.mruniverse.pixelmotd.SpigotPixel;
+import dev.mruniverse.pixelmotd.PixelSpigot;
 import dev.mruniverse.pixelmotd.listeners.spigot.MotdLoadEvent;
 import dev.mruniverse.pixelmotd.manager.WrappedStatus;
 import dev.mruniverse.pixelmotd.utils.SpigotUtils;
@@ -27,7 +27,7 @@ import static dev.mruniverse.pixelmotd.utils.Logger.warn;
 
 @SuppressWarnings({"UnstableApiUsage", "CatchMayIgnoreException"})
 public class SpigotMotd {
-    private final PacketAdapter packetAdapter = new PacketAdapter(SpigotPixel.getInstance(), ListenerPriority.HIGH, PacketType.Status.Server.SERVER_INFO) {
+    private final PacketAdapter packetAdapter = new PacketAdapter(PixelSpigot.getInstance(), ListenerPriority.HIGH, PacketType.Status.Server.SERVER_INFO) {
         public void onPacketSending(PacketEvent e) {
             if (e.getPacketType() != PacketType.Status.Server.SERVER_INFO)
                 return;
@@ -69,9 +69,9 @@ public class SpigotMotd {
                         icons = SpigotUtils.getIcons(motdType,motdName).listFiles();
                     } else {
                         if(motdType.equals(MotdType.NORMAL_MOTD)) {
-                            icons = SpigotPixel.getFiles().getFile(Icons.NORMAL).listFiles();
+                            icons = PixelSpigot.getFiles().getFile(Icons.NORMAL).listFiles();
                         } else {
-                            icons = SpigotPixel.getFiles().getFile(Icons.WHITELIST).listFiles();
+                            icons = PixelSpigot.getFiles().getFile(Icons.WHITELIST).listFiles();
                         }
                     }
                     if (icons != null && icons.length != 0) {
@@ -150,7 +150,7 @@ public class SpigotMotd {
                     ping.setPlayers(SpigotUtils.getHover(motdType, motdName, online, max));
                 }
                 if (SpigotUtils.getProtocolStatus(motdType, motdName)) {
-                    ping.setVersionName(SpigotPixel.getHex().applyColor(SpigotUtils.replaceProtocolVariables(SpigotUtils.getProtocolMessage(motdType, motdName), online, max, getName(e.getPlayer().getName(), e.getPlayer()))));
+                    ping.setVersionName(PixelSpigot.getHex().applyColor(SpigotUtils.replaceProtocolVariables(SpigotUtils.getProtocolMessage(motdType, motdName), online, max, getName(e.getPlayer().getName(), e.getPlayer()))));
                     if (SpigotUtils.getProtocolVersion(motdType, motdName)) { ping.setVersionProtocol(-1); } else { ping.setVersionProtocol(ProtocolLibrary.getProtocolManager().getProtocolVersion(e.getPlayer()));}
                 }
 
@@ -188,7 +188,7 @@ public class SpigotMotd {
 
                     error("Suppressed: " + Arrays.toString(ignored.getSuppressed()));
                     error("Class: " + ignored.getClass().getName() +".class");
-                    error("Plugin version:" + SpigotPixel.getInstance().getDescription().getVersion());
+                    error("Plugin version:" + PixelSpigot.getInstance().getDescription().getVersion());
                     error("---------------");
                 }
             }

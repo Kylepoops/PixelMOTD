@@ -2,7 +2,7 @@ package dev.mruniverse.pixelmotd.listeners;
 
 import dev.mruniverse.pixelmotd.enums.*;
 import dev.mruniverse.pixelmotd.files.BungeeControl;
-import dev.mruniverse.pixelmotd.BungeePixel;
+import dev.mruniverse.pixelmotd.PixelBungee;
 import dev.mruniverse.pixelmotd.listeners.bungeecord.MotdLoadEvent;
 import dev.mruniverse.pixelmotd.utils.BungeeUtils;
 import net.md_5.bungee.api.Favicon;
@@ -31,9 +31,9 @@ import static dev.mruniverse.pixelmotd.utils.Logger.error;
 
 @SuppressWarnings("UnstableApiUsage")
 public class BungeeMotd implements Listener {
-    private final BungeePixel plugin;
+    private final PixelBungee plugin;
 
-    public BungeeMotd(BungeePixel plugin) {
+    public BungeeMotd(PixelBungee plugin) {
         this.plugin = plugin;
         plugin.getProxy().getPluginManager().registerListener(plugin, this);
     }
@@ -96,9 +96,9 @@ public class BungeeMotd implements Listener {
                 icons = BungeeUtils.getIcons(ShowMode,ShowMotd).listFiles();
             } else {
                 if(ShowMode.equals(MotdType.NORMAL_MOTD)) {
-                    icons = BungeePixel.getFiles().getFile(Icons.NORMAL).listFiles();
+                    icons = PixelBungee.getFiles().getFile(Icons.NORMAL).listFiles();
                 } else {
-                    icons = BungeePixel.getFiles().getFile(Icons.WHITELIST).listFiles();
+                    icons = PixelBungee.getFiles().getFile(Icons.WHITELIST).listFiles();
                 }
             }
             List<File> validIcons = new ArrayList<>();
@@ -237,7 +237,7 @@ public class BungeeMotd implements Listener {
                     error("Suppressed: " + Arrays.toString(exception.getSuppressed()));
                 }
                 error("Class: " + exception.getClass().getName() +".class");
-                error("Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
+                error("Plugin version:" + PixelBungee.getInstance().getDescription().getVersion());
                 error("---------------");
             }
             return null;

@@ -1,7 +1,7 @@
 package dev.mruniverse.pixelmotd.utils;
 
-import dev.mruniverse.pixelmotd.BungeePixel;
-import dev.mruniverse.pixelmotd.SpigotPixel;
+import dev.mruniverse.pixelmotd.PixelBungee;
+import dev.mruniverse.pixelmotd.PixelSpigot;
 import dev.mruniverse.pixelmotd.bstats.BukkitMetrics;
 import dev.mruniverse.pixelmotd.bstats.BungeeMetrics;
 import dev.mruniverse.pixelmotd.commands.BungeeCMD;
@@ -95,12 +95,12 @@ public class LoaderUtils {
      */
     public void loadMetrics() {
         if (!isBungee) {
-            BukkitMetrics bukkitMetrics = new BukkitMetrics(SpigotPixel.getInstance(), 8509);
+            BukkitMetrics bukkitMetrics = new BukkitMetrics(PixelSpigot.getInstance(), 8509);
             debug(String.format("Spigot metrics has been enabled &7(%s)", bukkitMetrics.isEnabled()));
             return;
         }
 
-        BungeeMetrics bungeeMetrics = new BungeeMetrics(BungeePixel.getInstance(), 8509);
+        BungeeMetrics bungeeMetrics = new BungeeMetrics(PixelBungee.getInstance(), 8509);
         debug(String.format("Proxy metrics has been enabled &7(%s)", bungeeMetrics.isEnabled()));
     }
 
@@ -109,26 +109,26 @@ public class LoaderUtils {
      */
     public void registerListeners() {
         if (!isBungee) {
-            new SpigotEvents(SpigotPixel.getInstance());
+            new SpigotEvents(PixelSpigot.getInstance());
             debug("Spigot listener has been loaded.");
             return;
         }
 
-        new BungeeEvents(BungeePixel.getInstance());
-        new BungeeMotd(BungeePixel.getInstance());
+        new BungeeEvents(PixelBungee.getInstance());
+        new BungeeMotd(PixelBungee.getInstance());
         debug("Proxy listeners has been loaded.");
     }
 
     public void registerCommands() {
         if (!isBungee) {
-            SpigotPixel plugin = SpigotPixel.getInstance();
+            PixelSpigot plugin = PixelSpigot.getInstance();
             new SpigotCMD(plugin, "pixelmotd");
             new SpigotCMD(plugin, "pmotd");
             debug("Spigot commands has been registered.");
             return;
         }
 
-        BungeePixel plugin = BungeePixel.getInstance();
+        PixelBungee plugin = PixelBungee.getInstance();
         List<String> cmdList = BungeeControl.getControl(Files.COMMAND).getStringList("command.list");
 
         for (String command : cmdList) {

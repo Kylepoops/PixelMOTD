@@ -2,7 +2,7 @@ package dev.mruniverse.pixelmotd.commands;
 
 import dev.mruniverse.pixelmotd.enums.*;
 import dev.mruniverse.pixelmotd.files.SpigotControl;
-import dev.mruniverse.pixelmotd.SpigotPixel;
+import dev.mruniverse.pixelmotd.PixelSpigot;
 import dev.mruniverse.pixelmotd.utils.Extras;
 import dev.mruniverse.pixelmotd.utils.SpigotUtils;
 import org.bukkit.command.Command;
@@ -22,7 +22,7 @@ public class SpigotCMD implements CommandExecutor {
 
     private final String cmd;
 
-    public SpigotCMD(SpigotPixel plugin, String command) {
+    public SpigotCMD(PixelSpigot plugin, String command) {
         this.cmd = command;
 
         Objects.requireNonNull(plugin.getCommand(command)).setExecutor(this);
@@ -68,10 +68,10 @@ public class SpigotCMD implements CommandExecutor {
     }
     @SuppressWarnings("all")
     private String getOnline(String playerName) {
-        if(SpigotPixel.getInstance().getServer().getPlayer(playerName) != null) {
+        if(PixelSpigot.getInstance().getServer().getPlayer(playerName) != null) {
             try {
-                if (Objects.requireNonNull(SpigotPixel.getInstance().getServer().getPlayer(playerName)).isOnline()) {
-                    return SpigotControl.getControl(Files.COMMAND).getString("command.online-status.online").replace("%server%",Objects.requireNonNull(SpigotPixel.getInstance().getServer().getPlayer(playerName).getWorld().getName()));
+                if (Objects.requireNonNull(PixelSpigot.getInstance().getServer().getPlayer(playerName)).isOnline()) {
+                    return SpigotControl.getControl(Files.COMMAND).getString("command.online-status.online").replace("%server%",Objects.requireNonNull(PixelSpigot.getInstance().getServer().getPlayer(playerName).getWorld().getName()));
                 }
                 return SpigotControl.getControl(Files.COMMAND).getString("command.online-status.offline");
             }catch(Throwable throwable) {
@@ -84,8 +84,8 @@ public class SpigotCMD implements CommandExecutor {
     private void sendMain(CommandSender sender) {
         for(String lines : SpigotControl.getControl(Files.COMMAND).getStringList("command.help")) {
             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
-            if(lines.contains("%author%")) lines = lines.replace("%author%", SpigotPixel.getInstance().getDescription().getAuthors().toString());
-            if(lines.contains("%version%")) lines = lines.replace("%version%", SpigotPixel.getInstance().getDescription().getVersion());
+            if(lines.contains("%author%")) lines = lines.replace("%author%", PixelSpigot.getInstance().getDescription().getAuthors().toString());
+            if(lines.contains("%version%")) lines = lines.replace("%version%", PixelSpigot.getInstance().getDescription().getVersion());
             SpigotUtils.sendColored(sender,lines);
         }
     }
@@ -127,7 +127,7 @@ public class SpigotCMD implements CommandExecutor {
                             for(String lines : SpigotControl.getControl(Files.COMMAND).getStringList("command.whitelist.list.top")) {
                                 if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                                 if(lines.contains("%author%")) lines = lines.replace("%author%", SpigotControl.getWhitelistAuthor());
-                                if(lines.contains("%version%")) lines = lines.replace("%version%", SpigotPixel.getInstance().getDescription().getVersion());
+                                if(lines.contains("%version%")) lines = lines.replace("%version%", PixelSpigot.getInstance().getDescription().getVersion());
                                 if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", "Global");
                                 if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus("Global"));
                                 if(lines.contains("<isUser>")) lines = lines.replace("<isUser>","");
@@ -144,7 +144,7 @@ public class SpigotCMD implements CommandExecutor {
                             for(String lines : SpigotControl.getControl(Files.COMMAND).getStringList("command.whitelist.list.mid")) {
                                 if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                                 if(lines.contains("%author%")) lines = lines.replace("%author%", SpigotControl.getWhitelistAuthor());
-                                if(lines.contains("%version%")) lines = lines.replace("%version%", SpigotPixel.getInstance().getDescription().getVersion());
+                                if(lines.contains("%version%")) lines = lines.replace("%version%", PixelSpigot.getInstance().getDescription().getVersion());
                                 if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", "Global");
                                 if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus("Global"));
                                 if(lines.contains("<isUser>")) lines = lines.replace("<isUser>","");
@@ -162,7 +162,7 @@ public class SpigotCMD implements CommandExecutor {
                             for(String lines : SpigotControl.getControl(Files.COMMAND).getStringList("command.whitelist.list.bot")) {
                                 if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                                 if(lines.contains("%author%")) lines = lines.replace("%author%", SpigotControl.getWhitelistAuthor());
-                                if(lines.contains("%version%")) lines = lines.replace("%version%", SpigotPixel.getInstance().getDescription().getVersion());
+                                if(lines.contains("%version%")) lines = lines.replace("%version%", PixelSpigot.getInstance().getDescription().getVersion());
                                 if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", "Global");
                                 if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus("Global"));
                                 if(lines.contains("<isUser>")) lines = lines.replace("<isUser>","");
@@ -193,7 +193,7 @@ public class SpigotCMD implements CommandExecutor {
                         for(String lines : SpigotControl.getControl(Files.COMMAND).getStringList("command.whitelist.list.top")) {
                             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                             if(lines.contains("%author%")) lines = lines.replace("%author%", getAuthor(args[1]));
-                            if(lines.contains("%version%")) lines = lines.replace("%version%", SpigotPixel.getInstance().getDescription().getVersion());
+                            if(lines.contains("%version%")) lines = lines.replace("%version%", PixelSpigot.getInstance().getDescription().getVersion());
                             if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", args[1]);
                             if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus(args[1]));
                             if(lines.contains("<isUser>")) lines = lines.replace("<isUser>","");
@@ -210,7 +210,7 @@ public class SpigotCMD implements CommandExecutor {
                         for(String lines : SpigotControl.getControl(Files.COMMAND).getStringList("command.whitelist.list.mid")) {
                             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                             if(lines.contains("%author%")) lines = lines.replace("%author%", getAuthor(args[1]));
-                            if(lines.contains("%version%")) lines = lines.replace("%version%", SpigotPixel.getInstance().getDescription().getVersion());
+                            if(lines.contains("%version%")) lines = lines.replace("%version%", PixelSpigot.getInstance().getDescription().getVersion());
                             if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", args[1]);
                             if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus(args[1]));
                             if(lines.contains("<isUser>")) lines = lines.replace("<isUser>","");
@@ -228,7 +228,7 @@ public class SpigotCMD implements CommandExecutor {
                         for(String lines : SpigotControl.getControl(Files.COMMAND).getStringList("command.whitelist.list.bot")) {
                             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                             if(lines.contains("%author%")) lines = lines.replace("%author%", getAuthor(args[1]));
-                            if(lines.contains("%version%")) lines = lines.replace("%version%", SpigotPixel.getInstance().getDescription().getVersion());
+                            if(lines.contains("%version%")) lines = lines.replace("%version%", PixelSpigot.getInstance().getDescription().getVersion());
                             if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", args[1]);
                             if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus(args[1]));
                             if(lines.contains("<isUser>")) lines = lines.replace("<isUser>","");
@@ -279,7 +279,7 @@ public class SpigotCMD implements CommandExecutor {
                                 userMessage = false;
                                 if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                                 if(lines.contains("%author%")) lines = lines.replace("%author%", "??");
-                                if(lines.contains("%version%")) lines = lines.replace("%version%", SpigotPixel.getInstance().getDescription().getVersion());
+                                if(lines.contains("%version%")) lines = lines.replace("%version%", PixelSpigot.getInstance().getDescription().getVersion());
                                 if(lines.contains("%blacklist%")) lines = lines.replace("%blacklist%", "Global");
                                 if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus("Global"));
                                 if(lines.contains("<isUser>")) {
@@ -306,7 +306,7 @@ public class SpigotCMD implements CommandExecutor {
                                 userMessage = false;
                                 if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                                 if(lines.contains("%author%")) lines = lines.replace("%author%", "??");
-                                if(lines.contains("%version%")) lines = lines.replace("%version%", SpigotPixel.getInstance().getDescription().getVersion());
+                                if(lines.contains("%version%")) lines = lines.replace("%version%", PixelSpigot.getInstance().getDescription().getVersion());
                                 if(lines.contains("%blacklist%")) lines = lines.replace("%blacklist%", "Global");
                                 if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus("Global"));
                                 if(lines.contains("<isUser>")) {
@@ -334,7 +334,7 @@ public class SpigotCMD implements CommandExecutor {
                                 userMessage = false;
                                 if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                                 if(lines.contains("%author%")) lines = lines.replace("%author%", "??");
-                                if(lines.contains("%version%")) lines = lines.replace("%version%", SpigotPixel.getInstance().getDescription().getVersion());
+                                if(lines.contains("%version%")) lines = lines.replace("%version%", PixelSpigot.getInstance().getDescription().getVersion());
                                 if(lines.contains("%blacklist%")) lines = lines.replace("%blacklist%", "Global");
                                 if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus("Global"));
                                 if(lines.contains("<isUser>")) {
@@ -375,7 +375,7 @@ public class SpigotCMD implements CommandExecutor {
                             userMessage=false;
                             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                             if(lines.contains("%author%")) lines = lines.replace("%author%", "??");
-                            if(lines.contains("%version%")) lines = lines.replace("%version%", SpigotPixel.getInstance().getDescription().getVersion());
+                            if(lines.contains("%version%")) lines = lines.replace("%version%", PixelSpigot.getInstance().getDescription().getVersion());
                             if(lines.contains("%blacklist%")) lines = lines.replace("%blacklist%", args[1]);
                             if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus(args[1]));
                             if(lines.contains("<isUser>")) {
@@ -402,7 +402,7 @@ public class SpigotCMD implements CommandExecutor {
                             userMessage=false;
                             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                             if(lines.contains("%author%")) lines = lines.replace("%author%", "??");
-                            if(lines.contains("%version%")) lines = lines.replace("%version%", SpigotPixel.getInstance().getDescription().getVersion());
+                            if(lines.contains("%version%")) lines = lines.replace("%version%", PixelSpigot.getInstance().getDescription().getVersion());
                             if(lines.contains("%blacklist%")) lines = lines.replace("%blacklist%", args[1]);
                             if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus(args[1]));
                             if(lines.contains("<isUser>")) {
@@ -430,7 +430,7 @@ public class SpigotCMD implements CommandExecutor {
                             userMessage = false;
                             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                             if(lines.contains("%author%")) lines = lines.replace("%author%", "??");
-                            if(lines.contains("%version%")) lines = lines.replace("%version%", SpigotPixel.getInstance().getDescription().getVersion());
+                            if(lines.contains("%version%")) lines = lines.replace("%version%", PixelSpigot.getInstance().getDescription().getVersion());
                             if(lines.contains("%blacklist%")) lines = lines.replace("%blacklist%", args[1]);
                             if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus(args[1]));
                             if(lines.contains("<isUser>")) {
@@ -857,7 +857,7 @@ public class SpigotCMD implements CommandExecutor {
                     error("Class: " + throwable.getClass().getName() + ".class");
                 }
 
-                error("Plugin version:" + SpigotPixel.getInstance().getDescription().getVersion());
+                error("Plugin version:" + PixelSpigot.getInstance().getDescription().getVersion());
                 error("---------------");
             }
         }

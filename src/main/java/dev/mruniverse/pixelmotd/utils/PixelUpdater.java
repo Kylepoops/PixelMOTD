@@ -2,8 +2,8 @@ package dev.mruniverse.pixelmotd.utils;
 
 import dev.mruniverse.pixelmotd.files.BungeeControl;
 import dev.mruniverse.pixelmotd.files.SpigotControl;
-import dev.mruniverse.pixelmotd.BungeePixel;
-import dev.mruniverse.pixelmotd.SpigotPixel;
+import dev.mruniverse.pixelmotd.PixelBungee;
+import dev.mruniverse.pixelmotd.PixelSpigot;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,9 +21,9 @@ public class PixelUpdater {
     private String newestVersion;
     public PixelUpdater(boolean isBungee,int projectID) {
         if(isBungee) {
-            currentVersion = BungeePixel.getInstance().getDescription().getVersion();
+            currentVersion = PixelBungee.getInstance().getDescription().getVersion();
         } else {
-            currentVersion = SpigotPixel.getInstance().getDescription().getVersion();
+            currentVersion = PixelSpigot.getInstance().getDescription().getVersion();
         }
         try {
             URL url = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + projectID);
@@ -61,7 +61,7 @@ public class PixelUpdater {
                     if(ignored.getClass() != null) {
                         error("Class: " + ignored.getClass().getName());
                     }
-                    error("Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
+                    error("Plugin version:" + PixelBungee.getInstance().getDescription().getVersion());
                     error("--------------- [Detailed Error]");
                 }
             } else {
@@ -86,7 +86,7 @@ public class PixelUpdater {
                     if(ignored.getClass() != null) {
                         error("Class: " + ignored.getClass().getName());
                     }
-                    error("Plugin version:" + SpigotPixel.getInstance().getDescription().getVersion());
+                    error("Plugin version:" + PixelSpigot.getInstance().getDescription().getVersion());
                     error("---------------");
                 }
             }

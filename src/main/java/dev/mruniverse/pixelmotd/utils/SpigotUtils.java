@@ -3,7 +3,7 @@ package dev.mruniverse.pixelmotd.utils;
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import dev.mruniverse.pixelmotd.enums.*;
 import dev.mruniverse.pixelmotd.files.SpigotControl;
-import dev.mruniverse.pixelmotd.SpigotPixel;
+import dev.mruniverse.pixelmotd.PixelSpigot;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -65,14 +65,14 @@ public class SpigotUtils {
         warn("Can't generate motd Protocol, please verify if your protocol is correctly created!");
     }
     public static File getIcons(MotdType motdType,String motdName) {
-        File iconFolder = SpigotPixel.getFiles().getFile(Icons.FOLDER);
+        File iconFolder = PixelSpigot.getFiles().getFile(Icons.FOLDER);
         if(motdType.equals(MotdType.NORMAL_MOTD)) {
-            iconFolder = new File(SpigotPixel.getFiles().getFile(Icons.FOLDER), "Normal-" + motdName);
+            iconFolder = new File(PixelSpigot.getFiles().getFile(Icons.FOLDER), "Normal-" + motdName);
         }
         if(motdType.equals(MotdType.WHITELIST_MOTD)) {
-            iconFolder = new File(SpigotPixel.getFiles().getFile(Icons.FOLDER), "Whitelist-" + motdName);
+            iconFolder = new File(PixelSpigot.getFiles().getFile(Icons.FOLDER), "Whitelist-" + motdName);
         }
-        if(!iconFolder.exists()) SpigotPixel.getFiles().loadFolder(iconFolder,"&fIcon Folder: &b" + motdName);
+        if(!iconFolder.exists()) PixelSpigot.getFiles().loadFolder(iconFolder,"&fIcon Folder: &b" + motdName);
         return iconFolder;
     }
     public static boolean getPlayersStatus(MotdType motdType,String motdName) {
@@ -285,18 +285,15 @@ public class SpigotUtils {
     }
     public static String replaceVariables(String msg,int online,int max) {
         try {
-            msg = SpigotPixel.getHex().applyColor(SpigotControl.getWorlds(msg).replace("%online%",online + "")
+            msg = PixelSpigot.getHex().applyColor(SpigotControl.getWorlds(msg).replace("%online%",online + "")
                     .replace("%max%",max + "")
                     .replace("%plugin_author%","MrUniverse44")
                     .replace("%whitelist_author%", SpigotControl.getWhitelistAuthor())
-                    .replace("%plugin_version%", SpigotPixel.getInstance().getDescription().getVersion()));
+                    .replace("%plugin_version%", PixelSpigot.getInstance().getDescription().getVersion()));
         } catch (ParseException e) {
             reportProtocolError();
             if(SpigotControl.isDetailed()) {
                 error("Information:");
-                //if(e.getCause().toString() != null) {
-                //    spigotPixelMOTD.sendConsole("&a[Pixel MOTD] Cause: " + e.getCause().toString());
-                //}
                 if(e.getMessage() != null) {
                     error("Message: " + e.getMessage());
                 }
@@ -316,7 +313,7 @@ public class SpigotUtils {
                 if(e.getClass().getName() != null) {
                     error("&a[Pixel MOTD] Class: " + e.getClass().getName() + ".class");
                 }
-                error("&a[Pixel MOTD] Plugin version:" + SpigotPixel.getInstance().getDescription().getVersion());
+                error("&a[Pixel MOTD] Plugin version:" + PixelSpigot.getInstance().getDescription().getVersion());
                 error("&a[Pixel MOTD] --------------- [Detailed Error]");
             }
         }
@@ -405,14 +402,14 @@ public class SpigotUtils {
         return SpigotControl.getControl(Files.TIMER_MOTD).getBoolean("timers." + motdName + ".otherSettings.customIcon.customFile");
     }
     public static String applyColor(String message) {
-        if(SpigotPixel.getHex().getStatus()) {
-            return SpigotPixel.getHex().applyColor(message);
+        if(PixelSpigot.getHex().getStatus()) {
+            return PixelSpigot.getHex().applyColor(message);
         }
         return ChatColor.translateAlternateColorCodes('&',message);
     }
     public static String applyColor(String message,ShowType showType) {
         if(showType.equals(ShowType.SECOND)) {
-            return SpigotPixel.getHex().applyColor(ChatColor.translateAlternateColorCodes('&',message));
+            return PixelSpigot.getHex().applyColor(ChatColor.translateAlternateColorCodes('&',message));
         }
         return ChatColor.translateAlternateColorCodes('&',message);
     }

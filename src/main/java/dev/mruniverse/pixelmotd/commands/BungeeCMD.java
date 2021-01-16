@@ -2,7 +2,7 @@ package dev.mruniverse.pixelmotd.commands;
 
 import dev.mruniverse.pixelmotd.enums.*;
 import dev.mruniverse.pixelmotd.files.BungeeControl;
-import dev.mruniverse.pixelmotd.BungeePixel;
+import dev.mruniverse.pixelmotd.PixelBungee;
 import dev.mruniverse.pixelmotd.utils.Extras;
 import dev.mruniverse.pixelmotd.utils.BungeeUtils;
 import net.md_5.bungee.api.CommandSender;
@@ -58,10 +58,10 @@ public class BungeeCMD extends Command {
         return BungeeControl.getControl(Files.COMMAND).getString("command.status.off");
     }
     private String getOnline(String playerName) {
-        if(BungeePixel.getInstance().getProxy().getPlayer(playerName) != null) {
+        if(PixelBungee.getInstance().getProxy().getPlayer(playerName) != null) {
             try {
-                if (Objects.requireNonNull(BungeePixel.getInstance().getProxy().getPlayer(playerName)).isConnected()) {
-                    return BungeeControl.getControl(Files.COMMAND).getString("command.online-status.online").replace("%server%",Objects.requireNonNull(BungeePixel.getInstance().getProxy().getPlayer(playerName).getServer().getInfo().getName()));
+                if (Objects.requireNonNull(PixelBungee.getInstance().getProxy().getPlayer(playerName)).isConnected()) {
+                    return BungeeControl.getControl(Files.COMMAND).getString("command.online-status.online").replace("%server%",Objects.requireNonNull(PixelBungee.getInstance().getProxy().getPlayer(playerName).getServer().getInfo().getName()));
                 }
                 return BungeeControl.getControl(Files.COMMAND).getString("command.online-status.offline");
             }catch(Throwable throwable) {
@@ -80,8 +80,8 @@ public class BungeeCMD extends Command {
     private void sendMain(CommandSender sender) {
         for(String lines : BungeeControl.getControl(Files.COMMAND).getStringList("command.help")) {
             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
-            if(lines.contains("%author%")) lines = lines.replace("%author%", BungeePixel.getInstance().getDescription().getAuthor());
-            if(lines.contains("%version%")) lines = lines.replace("%version%", BungeePixel.getInstance().getDescription().getVersion());
+            if(lines.contains("%author%")) lines = lines.replace("%author%", PixelBungee.getInstance().getDescription().getAuthor());
+            if(lines.contains("%version%")) lines = lines.replace("%version%", PixelBungee.getInstance().getDescription().getVersion());
             BungeeUtils.sendColored(sender,lines);
         }
     }
@@ -125,7 +125,7 @@ public class BungeeCMD extends Command {
                                 userMessage = false;
                                 if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                                 if(lines.contains("%author%")) lines = lines.replace("%author%", BungeeControl.getWhitelistAuthor());
-                                if(lines.contains("%version%")) lines = lines.replace("%version%", BungeePixel.getInstance().getDescription().getVersion());
+                                if(lines.contains("%version%")) lines = lines.replace("%version%", PixelBungee.getInstance().getDescription().getVersion());
                                 if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", "Global");
                                 if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus("Global"));
                                 if(lines.contains("<isUser>")) {
@@ -152,7 +152,7 @@ public class BungeeCMD extends Command {
                                 userMessage = false;
                                 if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                                 if(lines.contains("%author%")) lines = lines.replace("%author%", BungeeControl.getWhitelistAuthor());
-                                if(lines.contains("%version%")) lines = lines.replace("%version%", BungeePixel.getInstance().getDescription().getVersion());
+                                if(lines.contains("%version%")) lines = lines.replace("%version%", PixelBungee.getInstance().getDescription().getVersion());
                                 if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", "Global");
                                 if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus("Global"));
                                 if(lines.contains("<isUser>")) {
@@ -180,7 +180,7 @@ public class BungeeCMD extends Command {
                                 userMessage = false;
                                 if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                                 if(lines.contains("%author%")) lines = lines.replace("%author%", BungeeControl.getWhitelistAuthor());
-                                if(lines.contains("%version%")) lines = lines.replace("%version%", BungeePixel.getInstance().getDescription().getVersion());
+                                if(lines.contains("%version%")) lines = lines.replace("%version%", PixelBungee.getInstance().getDescription().getVersion());
                                 if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", "Global");
                                 if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus("Global"));
                                 if(lines.contains("<isUser>")) {
@@ -221,7 +221,7 @@ public class BungeeCMD extends Command {
                             userMessage=false;
                             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                             if(lines.contains("%author%")) lines = lines.replace("%author%", getAuthor(args[1]));
-                            if(lines.contains("%version%")) lines = lines.replace("%version%", BungeePixel.getInstance().getDescription().getVersion());
+                            if(lines.contains("%version%")) lines = lines.replace("%version%", PixelBungee.getInstance().getDescription().getVersion());
                             if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", args[1]);
                             if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus(args[1]));
                             if(lines.contains("<isUser>")) {
@@ -248,7 +248,7 @@ public class BungeeCMD extends Command {
                             userMessage=false;
                             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                             if(lines.contains("%author%")) lines = lines.replace("%author%", getAuthor(args[1]));
-                            if(lines.contains("%version%")) lines = lines.replace("%version%", BungeePixel.getInstance().getDescription().getVersion());
+                            if(lines.contains("%version%")) lines = lines.replace("%version%", PixelBungee.getInstance().getDescription().getVersion());
                             if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", args[1]);
                             if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus(args[1]));
                             if(lines.contains("<isUser>")) {
@@ -276,7 +276,7 @@ public class BungeeCMD extends Command {
                             userMessage = false;
                             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                             if(lines.contains("%author%")) lines = lines.replace("%author%", getAuthor(args[1]));
-                            if(lines.contains("%version%")) lines = lines.replace("%version%", BungeePixel.getInstance().getDescription().getVersion());
+                            if(lines.contains("%version%")) lines = lines.replace("%version%", PixelBungee.getInstance().getDescription().getVersion());
                             if(lines.contains("%whitelist%")) lines = lines.replace("%whitelist%", args[1]);
                             if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus(args[1]));
                             if(lines.contains("<isUser>")) {
@@ -326,7 +326,7 @@ public class BungeeCMD extends Command {
                                 userMessage = false;
                                 if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                                 if(lines.contains("%author%")) lines = lines.replace("%author%", "??");
-                                if(lines.contains("%version%")) lines = lines.replace("%version%", BungeePixel.getInstance().getDescription().getVersion());
+                                if(lines.contains("%version%")) lines = lines.replace("%version%", PixelBungee.getInstance().getDescription().getVersion());
                                 if(lines.contains("%blacklist%")) lines = lines.replace("%blacklist%", "Global");
                                 if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus("Global"));
                                 if(lines.contains("<isUser>")) {
@@ -353,7 +353,7 @@ public class BungeeCMD extends Command {
                                 userMessage = false;
                                 if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                                 if(lines.contains("%author%")) lines = lines.replace("%author%", "??");
-                                if(lines.contains("%version%")) lines = lines.replace("%version%", BungeePixel.getInstance().getDescription().getVersion());
+                                if(lines.contains("%version%")) lines = lines.replace("%version%", PixelBungee.getInstance().getDescription().getVersion());
                                 if(lines.contains("%blacklist%")) lines = lines.replace("%blacklist%", "Global");
                                 if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus("Global"));
                                 if(lines.contains("<isUser>")) {
@@ -381,7 +381,7 @@ public class BungeeCMD extends Command {
                                 userMessage = false;
                                 if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                                 if(lines.contains("%author%")) lines = lines.replace("%author%", "??");
-                                if(lines.contains("%version%")) lines = lines.replace("%version%", BungeePixel.getInstance().getDescription().getVersion());
+                                if(lines.contains("%version%")) lines = lines.replace("%version%", PixelBungee.getInstance().getDescription().getVersion());
                                 if(lines.contains("%blacklist%")) lines = lines.replace("%blacklist%", "Global");
                                 if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus("Global"));
                                 if(lines.contains("<isUser>")) {
@@ -422,7 +422,7 @@ public class BungeeCMD extends Command {
                             userMessage=false;
                             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                             if(lines.contains("%author%")) lines = lines.replace("%author%", "??");
-                            if(lines.contains("%version%")) lines = lines.replace("%version%", BungeePixel.getInstance().getDescription().getVersion());
+                            if(lines.contains("%version%")) lines = lines.replace("%version%", PixelBungee.getInstance().getDescription().getVersion());
                             if(lines.contains("%blacklist%")) lines = lines.replace("%blacklist%", args[1]);
                             if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus(args[1]));
                             if(lines.contains("<isUser>")) {
@@ -449,7 +449,7 @@ public class BungeeCMD extends Command {
                             userMessage=false;
                             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                             if(lines.contains("%author%")) lines = lines.replace("%author%", "??");
-                            if(lines.contains("%version%")) lines = lines.replace("%version%", BungeePixel.getInstance().getDescription().getVersion());
+                            if(lines.contains("%version%")) lines = lines.replace("%version%", PixelBungee.getInstance().getDescription().getVersion());
                             if(lines.contains("%blacklist%")) lines = lines.replace("%blacklist%", args[1]);
                             if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus(args[1]));
                             if(lines.contains("<isUser>")) {
@@ -477,7 +477,7 @@ public class BungeeCMD extends Command {
                             userMessage = false;
                             if(lines.contains("%cmd%")) lines = lines.replace("%cmd%", cmd);
                             if(lines.contains("%author%")) lines = lines.replace("%author%", "??");
-                            if(lines.contains("%version%")) lines = lines.replace("%version%", BungeePixel.getInstance().getDescription().getVersion());
+                            if(lines.contains("%version%")) lines = lines.replace("%version%", PixelBungee.getInstance().getDescription().getVersion());
                             if(lines.contains("%blacklist%")) lines = lines.replace("%blacklist%", args[1]);
                             if(lines.contains("%status%")) lines = lines.replace("%status%", getStatus(args[1]));
                             if(lines.contains("<isUser>")) {
@@ -897,7 +897,7 @@ public class BungeeCMD extends Command {
                 if(throwable.getClass().getName() != null) {
                     error("Class: " + throwable.getClass().getName() + ".class");
                 }
-                error("Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
+                error("Plugin version:" + PixelBungee.getInstance().getDescription().getVersion());
                 error("---------------");
             }
         }

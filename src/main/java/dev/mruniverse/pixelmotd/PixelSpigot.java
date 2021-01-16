@@ -17,8 +17,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import static dev.mruniverse.pixelmotd.utils.Logger.error;
 import static dev.mruniverse.pixelmotd.utils.Logger.info;
 
-public class SpigotPixel extends JavaPlugin implements Listener {
-    private static SpigotPixel instance;
+public class PixelSpigot extends JavaPlugin implements Listener {
+    private static PixelSpigot instance;
     private static HexManager hManager;
     private static FileManager fManager;
 
@@ -78,7 +78,7 @@ public class SpigotPixel extends JavaPlugin implements Listener {
         return fManager;
     }
 
-    public static SpigotPixel getInstance() {
+    public static PixelSpigot getInstance() {
         return instance;
     }
 

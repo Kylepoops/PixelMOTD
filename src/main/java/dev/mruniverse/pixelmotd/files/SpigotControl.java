@@ -3,7 +3,7 @@ package dev.mruniverse.pixelmotd.files;
 import dev.mruniverse.pixelmotd.enums.Files;
 import dev.mruniverse.pixelmotd.enums.MotdType;
 import dev.mruniverse.pixelmotd.enums.SaveMode;
-import dev.mruniverse.pixelmotd.SpigotPixel;
+import dev.mruniverse.pixelmotd.PixelSpigot;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static dev.mruniverse.pixelmotd.SpigotPixel.getFiles;
+import static dev.mruniverse.pixelmotd.PixelSpigot.getFiles;
 
 public class SpigotControl {
     private static FileConfiguration rEditable, rModules, rSettings, rWhitelist, rNormal,rTimer,rCommand;
@@ -85,7 +85,7 @@ public class SpigotControl {
     }
     public static String getWorlds(String msg) throws ParseException {
         if(msg.contains("%online_")) {
-            for (World world : SpigotPixel.getInstance().getServer().getWorlds()) {
+            for (World world : PixelSpigot.getInstance().getServer().getWorlds()) {
                 msg = msg.replace("%online_" + world.getName() + "%", world.getPlayers().size() + "");
             }
         }
@@ -462,7 +462,7 @@ public class SpigotControl {
                 getControl(Files.TIMER_MOTD).save(getFiles().getFile(Files.TIMER_MOTD));
             }
         } catch(IOException exception) {
-            SpigotPixel.getFiles().reportControlError();
+            PixelSpigot.getFiles().reportControlError();
         }
     }
     public static String getWhitelistAuthor() {

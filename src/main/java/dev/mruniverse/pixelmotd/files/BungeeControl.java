@@ -3,7 +3,7 @@ package dev.mruniverse.pixelmotd.files;
 import dev.mruniverse.pixelmotd.enums.Files;
 import dev.mruniverse.pixelmotd.enums.MotdType;
 import dev.mruniverse.pixelmotd.enums.SaveMode;
-import dev.mruniverse.pixelmotd.BungeePixel;
+import dev.mruniverse.pixelmotd.PixelBungee;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.config.Configuration;
@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static dev.mruniverse.pixelmotd.BungeePixel.getFiles;
+import static dev.mruniverse.pixelmotd.PixelBungee.getFiles;
 import static dev.mruniverse.pixelmotd.utils.Logger.error;
 
 @SuppressWarnings("ConstantConditions")
@@ -26,24 +26,24 @@ public class BungeeControl {
 
     private static File getFile(Files fileToGet) {
         if(fileToGet.equals(Files.NORMAL_MOTD)) {
-            return new File(BungeePixel.getInstance().getDataFolder(), "normal-motd.yml");
+            return new File(PixelBungee.getInstance().getDataFolder(), "normal-motd.yml");
         }
         if(fileToGet.equals(Files.COMMAND)) {
-            return new File(BungeePixel.getInstance().getDataFolder(), "command.yml");
+            return new File(PixelBungee.getInstance().getDataFolder(), "command.yml");
         }
         if(fileToGet.equals(Files.WHITELIST_MOTD)) {
-            return new File(BungeePixel.getInstance().getDataFolder(), "whitelist-motd.yml");
+            return new File(PixelBungee.getInstance().getDataFolder(), "whitelist-motd.yml");
         }
         if(fileToGet.equals(Files.EDITABLE)) {
-            return new File(BungeePixel.getInstance().getDataFolder(), "edit.yml");
+            return new File(PixelBungee.getInstance().getDataFolder(), "edit.yml");
         }
         if(fileToGet.equals(Files.TIMER_MOTD)) {
-            return new File(BungeePixel.getInstance().getDataFolder(), "timer-motd.yml");
+            return new File(PixelBungee.getInstance().getDataFolder(), "timer-motd.yml");
         }
         if(fileToGet.equals(Files.MODULES)) {
-            return new File(BungeePixel.getInstance().getDataFolder(), "modules.yml");
+            return new File(PixelBungee.getInstance().getDataFolder(), "modules.yml");
         }
-        return new File(BungeePixel.getInstance().getDataFolder(), "settings.yml");
+        return new File(PixelBungee.getInstance().getDataFolder(), "settings.yml");
     }
     public static boolean callMotds(MotdType motdType) {
         try {
@@ -60,7 +60,7 @@ public class BungeeControl {
     }
     public static String getServers(String msg) throws ParseException {
         if(msg.contains("%online_")) {
-            for (ServerInfo svs : BungeePixel.getInstance().getProxy().getServers().values()) {
+            for (ServerInfo svs : PixelBungee.getInstance().getProxy().getServers().values()) {
                 msg = msg.replace("%online_" + svs.getName() + "%", svs.getPlayers().size() + "");
             }
         }
@@ -252,7 +252,7 @@ public class BungeeControl {
                 pNormal = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile(Files.NORMAL_MOTD));
             }
         } catch (IOException exp) {
-            BungeePixel.getFiles().reportControlError();
+            PixelBungee.getFiles().reportControlError();
             if(BungeeControl.isDetailed()) {
                 error("Information: ");
                 if(exp.getMessage() != null) {
@@ -271,7 +271,7 @@ public class BungeeControl {
                     error("Suppressed: " + Arrays.toString(exp.getSuppressed()));
                 }
                 error("Class: " + exp.getClass().getName() +".class");
-                error("Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
+                error("Plugin version:" + PixelBungee.getInstance().getDescription().getVersion());
                 error("---------------");
             }
         }
@@ -286,7 +286,7 @@ public class BungeeControl {
             pWhitelist = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile(Files.WHITELIST_MOTD));
             pNormal = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile(Files.NORMAL_MOTD));
         } catch (IOException exp) {
-            BungeePixel.getFiles().reportControlError();
+            PixelBungee.getFiles().reportControlError();
             if(BungeeControl.isDetailed()) {
                 error("&a[Pixel MOTD] [Detailed Error] Information: ");
                 //if(exp.getCause().toString() != null) {
@@ -308,7 +308,7 @@ public class BungeeControl {
                     error("&a[Pixel MOTD] Suppressed: " + Arrays.toString(exp.getSuppressed()));
                 }
                 error("&a[Pixel MOTD] Class: " + exp.getClass().getName() +".class");
-                error("&a[Pixel MOTD] Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
+                error("&a[Pixel MOTD] Plugin version:" + PixelBungee.getInstance().getDescription().getVersion());
                 error("&a[Pixel MOTD] --------------- [Detailed Error]");
             }
         }
@@ -345,7 +345,7 @@ public class BungeeControl {
             if(pWhitelist == null) reloadFiles();
             return pWhitelist;
         }
-        BungeePixel.getFiles().reportBungeeGetControlError();
+        PixelBungee.getFiles().reportBungeeGetControlError();
         return pSettings;
     }
     public static void save(SaveMode Mode) {
@@ -372,7 +372,7 @@ public class BungeeControl {
                 ConfigurationProvider.getProvider(YamlConfiguration.class).save(getControl(Files.SETTINGS), getFile(Files.SETTINGS));
             }
         } catch(IOException exception) {
-            BungeePixel.getFiles().reportControlError();
+            PixelBungee.getFiles().reportControlError();
             if(isDetailed()) {
                 error("&a[Pixel MOTD] [Detailed Error] Information: ");
                 if (exception.getCause().toString() != null) {
@@ -394,7 +394,7 @@ public class BungeeControl {
                     error("&a[Pixel MOTD] Suppressed: " + Arrays.toString(exception.getSuppressed()));
                 }
                 error("&a[Pixel MOTD] Class: " + exception.getClass().getName() + ".class");
-                error("&a[Pixel MOTD] Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
+                error("&a[Pixel MOTD] Plugin version:" + PixelBungee.getInstance().getDescription().getVersion());
                 error("&a[Pixel MOTD] --------------- [Detailed Error]");
             }
         }

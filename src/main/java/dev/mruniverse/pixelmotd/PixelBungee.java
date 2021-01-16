@@ -12,8 +12,8 @@ import net.md_5.bungee.api.plugin.Plugin;
 
 import static dev.mruniverse.pixelmotd.utils.Logger.info;
 
-public class BungeePixel extends Plugin implements Listener {
-    private static BungeePixel instance;
+public class PixelBungee extends Plugin implements Listener {
+    private static PixelBungee instance;
     private static FileManager fManager;
     private static HexManager hManager;
 
@@ -59,7 +59,7 @@ public class BungeePixel extends Plugin implements Listener {
         return fManager;
     }
 
-    public static BungeePixel getInstance() {
+    public static PixelBungee getInstance() {
         return instance;
     }
 

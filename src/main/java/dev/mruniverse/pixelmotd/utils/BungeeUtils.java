@@ -2,7 +2,7 @@ package dev.mruniverse.pixelmotd.utils;
 
 import dev.mruniverse.pixelmotd.enums.*;
 import dev.mruniverse.pixelmotd.files.BungeeControl;
-import dev.mruniverse.pixelmotd.BungeePixel;
+import dev.mruniverse.pixelmotd.PixelBungee;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ServerPing;
@@ -49,7 +49,7 @@ public class BungeeUtils {
             if(BungeeControl.getControl(Files.NORMAL_MOTD).getBoolean("normal." + motdName + ".otherSettings.customHover.toggle")) {
                 for(String line : BungeeControl.getControl(Files.NORMAL_MOTD).getStringList("normal." + motdName + ".otherSettings.customHover.hover")) {
                     try {
-                        hoverToShow = addHoverLine(hoverToShow, new ServerPing.PlayerInfo(applyColor(BungeeControl.getServers(line.replace("&","§").replace("%plugin_version%", BungeePixel.getInstance().getDescription().getVersion()).replace("%online%", online + "").replace("%max%", max + "").replace("%whitelist_author%", BungeeControl.getWhitelistAuthor()))), String.valueOf(ids)));
+                        hoverToShow = addHoverLine(hoverToShow, new ServerPing.PlayerInfo(applyColor(BungeeControl.getServers(line.replace("&","§").replace("%plugin_version%", PixelBungee.getInstance().getDescription().getVersion()).replace("%online%", online + "").replace("%max%", max + "").replace("%whitelist_author%", BungeeControl.getWhitelistAuthor()))), String.valueOf(ids)));
                     } catch (ParseException e) {
                         reportHoverError();
                         if(BungeeControl.isDetailed()) {
@@ -68,7 +68,7 @@ public class BungeeUtils {
                             }
                             error("ErrorOffset: " + e.getErrorOffset());
                             error("Class: " + e.getClass().getName() +".class");
-                            error("Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
+                            error("Plugin version:" + PixelBungee.getInstance().getDescription().getVersion());
                             error("---------------");
                         }
                     }
@@ -82,7 +82,7 @@ public class BungeeUtils {
         if(BungeeControl.getControl(Files.WHITELIST_MOTD).getBoolean("whitelist." + motdName + ".otherSettings.customHover.toggle")) {
             for(String line : BungeeControl.getControl(Files.WHITELIST_MOTD).getStringList("whitelist." + motdName + ".otherSettings.customHover.hover")) {
                 try {
-                    hoverToShow = addHoverLine(hoverToShow, new ServerPing.PlayerInfo(applyColor(BungeeControl.getServers(line.replace("&","§").replace("%plugin_version%", BungeePixel.getInstance().getDescription().getVersion()).replace("%online%", online + "").replace("%max%", max + "").replace("%whitelist_author%", BungeeControl.getWhitelistAuthor()))), String.valueOf(ids)));
+                    hoverToShow = addHoverLine(hoverToShow, new ServerPing.PlayerInfo(applyColor(BungeeControl.getServers(line.replace("&","§").replace("%plugin_version%", PixelBungee.getInstance().getDescription().getVersion()).replace("%online%", online + "").replace("%max%", max + "").replace("%whitelist_author%", BungeeControl.getWhitelistAuthor()))), String.valueOf(ids)));
                 } catch (ParseException e) {
                     reportHoverError();
                     if(BungeeControl.isDetailed()) {
@@ -104,7 +104,7 @@ public class BungeeUtils {
                         }
                         error("ErrorOffset: " + e.getErrorOffset());
                         error("Class: " + e.getClass().getName() +".class");
-                        error("Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
+                        error("Plugin version:" + PixelBungee.getInstance().getDescription().getVersion());
                         error("---------------");
                     }
                 }
@@ -122,14 +122,14 @@ public class BungeeUtils {
         error("Can't generate motd Protocol, please verify if your protocol is correctly created!");
     }
     public static File getIcons(MotdType motdType,String motdName) {
-        File iconFolder = BungeePixel.getFiles().getFile(Icons.FOLDER);
+        File iconFolder = PixelBungee.getFiles().getFile(Icons.FOLDER);
         if(motdType.equals(MotdType.NORMAL_MOTD)) {
-            iconFolder = new File(BungeePixel.getFiles().getFile(Icons.FOLDER), "Normal-" + motdName);
+            iconFolder = new File(PixelBungee.getFiles().getFile(Icons.FOLDER), "Normal-" + motdName);
         }
         if(motdType.equals(MotdType.WHITELIST_MOTD)) {
-            iconFolder = new File(BungeePixel.getFiles().getFile(Icons.FOLDER), "Whitelist-" + motdName);
+            iconFolder = new File(PixelBungee.getFiles().getFile(Icons.FOLDER), "Whitelist-" + motdName);
         }
-        if(!iconFolder.exists()) BungeePixel.getFiles().loadFolder(iconFolder,"&fIcon Folder: &b" + motdName);
+        if(!iconFolder.exists()) PixelBungee.getFiles().loadFolder(iconFolder,"&fIcon Folder: &b" + motdName);
         return iconFolder;
     }
     public static boolean getPlayersStatus(MotdType motdType,String motdName) {
@@ -266,7 +266,7 @@ public class BungeeUtils {
                     .replace("%max%",max + "")
                     .replace("%plugin_author%","MrUniverse44")
                     .replace("%whitelist_author%", BungeeControl.getWhitelistAuthor())
-                    .replace("%plugin_version%", BungeePixel.getInstance().getDescription().getVersion());
+                    .replace("%plugin_version%", PixelBungee.getInstance().getDescription().getVersion());
         } catch (ParseException e) {
             reportProtocolError();
             if(BungeeControl.isDetailed()) {
@@ -286,7 +286,7 @@ public class BungeeUtils {
 
                 error("ErrorOffset: " + e.getErrorOffset());
                 error("Class: " + e.getClass().getName() +".class");
-                error("Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
+                error("Plugin version:" + PixelBungee.getInstance().getDescription().getVersion());
                 error("---------------");
             }
         }
@@ -376,14 +376,14 @@ public class BungeeUtils {
         return BungeeControl.getControl(Files.TIMER_MOTD).getBoolean("timers." + motdName + ".otherSettings.customIcon.customFile");
     }
     public static String applyColor(String message) {
-        if(BungeePixel.getHex().getStatus()) {
-            return nowCentered(BungeePixel.getHex().applyColor(message));
+        if(PixelBungee.getHex().getStatus()) {
+            return nowCentered(PixelBungee.getHex().applyColor(message));
         }
         return nowCentered(ChatColor.translateAlternateColorCodes('&',message));
     }
     public static String applyColor(String message,ShowType showType) {
         if(showType.equals(ShowType.SECOND)) {
-            return nowCentered(BungeePixel.getHex().applyColor(ChatColor.translateAlternateColorCodes('&',message)));
+            return nowCentered(PixelBungee.getHex().applyColor(ChatColor.translateAlternateColorCodes('&',message)));
         }
 
         return nowCentered(ChatColor.translateAlternateColorCodes('&',message));
