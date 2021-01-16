@@ -13,7 +13,7 @@
 * Per Motd Icons!
 * Per Server & World Whitelist
 * UUID System & Player Name System for Whitelist
-* Diferent Motd for 1.16+ and 1.8-1.15 in the same motd-config.
+* Different Motd for 1.16+ and 1.8-1.15 in the same motd-config.
 * Developer API
 * Center Text System
 * Countdown System
