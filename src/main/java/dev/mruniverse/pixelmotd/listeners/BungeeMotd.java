@@ -3,6 +3,7 @@ package dev.mruniverse.pixelmotd.listeners;
 import dev.mruniverse.pixelmotd.enums.*;
 import dev.mruniverse.pixelmotd.files.BungeeControl;
 import dev.mruniverse.pixelmotd.init.BungeePixel;
+import dev.mruniverse.pixelmotd.listeners.bungeecord.MotdLoadEvent;
 import dev.mruniverse.pixelmotd.utils.BungeeUtils;
 import net.md_5.bungee.api.Favicon;
 import net.md_5.bungee.api.ServerPing;
@@ -52,7 +53,7 @@ public class BungeeMotd implements Listener {
         MotdType ShowMode;
         ShowType showType;
         boolean mHover;
-
+        File iconFile;
         //* load strings & integers
         String line1,line2,motd,ShowMotd;
         int max,online;
@@ -86,7 +87,7 @@ public class BungeeMotd implements Listener {
         //* Motd Hover Setup
         motdHover = BungeeUtils.getHover(ShowMode,ShowMotd,online,max);
         mHover = BungeeUtils.getHoverStatus(ShowMode,ShowMotd);
-
+        iconFile = null;
         //* Custom Server Icon Setup
         if(BungeeUtils.getIconStatus(ShowMode,ShowMotd,false)) {
             File[] icons;
@@ -107,7 +108,8 @@ public class BungeeMotd implements Listener {
                     }
                 }
                 if(validIcons.size() != 0) {
-                    BufferedImage image = getImage(validIcons.get(new Random().nextInt(validIcons.size())));
+                    iconFile = validIcons.get(new Random().nextInt(validIcons.size()));
+                    BufferedImage image = getImage(iconFile);
                     if(image != null) {
                         icon = Favicon.create(image);
                     } else {
@@ -187,8 +189,12 @@ public class BungeeMotd implements Listener {
         }
         ServerPing result;
         if(showType.equals(FIRST)) {
+            MotdLoadEvent event = new MotdLoadEvent(false,ShowMode,ShowMotd,line1,line2,motdL,protocol.getName(),iconFile,online,max);
+            plugin.getProxy().getPluginManager().callEvent(event);
             result = new ServerPing(protocol, MotdPlayers, new TextComponent(motd), icon);
         } else {
+            MotdLoadEvent event = new MotdLoadEvent(true,ShowMode,ShowMotd,line1,line2,motdL,protocol.getName(),iconFile,online,max);
+            plugin.getProxy().getPluginManager().callEvent(event);
             result = new ServerPing(protocol, MotdPlayers, new TextComponent(TextComponent.fromLegacyText(motd)), icon);
         }
         e.setResponse(result);

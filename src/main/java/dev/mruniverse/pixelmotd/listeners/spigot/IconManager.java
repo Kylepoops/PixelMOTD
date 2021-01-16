@@ -20,6 +20,7 @@ public class IconManager {
         return iCustomFolder;
     }
     public BufferedImage getIcon() {
+        if(iFile == null) return null;
         try {
             return ImageIO.read(iFile);
         } catch (IOException exception) {
