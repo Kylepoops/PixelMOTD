@@ -84,7 +84,7 @@ public class FileManager {
         dataFolder = SpigotPixel.getInstance().getDataFolder();
     }
     private void callMotdGeneration(MotdType motdType) {
-        List<Object> stringList = new ArrayList<Object>();
+        List<Object> stringList = new ArrayList<>();
         if(motdType.equals(MotdType.WHITELIST_MOTD)) {
             stringList.add("     &c&lPIXEL MOTD");
             stringList.add("&7SpigotMC Plugin v%plugin_version%");
@@ -112,7 +112,7 @@ public class FileManager {
             addConfig(Files.WHITELIST_MOTD, "whitelist.exampleMotd1.otherSettings.customOnlinePlayers.mode", "HALF-ADD");
             addConfig(Files.WHITELIST_MOTD, "whitelist.exampleMotd1.otherSettings.customMaxPlayers.toggle", true);
             addConfig(Files.WHITELIST_MOTD, "whitelist.exampleMotd1.otherSettings.customMaxPlayers.mode","HALF");
-            stringList = new ArrayList<Object>();
+            stringList = new ArrayList<>();
             stringList.add(2021);
             stringList.add(2022);
             addConfig(Files.WHITELIST_MOTD, "whitelist.exampleMotd1.otherSettings.customOnlinePlayers.values",stringList);
@@ -146,7 +146,7 @@ public class FileManager {
             addConfig(Files.NORMAL_MOTD, "normal.exampleMotd1.otherSettings.customOnlinePlayers.mode", "HALF-ADD");
             addConfig(Files.NORMAL_MOTD, "normal.exampleMotd1.otherSettings.customMaxPlayers.toggle", true);
             addConfig(Files.NORMAL_MOTD, "normal.exampleMotd1.otherSettings.customMaxPlayers.mode","HALF-ADD");
-            stringList = new ArrayList<Object>();
+            stringList = new ArrayList<>();
             stringList.add(2021);
             stringList.add(2022);
             addConfig(Files.NORMAL_MOTD, "normal.exampleMotd1.otherSettings.customOnlinePlayers.values",stringList);
@@ -180,11 +180,11 @@ public class FileManager {
         addConfig(Files.TIMER_MOTD, "timers.exampleMotd1.otherSettings.customOnlinePlayers.mode", "HALF-ADD");
         addConfig(Files.TIMER_MOTD, "timers.exampleMotd1.otherSettings.customMaxPlayers.toggle", true);
         addConfig(Files.TIMER_MOTD, "timers.exampleMotd1.otherSettings.customMaxPlayers.mode","HALF-ADD");
-        stringList = new ArrayList<Object>();
+        stringList = new ArrayList<>();
         stringList.add("/pmotd whitelist off");
         stringList.add("/alert Maintenance off automatically!");
         addConfig(Files.TIMER_MOTD, "timers.exampleMotd1.timerSettings.commandsToExecute",stringList);
-        stringList = new ArrayList<Object>();
+        stringList = new ArrayList<>();
         stringList.add(2021);
         stringList.add(2022);
         addConfig(Files.TIMER_MOTD, "timers.exampleMotd1.otherSettings.customOnlinePlayers.values",stringList);
@@ -297,7 +297,7 @@ public class FileManager {
         addConfig(Files.EDITABLE, "messages.blacklist-player-remove", "&a%type% &e%player% &awas &cremoved &afrom the blacklist.");
         addConfig(Files.EDITABLE, "messages.not-blacklisted", "&a%type% &e%player% &ais not in the blacklist!");
         addConfig(Files.EDITABLE, "messages.already-blacklisted", "&a%type% &e%player% &ais already in the blacklist!");
-        List<String> motdLists = new ArrayList<String>();
+        List<String> motdLists = new ArrayList<>();
         addConfig(Files.EDITABLE, "whitelist.toggle", false);
         addConfig(Files.EDITABLE, "whitelist.author", "Console");
         addConfig(Files.EDITABLE, "whitelist.customConsoleName.toggle", true);
@@ -309,24 +309,24 @@ public class FileManager {
         motdLists.add("&cWhitelist Status Enabled by %whitelist_author%");
         motdLists.add(" ");
         addConfig(Files.EDITABLE, "whitelist.kick-message", motdLists);
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("md_5");
         addConfig(Files.EDITABLE, "whitelist.players-name", motdLists);
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("0-0-0-0");
         addConfig(Files.EDITABLE, "whitelist.players-uuid", motdLists);
         addConfig(Files.EDITABLE, "blacklist.toggle", false);
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add(" ");
         motdLists.add("&cYou were removed from the %type%!");
         motdLists.add("&cYou're in the black list of the server!");
         motdLists.add("&eYour nick: &f%nick%");
         motdLists.add(" ");
         addConfig(Files.EDITABLE, "blacklist.kick-message", motdLists);
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("md_5");
         addConfig(Files.EDITABLE, "blacklist.players-name", motdLists);
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("0-0-0-0");
         addConfig(Files.EDITABLE, "blacklist.players-uuid", motdLists);
         if (!callEventsExists()) {
@@ -351,7 +351,7 @@ public class FileManager {
         motdLists.add("ImAHacker");
         addConfig(Files.MODULES, "modules.block-users.ignoreCase", true);
         addConfig(Files.MODULES, "modules.block-users.blockedUsers", motdLists);
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("&b------------- &aPixelMOTD &b-------------");
         motdLists.add("&fYou has been kicked from the server");
         motdLists.add("&fYour name is in the blackList");
@@ -360,13 +360,13 @@ public class FileManager {
         addConfig(Files.MODULES, "modules.block-users.kickMessage", motdLists);
         addConfig(Files.MODULES, "modules.block-words-in-name.enabled", false);
         addConfig(Files.MODULES, "modules.block-words-in-name.ignoreCase", false);
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("hacker");
         motdLists.add("123456789");
         motdLists.add("racist");
         motdLists.add("Stupid");
         addConfig(Files.MODULES, "modules.block-words-in-name.blockedWords", motdLists);
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("&b------------- &aPixelMOTD &b-------------");
         motdLists.add("&fYou has been kicked from the server");
         motdLists.add("&fYour name has a blocked word.");
@@ -374,7 +374,7 @@ public class FileManager {
         motdLists.add("&b------------- &aPixelMOTD &b-------------");
         addConfig(Files.MODULES, "modules.block-words-in-name.kickMessage", motdLists);
         addConfig(Files.MODULES, "modules.%type%-whitelist.toggle", false);
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("&b------------ &aPixelMotd &b------------");
         motdLists.add("&aThis %type% is currently in whitelist.");
         motdLists.add("&c%type%: &f%value%");
@@ -385,13 +385,13 @@ public class FileManager {
         addConfig(Files.MODULES, "modules.%type%-whitelist.%type%s.%type%Name.whitelist-status", false);
         addConfig(Files.MODULES, "modules.%type%-whitelist.%type%s.%type%Name.whitelist-author", "RetiredUniverse44");
         addConfig(Files.MODULES, "modules.%type%-whitelist.%type%s.%type%Name.whitelist-reason", "This %type% is whitelisted!");
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("md_5");
         addConfig(Files.MODULES, "modules.%type%-whitelist.%type%s.%type%Name.players-name", motdLists);
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("0-0-0-0");
         addConfig(Files.MODULES, "modules.%type%-whitelist.%type%s.%type%Name.players-uuid", motdLists);
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("&b------------ &aPixelMotd &b------------");
         motdLists.add("&aYou are in %type%'s blacklist.");
         motdLists.add("&c%type%: &f%value%");
@@ -401,10 +401,10 @@ public class FileManager {
         addConfig(Files.MODULES, "modules.%type%-blacklist.kickMessage", motdLists);
         addConfig(Files.MODULES, "modules.%type%-blacklist.%type%s.%type%Name.blacklist-status", false);
         addConfig(Files.MODULES, "modules.%type%-blacklist.%type%s.%type%Name.blacklist-reason", "You're a bad player!");
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("md_5");
         addConfig(Files.MODULES, "modules.%type%-blacklist.%type%s.%type%Name.players-name", motdLists);
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("0-0-0-0");
         addConfig(Files.MODULES, "modules.%type%-blacklist.%type%s.%type%Name.players-uuid", motdLists);
 
@@ -412,13 +412,13 @@ public class FileManager {
         addConfig(Files.COMMAND, "command.online-status.offline","Offline");
         addConfig(Files.COMMAND, "command.status.on","Enabled");
         addConfig(Files.COMMAND, "command.status.off","Disabled");
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("pmotd");
         if(bungeeMode) motdLists.add("bpmotd");
         motdLists.add("pixelmotd");
         motdLists.add("pixelM");
         addConfig(Files.COMMAND, "command.list",motdLists);
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("&b------------ &aPixelMotd &b------------");
         motdLists.add("&e/%cmd% &e- &fMain Command");
         if (bungeeMode) {
@@ -441,7 +441,7 @@ public class FileManager {
         motdLists.add("&e/%cmd% externalModules list");
         motdLists.add("&b------------ &aPixelMotd &b------------");
         addConfig(Files.COMMAND, "command.help", motdLists);
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("&b------------ &aPixelMotd &b------------");
         motdLists.add("&e%whitelist% - Whitelist");
         motdLists.add("&fStatus: &7%status%");
@@ -449,18 +449,18 @@ public class FileManager {
         motdLists.add("&fPlayers Name:");
         addConfig(Files.COMMAND, "command.whitelist.list.top",motdLists);
         addConfig(Files.COMMAND, "command.whitelist.list.playersNameFormat","&e&l* &8[&7%online_status%&8] &7%player_name%");
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add(" ");
         motdLists.add("&fPlayers UUID:");
         addConfig(Files.COMMAND, "command.whitelist.list.mid",motdLists);
         addConfig(Files.COMMAND, "command.whitelist.list.playersUuidFormat","&e&l* &8[&7UUID&8] &7%player_uuid%");
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add(" ");
         motdLists.add("<isUser>&fYour UUID: &7%your_uuid%");
         motdLists.add("&b------------ &aPixelMotd &b------------");
         addConfig(Files.COMMAND, "command.whitelist.list.bot",motdLists);
 
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("&b------------ &aPixelMotd &b------------");
         motdLists.add("&e%blacklist% - Blacklist");
         motdLists.add("&fStatus: &7%status%");
@@ -468,40 +468,40 @@ public class FileManager {
         motdLists.add("&fPlayers Name:");
         addConfig(Files.COMMAND, "command.blacklist.list.top",motdLists);
         addConfig(Files.COMMAND, "command.blacklist.list.playersNameFormat","&e&l* &8[&7%online_status%&8] &7%player_name%");
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add(" ");
         motdLists.add("&fPlayers UUID:");
         addConfig(Files.COMMAND, "command.blacklist.list.mid",motdLists);
         addConfig(Files.COMMAND, "command.blacklist.list.playersUuidFormat","&e&l* &8[&7UUID&8] &7%player_uuid%");
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add(" ");
         motdLists.add("<isUser>&fYour UUID: &7%your_uuid%");
         motdLists.add("&b------------ &aPixelMotd &b------------");
         addConfig(Files.COMMAND, "command.blacklist.list.bot",motdLists);
 
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("&b------------ &aPixelMotd &b------------");
         motdLists.add("&6PixelMOTD - Module List");
         motdLists.add(" ");
         motdLists.add("&fPlugin Modules:");
         addConfig(Files.COMMAND, "command.modules.list.top",motdLists);
         addConfig(Files.COMMAND, "command.modules.list.moduleNameFormat","&e&l* &8[&7%status%&8] &7%module_name%");
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add(" ");
         motdLists.add("&b------------ &aPixelMotd &b------------");
         addConfig(Files.COMMAND, "command.modules.list.bot",motdLists);
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("&b------------ &aPixelMotd &b------------");
         motdLists.add("&6PixelMOTD - External Module List");
         motdLists.add(" ");
         motdLists.add("&fExternal Modules:");
         addConfig(Files.COMMAND, "command.externalModules.list.top",motdLists);
         addConfig(Files.COMMAND, "command.externalModules.list.moduleNameFormat","&e&l* &8[&7%status%&8] &7%module_name%");
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add(" ");
         motdLists.add("&b------------ &aPixelMotd &b------------");
         addConfig(Files.COMMAND, "command.externalModules.list.bot",motdLists);
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("&b------------ &aPixelMotd &b------------");
         motdLists.add("&6%module_name% - External Module");
         motdLists.add(" ");
@@ -511,7 +511,7 @@ public class FileManager {
         motdLists.add(" ");
         motdLists.add("&b------------ &aPixelMotd &b------------");
         addConfig(Files.COMMAND, "command.externalModules.info",motdLists);
-        motdLists = new ArrayList<String>();
+        motdLists = new ArrayList<>();
         motdLists.add("&b------------ &aPixelMotd &b------------");
         motdLists.add("&6%module_name% - Plugin Module");
         motdLists.add(" ");
