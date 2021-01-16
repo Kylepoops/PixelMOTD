@@ -2,6 +2,8 @@ package dev.mruniverse.pixelmotd.init;
 
 import dev.mruniverse.pixelmotd.bstats.BukkitMetrics;
 import dev.mruniverse.pixelmotd.bstats.BungeeMetrics;
+import dev.mruniverse.pixelmotd.commands.BungeeCMD;
+import dev.mruniverse.pixelmotd.commands.SpigotCMD;
 import dev.mruniverse.pixelmotd.enums.Files;
 import dev.mruniverse.pixelmotd.files.BungeeControl;
 import dev.mruniverse.pixelmotd.files.SpigotControl;
@@ -14,6 +16,8 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
+
+import java.util.List;
 
 public class LoaderUtils {
     private final boolean isBungee;
@@ -35,7 +39,7 @@ public class LoaderUtils {
         control = SpigotControl.getControl(Files.SETTINGS).getBoolean("settings.update-check");
     }
 
-    public void pluginUpdater() {
+    protected void pluginUpdater() {
         if (control) {
             PixelUpdater updater = new PixelUpdater(isBungee, 37177);
             String updaterResult = updater.getUpdateResult();
@@ -90,7 +94,7 @@ public class LoaderUtils {
     /**
      * Load it on the onEnable method.
      */
-    public void loadMetrics() {
+    protected void loadMetrics() {
         if (!isBungee) {
             BukkitMetrics bukkitMetrics = new BukkitMetrics(SpigotPixel.getInstance(), 8509);
             debug(String.format("Spigot metrics has been enabled &7(%s)", bukkitMetrics.isEnabled()));
@@ -101,7 +105,10 @@ public class LoaderUtils {
         debug(String.format("Proxy metrics has been enabled &7(%s)", bungeeMetrics.isEnabled()));
     }
 
-    public void registerListeners() {
+    /**
+     * Register it on the onEnable method.
+     */
+    protected void registerListeners() {
         if (!isBungee) {
             new SpigotEvents(SpigotPixel.getInstance());
             debug("Spigot listener has been loaded.");
@@ -111,6 +118,25 @@ public class LoaderUtils {
         new BungeeEvents(BungeePixel.getInstance());
         new BungeeMotd(BungeePixel.getInstance());
         debug("Proxy listeners has been loaded.");
+    }
+
+    protected void registerCommands() {
+        if (!isBungee) {
+            SpigotPixel plugin = SpigotPixel.getInstance();
+            new SpigotCMD(plugin, "pixelmotd");
+            new SpigotCMD(plugin, "pmotd");
+            debug("Spigot commands has been registered.");
+            return;
+        }
+
+        BungeePixel plugin = BungeePixel.getInstance();
+        List<String> cmdList = BungeeControl.getControl(Files.COMMAND).getStringList("command.list");
+
+        for (String command : cmdList) {
+            plugin.getProxy().getPluginManager().registerCommand(plugin, new BungeeCMD(command));
+        }
+
+        debug("Proxy commands has been registered.");
     }
 
     /**

@@ -16,11 +16,15 @@ import java.util.List;
 import java.util.Objects;
 
 public class SpigotCMD implements CommandExecutor {
+
     private final String cmd;
 
-    public SpigotCMD(String command) {
+    public SpigotCMD(SpigotPixel plugin, String command) {
         this.cmd = command;
+
+        Objects.requireNonNull(plugin.getCommand(command)).setExecutor(this);
     }
+
     private String getUniqueId(CommandSender sender) {
         if(sender instanceof Player) {
             Player player = (Player)sender;

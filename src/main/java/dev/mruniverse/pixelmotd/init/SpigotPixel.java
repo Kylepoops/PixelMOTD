@@ -60,12 +60,11 @@ public class SpigotPixel extends JavaPlugin implements Listener {
 
         if(cantWork()) {
             reportDependencies();
-        }
-        getCommand("pmotd").setExecutor(new SpigotCMD("pmotd"));
+        };
 
         loaderUtils.registerListeners();
+        loaderUtils.registerCommands();
 
-        getCommand("pixelmotd").setExecutor(new SpigotCMD("pixelmotd"));
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
         protocolManager.addPacketListener((new SpigotMotd()).getPacketAdapter());
         sendConsole("All events loaded in &b" + (System.currentTimeMillis() - temporalTimer) + "&fms.");
