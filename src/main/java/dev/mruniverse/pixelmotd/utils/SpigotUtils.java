@@ -3,7 +3,7 @@ package dev.mruniverse.pixelmotd.utils;
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import dev.mruniverse.pixelmotd.enums.*;
 import dev.mruniverse.pixelmotd.files.SpigotControl;
-import dev.mruniverse.pixelmotd.init.SpigotPixel;
+import dev.mruniverse.pixelmotd.SpigotPixel;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

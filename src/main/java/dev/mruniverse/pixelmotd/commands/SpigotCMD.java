@@ -2,7 +2,7 @@ package dev.mruniverse.pixelmotd.commands;
 
 import dev.mruniverse.pixelmotd.enums.*;
 import dev.mruniverse.pixelmotd.files.SpigotControl;
-import dev.mruniverse.pixelmotd.init.SpigotPixel;
+import dev.mruniverse.pixelmotd.SpigotPixel;
 import dev.mruniverse.pixelmotd.utils.Extras;
 import dev.mruniverse.pixelmotd.utils.SpigotUtils;
 import org.bukkit.command.Command;

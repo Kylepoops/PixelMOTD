@@ -1,7 +1,6 @@
 package dev.mruniverse.pixelmotd.utils;
 
-import dev.mruniverse.pixelmotd.init.BungeePixel;
-import dev.mruniverse.pixelmotd.init.LoaderUtils;
+import dev.mruniverse.pixelmotd.BungeePixel;
 
 import net.md_5.bungee.api.chat.ComponentBuilder;
 
@@ -9,7 +8,6 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class Logger {
     /**

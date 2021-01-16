@@ -8,7 +8,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.WrappedServerPing;
 import dev.mruniverse.pixelmotd.enums.*;
 import dev.mruniverse.pixelmotd.files.SpigotControl;
-import dev.mruniverse.pixelmotd.init.SpigotPixel;
+import dev.mruniverse.pixelmotd.SpigotPixel;
 import dev.mruniverse.pixelmotd.listeners.spigot.MotdLoadEvent;
 import dev.mruniverse.pixelmotd.manager.WrappedStatus;
 import dev.mruniverse.pixelmotd.utils.SpigotUtils;

@@ -6,7 +6,7 @@ import static dev.mruniverse.pixelmotd.files.BungeeControl.getControl;
 import static dev.mruniverse.pixelmotd.files.BungeeControl.getWhitelistAuthor;
 
 import dev.mruniverse.pixelmotd.files.BungeeControl;
-import dev.mruniverse.pixelmotd.init.BungeePixel;
+import dev.mruniverse.pixelmotd.BungeePixel;
 import dev.mruniverse.pixelmotd.utils.Extras;
 import dev.mruniverse.pixelmotd.utils.PixelConverter;
 import dev.mruniverse.pixelmotd.utils.BungeeUtils;

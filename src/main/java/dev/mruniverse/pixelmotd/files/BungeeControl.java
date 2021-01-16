@@ -3,7 +3,7 @@ package dev.mruniverse.pixelmotd.files;
 import dev.mruniverse.pixelmotd.enums.Files;
 import dev.mruniverse.pixelmotd.enums.MotdType;
 import dev.mruniverse.pixelmotd.enums.SaveMode;
-import dev.mruniverse.pixelmotd.init.BungeePixel;
+import dev.mruniverse.pixelmotd.BungeePixel;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.config.Configuration;
@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static dev.mruniverse.pixelmotd.init.BungeePixel.getFiles;
+import static dev.mruniverse.pixelmotd.BungeePixel.getFiles;
 import static dev.mruniverse.pixelmotd.utils.Logger.error;
 
 @SuppressWarnings("ConstantConditions")

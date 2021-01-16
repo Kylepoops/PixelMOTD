@@ -2,7 +2,7 @@ package dev.mruniverse.pixelmotd.commands;
 
 import dev.mruniverse.pixelmotd.enums.*;
 import dev.mruniverse.pixelmotd.files.BungeeControl;
-import dev.mruniverse.pixelmotd.init.BungeePixel;
+import dev.mruniverse.pixelmotd.BungeePixel;
 import dev.mruniverse.pixelmotd.utils.Extras;
 import dev.mruniverse.pixelmotd.utils.BungeeUtils;
 import net.md_5.bungee.api.CommandSender;

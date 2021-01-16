@@ -2,8 +2,8 @@ package dev.mruniverse.pixelmotd.utils;
 
 import dev.mruniverse.pixelmotd.files.BungeeControl;
 import dev.mruniverse.pixelmotd.files.SpigotControl;
-import dev.mruniverse.pixelmotd.init.BungeePixel;
-import dev.mruniverse.pixelmotd.init.SpigotPixel;
+import dev.mruniverse.pixelmotd.BungeePixel;
+import dev.mruniverse.pixelmotd.SpigotPixel;
 
 import java.io.BufferedReader;
 import java.io.IOException;

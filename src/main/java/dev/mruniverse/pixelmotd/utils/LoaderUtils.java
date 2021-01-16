@@ -1,5 +1,7 @@
-package dev.mruniverse.pixelmotd.init;
+package dev.mruniverse.pixelmotd.utils;
 
+import dev.mruniverse.pixelmotd.BungeePixel;
+import dev.mruniverse.pixelmotd.SpigotPixel;
 import dev.mruniverse.pixelmotd.bstats.BukkitMetrics;
 import dev.mruniverse.pixelmotd.bstats.BungeeMetrics;
 import dev.mruniverse.pixelmotd.commands.BungeeCMD;
@@ -10,7 +12,6 @@ import dev.mruniverse.pixelmotd.files.SpigotControl;
 import dev.mruniverse.pixelmotd.listeners.BungeeEvents;
 import dev.mruniverse.pixelmotd.listeners.BungeeMotd;
 import dev.mruniverse.pixelmotd.listeners.SpigotEvents;
-import dev.mruniverse.pixelmotd.utils.PixelUpdater;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class LoaderUtils {
         control = SpigotControl.getControl(Files.SETTINGS).getBoolean("settings.update-check");
     }
 
-    protected void pluginUpdater() {
+    public void pluginUpdater() {
         if (control) {
             PixelUpdater updater = new PixelUpdater(isBungee, 37177);
             String updaterResult = updater.getUpdateResult();
@@ -92,7 +93,7 @@ public class LoaderUtils {
     /**
      * Load it on the onEnable method.
      */
-    protected void loadMetrics() {
+    public void loadMetrics() {
         if (!isBungee) {
             BukkitMetrics bukkitMetrics = new BukkitMetrics(SpigotPixel.getInstance(), 8509);
             debug(String.format("Spigot metrics has been enabled &7(%s)", bukkitMetrics.isEnabled()));
@@ -106,7 +107,7 @@ public class LoaderUtils {
     /**
      * Register it on the onEnable method.
      */
-    protected void registerListeners() {
+    public void registerListeners() {
         if (!isBungee) {
             new SpigotEvents(SpigotPixel.getInstance());
             debug("Spigot listener has been loaded.");
@@ -118,7 +119,7 @@ public class LoaderUtils {
         debug("Proxy listeners has been loaded.");
     }
 
-    protected void registerCommands() {
+    public void registerCommands() {
         if (!isBungee) {
             SpigotPixel plugin = SpigotPixel.getInstance();
             new SpigotCMD(plugin, "pixelmotd");

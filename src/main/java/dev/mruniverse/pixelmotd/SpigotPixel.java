@@ -1,4 +1,4 @@
-package dev.mruniverse.pixelmotd.init;
+package dev.mruniverse.pixelmotd;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -7,6 +7,7 @@ import dev.mruniverse.pixelmotd.enums.InitMode;
 import dev.mruniverse.pixelmotd.enums.SaveMode;
 import dev.mruniverse.pixelmotd.files.FileManager;
 import dev.mruniverse.pixelmotd.files.SpigotControl;
+import dev.mruniverse.pixelmotd.utils.LoaderUtils;
 import dev.mruniverse.pixelmotd.listeners.SpigotMotd;
 import dev.mruniverse.pixelmotd.utils.HexManager;
 import org.bukkit.Bukkit;

@@ -3,7 +3,7 @@ package dev.mruniverse.pixelmotd.files;
 import dev.mruniverse.pixelmotd.enums.Files;
 import dev.mruniverse.pixelmotd.enums.MotdType;
 import dev.mruniverse.pixelmotd.enums.SaveMode;
-import dev.mruniverse.pixelmotd.init.SpigotPixel;
+import dev.mruniverse.pixelmotd.SpigotPixel;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static dev.mruniverse.pixelmotd.init.SpigotPixel.getFiles;
+import static dev.mruniverse.pixelmotd.SpigotPixel.getFiles;
 
 public class SpigotControl {
     private static FileConfiguration rEditable, rModules, rSettings, rWhitelist, rNormal,rTimer,rCommand;

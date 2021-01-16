@@ -1,4 +1,4 @@
-main: dev.mruniverse.pixelmotd.init.BungeePixel
+main: dev.mruniverse.pixelmotd.BungeePixel
 name: PixelMOTD
 version: 8.8.6-Alpha3
 description: Motd Plugin with RGB Support and Hover System.

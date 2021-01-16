@@ -1,10 +1,11 @@
-package dev.mruniverse.pixelmotd.init;
+package dev.mruniverse.pixelmotd;
 
 import dev.mruniverse.pixelmotd.enums.Files;
 import dev.mruniverse.pixelmotd.enums.InitMode;
 import dev.mruniverse.pixelmotd.enums.SaveMode;
 import dev.mruniverse.pixelmotd.files.BungeeControl;
 import dev.mruniverse.pixelmotd.files.FileManager;
+import dev.mruniverse.pixelmotd.utils.LoaderUtils;
 import dev.mruniverse.pixelmotd.utils.HexManager;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;

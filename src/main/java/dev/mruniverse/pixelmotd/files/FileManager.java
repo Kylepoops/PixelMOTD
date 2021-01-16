@@ -1,9 +1,9 @@
 package dev.mruniverse.pixelmotd.files;
 
 import dev.mruniverse.pixelmotd.enums.*;
-import dev.mruniverse.pixelmotd.init.BungeePixel;
-import dev.mruniverse.pixelmotd.init.LoaderUtils;
-import dev.mruniverse.pixelmotd.init.SpigotPixel;
+import dev.mruniverse.pixelmotd.BungeePixel;
+import dev.mruniverse.pixelmotd.utils.LoaderUtils;
+import dev.mruniverse.pixelmotd.SpigotPixel;
 
 import java.io.File;
 import java.io.IOException;
