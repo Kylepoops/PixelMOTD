@@ -36,12 +36,9 @@ public class BungeePixel extends Plugin implements Listener {
 
         hManager.setHex(BungeeControl.getControl(Files.SETTINGS).getBoolean("settings.hexColors"));
 
-        for(String command : BungeeControl.getControl(Files.COMMAND).getStringList("command.list")) {
-            getProxy().getPluginManager().registerCommand(this,new BungeeCMD(command));
-        }
-
         loaderUtils = new LoaderUtils(true);
         loaderUtils.pluginUpdater();
+        loaderUtils.registerCommands();
 
         sendConsole("All files loaded");
     }
