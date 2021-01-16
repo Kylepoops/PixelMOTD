@@ -10,14 +10,22 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 
 public class LoaderUtils {
-    private boolean isBungee;
+    private final boolean isBungee;
 
     private final boolean bungeeControl = BungeeControl.getControl(Files.SETTINGS).getBoolean("settings.update-check");
     private final boolean spigotControl = SpigotControl.getControl(Files.SETTINGS).getBoolean("settings.update-check");
 
-    public void updater(boolean isBungee) {
+    /**
+     * Specify if it's Bungee or Spigot
+     * when initialize this class constructor.
+     *
+     * @param isBungee spigot if false.
+     */
+    public LoaderUtils (boolean isBungee) {
         this.isBungee = isBungee;
+    }
 
+    public void pluginUpdater() {
         if (bungeeControl || spigotControl) {
             PixelUpdater updater = new PixelUpdater(isBungee, 37177);
             String updaterResult = updater.getUpdateResult();
@@ -73,7 +81,7 @@ public class LoaderUtils {
      *
      * @param message string to send on.
      */
-    public void sendConsole(String message) {
+    private void sendConsole(String message) {
         CommandSender bungeeConsole = BungeePixel.getInstance().getProxy().getConsole();
         ConsoleCommandSender spigotConsole = SpigotPixel.getInstance().getServer().getConsoleSender();
 
@@ -91,7 +99,7 @@ public class LoaderUtils {
      * @param message Message to transform.
      * @return transformed message with colors.
      */
-    private static String color(String message) {
+    private String color(String message) {
         return ChatColor.translateAlternateColorCodes('&',message);
     }
 }
