@@ -304,6 +304,19 @@ public class BungeeUtils {
         }
         return msg;
     }
+    public static List<Integer> getPlayersList(MotdType motdType,String motdName) {
+        List<Integer> values = new ArrayList<>();
+        if(motdType.equals(MotdType.NORMAL_MOTD)) {
+            values = BungeeControl.getControl(Files.NORMAL_MOTD).getIntList("normal." + motdName + ".otherSettings.customMaxPlayers.values");
+        }
+        if(motdType.equals(MotdType.WHITELIST_MOTD)) {
+            values = BungeeControl.getControl(Files.WHITELIST_MOTD).getIntList("whitelist." + motdName + ".otherSettings.customMaxPlayers.values");
+        }
+        if(motdType.equals(MotdType.TIMER_MOTD)) {
+            values = BungeeControl.getControl(Files.TIMER_MOTD).getIntList("timers." + motdName + ".otherSettings.customMaxPlayers.values");
+        }
+        return values;
+    }
     public static int getPlayersValue(MotdType motdType,String motdName) {
         List<Integer> values = new ArrayList<>();
         if(motdType.equals(MotdType.NORMAL_MOTD)) {

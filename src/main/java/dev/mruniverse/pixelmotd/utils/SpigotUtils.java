@@ -351,6 +351,19 @@ public class SpigotUtils {
         }
         return values.get(new Random().nextInt(values.size()));
     }
+    public static List<Integer> getPlayersList(MotdType motdType,String motdName) {
+        List<Integer> values = new ArrayList<>();
+        if(motdType.equals(MotdType.NORMAL_MOTD)) {
+            values = SpigotControl.getControl(Files.NORMAL_MOTD).getIntegerList("normal." + motdName + ".otherSettings.customMaxPlayers.values");
+        }
+        if(motdType.equals(MotdType.WHITELIST_MOTD)) {
+            values = SpigotControl.getControl(Files.WHITELIST_MOTD).getIntegerList("whitelist." + motdName + ".otherSettings.customMaxPlayers.values");
+        }
+        if(motdType.equals(MotdType.TIMER_MOTD)) {
+            values = SpigotControl.getControl(Files.TIMER_MOTD).getIntegerList("timers." + motdName + ".otherSettings.customMaxPlayers.values");
+        }
+        return values;
+    }
     //private static ServerPing.PlayerInfo[] addHoverLine(ServerPing.PlayerInfo[] player, ServerPing.PlayerInfo info) {
     //    ServerPing.PlayerInfo[] hoverText = new ServerPing.PlayerInfo[player.length + 1];
     //    for(int id = 0; id < player.length; id++) {
