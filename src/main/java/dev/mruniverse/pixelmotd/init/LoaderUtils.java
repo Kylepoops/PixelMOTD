@@ -1,5 +1,7 @@
 package dev.mruniverse.pixelmotd.init;
 
+import dev.mruniverse.pixelmotd.bstats.BukkitMetrics;
+import dev.mruniverse.pixelmotd.bstats.BungeeMetrics;
 import dev.mruniverse.pixelmotd.enums.Files;
 import dev.mruniverse.pixelmotd.files.BungeeControl;
 import dev.mruniverse.pixelmotd.files.SpigotControl;
@@ -80,6 +82,20 @@ public class LoaderUtils {
                     break;
             }
         }
+    }
+
+    /**
+     * Load it on the onEnable method.
+     */
+    public void loadMetrics() {
+        if (!isBungee) {
+            BukkitMetrics bukkitMetrics = new BukkitMetrics(SpigotPixel.getInstance(), 8509);
+            sendConsole("Metrics: &b" + bukkitMetrics.isEnabled());
+            return;
+        }
+
+        BungeeMetrics bungeeMetrics = new BungeeMetrics(BungeePixel.getInstance(), 8509);
+        sendConsole("Metrics: &b" + bungeeMetrics.isEnabled());
     }
 
     /**

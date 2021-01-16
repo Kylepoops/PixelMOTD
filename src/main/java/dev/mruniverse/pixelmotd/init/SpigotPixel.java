@@ -6,7 +6,7 @@ import dev.mruniverse.pixelmotd.commands.SpigotCMD;
 import dev.mruniverse.pixelmotd.enums.Files;
 import dev.mruniverse.pixelmotd.enums.SaveMode;
 
-import dev.mruniverse.pixelmotd.bstats.bukkit.Metrics;
+import dev.mruniverse.pixelmotd.bstats.BukkitMetrics;
 
 import dev.mruniverse.pixelmotd.enums.InitMode;
 import dev.mruniverse.pixelmotd.listeners.SpigotEvents;
@@ -15,7 +15,6 @@ import dev.mruniverse.pixelmotd.files.FileManager;
 import dev.mruniverse.pixelmotd.files.SpigotControl;
 
 import dev.mruniverse.pixelmotd.utils.HexManager;
-import dev.mruniverse.pixelmotd.utils.PixelUpdater;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,6 +25,8 @@ public class SpigotPixel extends JavaPlugin implements Listener {
     private static SpigotPixel instance;
     private static HexManager hManager;
     private static FileManager fManager;
+
+    private LoaderUtils loaderUtils;
 
     public static HexManager getHex() {
         return hManager;
@@ -42,7 +43,7 @@ public class SpigotPixel extends JavaPlugin implements Listener {
         hManager = new HexManager();
         hManager.setHex(SpigotControl.getControl(Files.SETTINGS).getBoolean("settings.hexColors"));
 
-        LoaderUtils loaderUtils = new LoaderUtils(false);
+        loaderUtils = new LoaderUtils(false);
         loaderUtils.pluginUpdater();
 
         sendConsole("All files loaded in &b" + (System.currentTimeMillis() - temporalTimer) + "&fms.");
@@ -54,9 +55,9 @@ public class SpigotPixel extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         long temporalTimer = System.currentTimeMillis();
-        int pluginId = 8509;
-        Metrics metrics = new Metrics(this, pluginId);
-        sendConsole("Metrics: &b" + metrics.isEnabled());
+
+        loaderUtils.loadMetrics();
+
         if(cantWork()) {
             reportDependencies();
         }
