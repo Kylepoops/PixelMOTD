@@ -2,12 +2,15 @@ package dev.mruniverse.pixelmotd.files;
 
 import dev.mruniverse.pixelmotd.enums.*;
 import dev.mruniverse.pixelmotd.init.BungeePixel;
+import dev.mruniverse.pixelmotd.init.LoaderUtils;
 import dev.mruniverse.pixelmotd.init.SpigotPixel;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static dev.mruniverse.pixelmotd.utils.Logger.info;
 
 public class FileManager {
     private final boolean bungeeMode;
@@ -19,7 +22,7 @@ public class FileManager {
 
     public FileManager(InitMode startMode) {
         bungeeMode= startMode.equals(InitMode.BUNGEE_VERSION);
-        if(bungeeMode) {
+        if(LoaderUtils.isBungee ) {
             dataFolder = BungeePixel.getInstance().getDataFolder();
             return;
         }
@@ -208,22 +211,15 @@ public class FileManager {
                 reportError();
             }
             if(result) {
-                sendConsole("File: &b" + fileName + "&f created!");
+                info("File: &b" + fileName + "&f created!");
             }
         }
     }
-    private void sendConsole(String message) {
-        if(bungeeMode) {
-            BungeePixel.sendConsole(message);
-            return;
-        }
-        SpigotPixel.sendConsole(message);
-    }
-    public void loadFolder(File folderToLoad,String folderName) {
+public void loadFolder(File folderToLoad, String folderName) {
         boolean result = false;
         if(!folderToLoad.exists()) result = folderToLoad.mkdir();
         if(result) {
-            sendConsole("Folder: &b" + folderName + "&f created!");
+            info("Folder: &b" + folderName + "&f created!");
         }
     }
 
@@ -638,15 +634,15 @@ public class FileManager {
     }
 
     private void reportError() {
-        sendConsole("The plugin can't load or save configuration files!");
+        info("The plugin can't load or save configuration files!");
     }
     public void reportControlError() {
-        sendConsole("The plugin can't load or save configuration files! (Bungee | Spigot Control Issue - Caused by: IO Exception)");
+        info("The plugin can't load or save configuration files! (Bungee | Spigot Control Issue - Caused by: IO Exception)");
     }
     public void reportBungeeGetControlError() {
-        sendConsole("The plugin can't load or save configuration files! (Bungee Control Issue - Caused by: One plugin is using bad the <getControl() from FileManager.class>)");
+        info("The plugin can't load or save configuration files! (Bungee Control Issue - Caused by: One plugin is using bad the <getControl() from FileManager.class>)");
     }
     public void reportSpigotGetControlError() {
-        sendConsole("The plugin can't load or save configuration files! (Spigot Control Issue - Caused by: One plugin is using bad the <getControl() from FileManager.class>)");
+        info("The plugin can't load or save configuration files! (Spigot Control Issue - Caused by: One plugin is using bad the <getControl() from FileManager.class>)");
     }
 }

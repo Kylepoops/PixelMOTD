@@ -15,6 +15,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static dev.mruniverse.pixelmotd.utils.Logger.error;
+import static dev.mruniverse.pixelmotd.utils.Logger.sendMessage;
+
 public class SpigotCMD implements CommandExecutor {
 
     private final String cmd;
@@ -827,30 +830,35 @@ public class SpigotCMD implements CommandExecutor {
                 return true;
             }
             return true;
-        } catch(Throwable throwable) {
-            SpigotUtils.sendColored(sender,"&cPixelMOTD found a error using this command. Check console and report this error to the developer, please enable option &lshow-detailed-errors &cfor more info for the developer.");
-            if(SpigotControl.isDetailed()) {
-                SpigotPixel.sendConsole("&a[Pixel MOTD] [Detailed Error] Information:");
-                if(throwable.getMessage() != null) {
-                    SpigotPixel.sendConsole("&a[Pixel MOTD] Message: " + throwable.getMessage());
+        } catch (Throwable throwable) {
+            sendMessage(sender, "&cPixelMOTD found a error using this command. Check console and report this error to the developer, please enable option &lshow-detailed-errors &cfor more info for the developer.");
+            if (SpigotControl.isDetailed()) {
+                error("Information:");
+
+                if (throwable.getMessage() != null) {
+                    error("Message: " + throwable.getMessage());
                 }
-                if(throwable.getLocalizedMessage() != null) {
-                    SpigotPixel.sendConsole("&a[Pixel MOTD] LocalizedMessage: " + throwable.getLocalizedMessage());
+                if (throwable.getLocalizedMessage() != null) {
+                    error("LocalizedMessage: " + throwable.getLocalizedMessage());
                 }
-                if(throwable.getStackTrace() != null) {
-                    SpigotPixel.sendConsole("&a[Pixel MOTD] StackTrace: ");
-                    for(StackTraceElement line : throwable.getStackTrace()) {
-                        SpigotPixel.sendConsole("&a[Pixel MOTD] (" + line.getLineNumber() + ") " + line.toString());
+                if (throwable.getStackTrace() != null) {
+                    error("StackTrace: ");
+
+                    for (StackTraceElement line : throwable.getStackTrace()) {
+                        error("(" + line.getLineNumber() + ") " + line.toString());
                     }
+
                 }
-                if(throwable.getSuppressed() != null) {
-                    SpigotPixel.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(throwable.getSuppressed()));
+                if (throwable.getSuppressed() != null) {
+                    error("Suppressed: " + Arrays.toString(throwable.getSuppressed()));
                 }
-                if(throwable.getClass().getName() != null) {
-                    SpigotPixel.sendConsole("&a[Pixel MOTD] Class: " + throwable.getClass().getName() + ".class");
+
+                if (throwable.getClass().getName() != null) {
+                    error("Class: " + throwable.getClass().getName() + ".class");
                 }
-                SpigotPixel.sendConsole("&a[Pixel MOTD] Plugin version:" + SpigotPixel.getInstance().getDescription().getVersion());
-                SpigotPixel.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
+
+                error("Plugin version:" + SpigotPixel.getInstance().getDescription().getVersion());
+                error("---------------");
             }
         }
         return true;

@@ -12,6 +12,8 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.*;
 
+import static dev.mruniverse.pixelmotd.utils.Logger.*;
+
 public class SpigotUtils {
     public static List<String> getPlayers(WhitelistMembers mode, String worldName) {
         if(mode.equals(WhitelistMembers.NAMEs)) {
@@ -60,7 +62,7 @@ public class SpigotUtils {
         return result;
     }
     private static void reportProtocolError() {
-        SpigotPixel.sendConsole("Can't generate motd Protocol, please verify if your protocol is correctly created!");
+        warn("Can't generate motd Protocol, please verify if your protocol is correctly created!");
     }
     public static File getIcons(MotdType motdType,String motdName) {
         File iconFolder = SpigotPixel.getFiles().getFile(Icons.FOLDER);
@@ -258,7 +260,7 @@ public class SpigotUtils {
         return SpigotControl.getControl(Files.EDITABLE).getString("messages.no-perms");
     }
     private static void reportMistake() {
-        SpigotPixel.sendConsole("&e[Pixel MOTD] &fThe plugin found an issue, fixing internal issue.");
+        info("&e[Pixel MOTD] &fThe plugin found an issue, fixing internal issue.");
     }
     public static void sendColored(CommandSender sender, String message) {
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
@@ -291,31 +293,31 @@ public class SpigotUtils {
         } catch (ParseException e) {
             reportProtocolError();
             if(SpigotControl.isDetailed()) {
-                SpigotPixel.sendConsole("&a[Pixel MOTD] [Detailed Error] Information:");
+                error("Information:");
                 //if(e.getCause().toString() != null) {
                 //    spigotPixelMOTD.sendConsole("&a[Pixel MOTD] Cause: " + e.getCause().toString());
                 //}
                 if(e.getMessage() != null) {
-                    SpigotPixel.sendConsole("&a[Pixel MOTD] Message: " + e.getMessage());
+                    error("Message: " + e.getMessage());
                 }
                 if(e.getLocalizedMessage() != null) {
-                    SpigotPixel.sendConsole("&a[Pixel MOTD] LocalizedMessage: " + e.getLocalizedMessage());
+                    error("&a[Pixel MOTD] LocalizedMessage: " + e.getLocalizedMessage());
                 }
                 if(e.getStackTrace() != null) {
-                    SpigotPixel.sendConsole("&a[Pixel MOTD] StackTrace: ");
+                    error("&a[Pixel MOTD] StackTrace: ");
                     for(StackTraceElement line : e.getStackTrace()) {
-                        SpigotPixel.sendConsole("&a[Pixel MOTD] (" + line.getLineNumber() + ") " + line.toString());
+                        error("&a[Pixel MOTD] (" + line.getLineNumber() + ") " + line.toString());
                     }
                 }
                 if(e.getSuppressed() != null) {
-                    SpigotPixel.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(e.getSuppressed()));
+                    error("&a[Pixel MOTD] Suppressed: " + Arrays.toString(e.getSuppressed()));
                 }
-                SpigotPixel.sendConsole("&a[Pixel MOTD] ErrorOffset: " + e.getErrorOffset());
+                error("&a[Pixel MOTD] ErrorOffset: " + e.getErrorOffset());
                 if(e.getClass().getName() != null) {
-                    SpigotPixel.sendConsole("&a[Pixel MOTD] Class: " + e.getClass().getName() + ".class");
+                    error("&a[Pixel MOTD] Class: " + e.getClass().getName() + ".class");
                 }
-                SpigotPixel.sendConsole("&a[Pixel MOTD] Plugin version:" + SpigotPixel.getInstance().getDescription().getVersion());
-                SpigotPixel.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
+                error("&a[Pixel MOTD] Plugin version:" + SpigotPixel.getInstance().getDescription().getVersion());
+                error("&a[Pixel MOTD] --------------- [Detailed Error]");
             }
         }
         if(msg.contains("<centerText>")) {

@@ -2,9 +2,14 @@ package dev.mruniverse.pixelmotd.utils;
 
 import dev.mruniverse.pixelmotd.init.BungeePixel;
 import dev.mruniverse.pixelmotd.init.LoaderUtils;
+
 import net.md_5.bungee.api.chat.ComponentBuilder;
+
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class Logger {
     /**
@@ -47,6 +52,26 @@ public class Logger {
      */
     public static void info(String message) {
         sendMessage("&f[&bINFO &7| &fPixel MOTD] " + message);
+    }
+
+    /**
+     * Sends a message to a Bukkit command sender.
+     *
+     * @param sender Bukkit CommandSender
+     * @param message Message to send.
+     */
+    public static void sendMessage(CommandSender sender, String message) {
+        sender.sendMessage(color(message));
+    }
+
+    /**
+     * Sends a message to a Proxied Player.
+     *
+     * @param player Proxied Player
+     * @param message Message to send.
+     */
+    public static void sendMessage(ProxiedPlayer player, String message) {
+        player.sendMessage(new ComponentBuilder(color(message)).create());
     }
 
     /**
