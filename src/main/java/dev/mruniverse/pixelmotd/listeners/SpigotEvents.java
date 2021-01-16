@@ -4,6 +4,8 @@ import dev.mruniverse.pixelmotd.enums.BlacklistMembers;
 import dev.mruniverse.pixelmotd.enums.Files;
 import dev.mruniverse.pixelmotd.enums.WhitelistMembers;
 import dev.mruniverse.pixelmotd.files.SpigotControl;
+import dev.mruniverse.pixelmotd.init.BungeePixel;
+import dev.mruniverse.pixelmotd.init.SpigotPixel;
 import dev.mruniverse.pixelmotd.utils.PixelConverter;
 import dev.mruniverse.pixelmotd.utils.SpigotUtils;
 import net.md_5.bungee.api.ChatColor;
@@ -21,6 +23,13 @@ import static dev.mruniverse.pixelmotd.files.SpigotControl.getControl;
 import static dev.mruniverse.pixelmotd.files.SpigotControl.getWhitelistAuthor;
 @SuppressWarnings("unused")
 public class SpigotEvents implements Listener {
+    private final SpigotPixel plugin;
+
+    public SpigotEvents(SpigotPixel plugin) {
+        this.plugin = plugin;
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
     @EventHandler
     public void playerLoginEvent(PlayerLoginEvent event) {
         //database - Setup

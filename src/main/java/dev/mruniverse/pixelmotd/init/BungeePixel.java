@@ -54,9 +54,8 @@ public class BungeePixel extends Plugin implements Listener {
         long temporalTimer = System.currentTimeMillis();
 
         loaderUtils.loadMetrics();
+        loaderUtils.registerListeners();
 
-        getProxy().getPluginManager().registerListener(this, new BungeeEvents());
-        getProxy().getPluginManager().registerListener(this, new BungeeMotd());
         sendConsole("All events loaded in &b" + (System.currentTimeMillis() - temporalTimer) + "&fms.");
     }
 

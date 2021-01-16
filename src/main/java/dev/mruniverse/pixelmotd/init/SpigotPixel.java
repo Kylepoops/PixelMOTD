@@ -62,7 +62,9 @@ public class SpigotPixel extends JavaPlugin implements Listener {
             reportDependencies();
         }
         getCommand("pmotd").setExecutor(new SpigotCMD("pmotd"));
-        Bukkit.getPluginManager().registerEvents(new SpigotEvents(),this);
+
+        loaderUtils.registerListeners();
+
         getCommand("pixelmotd").setExecutor(new SpigotCMD("pixelmotd"));
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
         protocolManager.addPacketListener((new SpigotMotd()).getPacketAdapter());

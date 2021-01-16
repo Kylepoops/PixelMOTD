@@ -5,6 +5,9 @@ import dev.mruniverse.pixelmotd.bstats.BungeeMetrics;
 import dev.mruniverse.pixelmotd.enums.Files;
 import dev.mruniverse.pixelmotd.files.BungeeControl;
 import dev.mruniverse.pixelmotd.files.SpigotControl;
+import dev.mruniverse.pixelmotd.listeners.BungeeEvents;
+import dev.mruniverse.pixelmotd.listeners.BungeeMotd;
+import dev.mruniverse.pixelmotd.listeners.SpigotEvents;
 import dev.mruniverse.pixelmotd.utils.PixelUpdater;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -90,12 +93,24 @@ public class LoaderUtils {
     public void loadMetrics() {
         if (!isBungee) {
             BukkitMetrics bukkitMetrics = new BukkitMetrics(SpigotPixel.getInstance(), 8509);
-            sendConsole("Metrics: &b" + bukkitMetrics.isEnabled());
+            debug(String.format("Spigot metrics has been enabled &7(%s)", bukkitMetrics.isEnabled()));
             return;
         }
 
         BungeeMetrics bungeeMetrics = new BungeeMetrics(BungeePixel.getInstance(), 8509);
-        sendConsole("Metrics: &b" + bungeeMetrics.isEnabled());
+        debug(String.format("Proxy metrics has been enabled &7(%s)", bungeeMetrics.isEnabled()));
+    }
+
+    public void registerListeners() {
+        if (!isBungee) {
+            new SpigotEvents(SpigotPixel.getInstance());
+            debug("Spigot listener has been loaded.");
+            return;
+        }
+
+        new BungeeEvents(BungeePixel.getInstance());
+        new BungeeMotd(BungeePixel.getInstance());
+        debug("Proxy listeners has been loaded.");
     }
 
     /**
@@ -112,6 +127,16 @@ public class LoaderUtils {
 
         CommandSender bungeeConsole = BungeePixel.getInstance().getProxy().getConsole();
         bungeeConsole.sendMessage(new TextComponent(color("&b[Pixel MOTD] &f" + message)));
+    }
+
+    private void debug(String message) {
+        if (!isBungee) {
+            Bukkit.getServer().getConsoleSender().sendMessage(color("&9[DEBUG &7| Pixel MOTD] &f" + message));
+            return;
+        }
+
+        CommandSender bungeeConsole = BungeePixel.getInstance().getProxy().getConsole();
+        bungeeConsole.sendMessage(new TextComponent(color("&9[DEBUG &7| Pixel MOTD] &f" + message)));
     }
 
     /**

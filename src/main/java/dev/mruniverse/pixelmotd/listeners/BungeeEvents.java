@@ -6,6 +6,7 @@ import static dev.mruniverse.pixelmotd.files.BungeeControl.getControl;
 import static dev.mruniverse.pixelmotd.files.BungeeControl.getWhitelistAuthor;
 
 import dev.mruniverse.pixelmotd.files.BungeeControl;
+import dev.mruniverse.pixelmotd.init.BungeePixel;
 import dev.mruniverse.pixelmotd.utils.Extras;
 import dev.mruniverse.pixelmotd.utils.PixelConverter;
 import dev.mruniverse.pixelmotd.utils.BungeeUtils;
@@ -21,6 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BungeeEvents implements Listener {
+    private final BungeePixel plugin;
+
+    public BungeeEvents(BungeePixel plugin) {
+        this.plugin = plugin;
+        plugin.getProxy().getPluginManager().registerListener(plugin, this);
+    }
+
+
     @EventHandler
     public void onLoginEvent(LoginEvent event) {
         if(event.isCancelled()) return;

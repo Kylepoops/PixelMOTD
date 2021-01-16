@@ -29,6 +29,12 @@ import static dev.mruniverse.pixelmotd.enums.ShowType.FIRST;
 
 @SuppressWarnings("UnstableApiUsage")
 public class BungeeMotd implements Listener {
+    private final BungeePixel plugin;
+
+    public BungeeMotd(BungeePixel plugin) {
+        this.plugin = plugin;
+        plugin.getProxy().getPluginManager().registerListener(plugin, this);
+    }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPing(ProxyPingEvent e) {
