@@ -186,14 +186,15 @@ public class SpigotMotd {
                         }
                     }
 
-                    error("&a[Pixel MOTD] Suppressed: " + Arrays.toString(ignored.getSuppressed()));
-                    error("&a[Pixel MOTD] Class: " + ignored.getClass().getName() +".class");
-                    error("&a[Pixel MOTD] Plugin version:" + SpigotPixel.getInstance().getDescription().getVersion());
-                    error("&a[Pixel MOTD] --------------- [Detailed Error]");
+                    error("Suppressed: " + Arrays.toString(ignored.getSuppressed()));
+                    error("Class: " + ignored.getClass().getName() +".class");
+                    error("Plugin version:" + SpigotPixel.getInstance().getDescription().getVersion());
+                    error("---------------");
                 }
             }
         }
     };
+
     private WrappedServerPing.CompressedImage getImage(File file) {
         try {
             return WrappedServerPing.CompressedImage.fromPng(ImageIO.read(file));

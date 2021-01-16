@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static dev.mruniverse.pixelmotd.utils.Logger.error;
+
 public class BungeeCMD extends Command {
     private final String cmd;
 
@@ -876,27 +878,27 @@ public class BungeeCMD extends Command {
         } catch(Throwable throwable) {
             BungeeUtils.sendColored(sender,"&cPixelMOTD found a error using this command. Check console and report this error to the developer, please enable option &lshow-detailed-errors &cfor more info for the developer.");
             if(BungeeControl.isDetailed()) {
-                BungeePixel.sendConsole("&a[Pixel MOTD] [Detailed Error] Information:");
+                error("Information:");
                 if(throwable.getMessage() != null) {
-                    BungeePixel.sendConsole("&a[Pixel MOTD] Message: " + throwable.getMessage());
+                    error("Message: " + throwable.getMessage());
                 }
                 if(throwable.getLocalizedMessage() != null) {
-                    BungeePixel.sendConsole("&a[Pixel MOTD] LocalizedMessage: " + throwable.getLocalizedMessage());
+                    error("LocalizedMessage: " + throwable.getLocalizedMessage());
                 }
                 if(throwable.getStackTrace() != null) {
-                    BungeePixel.sendConsole("&a[Pixel MOTD] StackTrace: ");
+                    error("StackTrace: ");
                     for(StackTraceElement line : throwable.getStackTrace()) {
-                        BungeePixel.sendConsole("&a[Pixel MOTD] (" + line.getLineNumber() + ") " + line.toString());
+                        error("(" + line.getLineNumber() + ") " + line.toString());
                     }
                 }
                 if(throwable.getSuppressed() != null) {
-                    BungeePixel.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(throwable.getSuppressed()));
+                    error("Suppressed: " + Arrays.toString(throwable.getSuppressed()));
                 }
                 if(throwable.getClass().getName() != null) {
-                    BungeePixel.sendConsole("&a[Pixel MOTD] Class: " + throwable.getClass().getName() + ".class");
+                    error("Class: " + throwable.getClass().getName() + ".class");
                 }
-                BungeePixel.sendConsole("&a[Pixel MOTD] Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
-                BungeePixel.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
+                error("Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
+                error("---------------");
             }
         }
     }

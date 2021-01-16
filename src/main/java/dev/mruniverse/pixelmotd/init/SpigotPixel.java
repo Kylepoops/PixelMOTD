@@ -59,7 +59,7 @@ public class SpigotPixel extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        info("The plugin was unloaded.");
+        info("The plugin was disabled.");
     }
 
     public void loadHooks() {

@@ -13,6 +13,8 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.*;
 
+import static dev.mruniverse.pixelmotd.utils.Logger.error;
+
 public class BungeeUtils {
     public static List<String> getPlayers(WhitelistMembers mode, String serverName) {
         if(mode.equals(WhitelistMembers.NAMEs)) {
@@ -51,29 +53,23 @@ public class BungeeUtils {
                     } catch (ParseException e) {
                         reportHoverError();
                         if(BungeeControl.isDetailed()) {
-                            BungeePixel.sendConsole("&a[Pixel MOTD] [Detailed Error] Information: ");
-                            //if(e.getCause().toString() != null) {
-                            //    bungeePixelMOTD.sendConsole("&a[Pixel MOTD] Cause: " + e.getCause().toString());
-                            //}
+                            error("Information: ");
                             if(e.getMessage() != null) {
-                                BungeePixel.sendConsole("&a[Pixel MOTD] Message: " + e.getMessage());
+                                error("Message: " + e.getMessage());
                             }
                             if(e.getLocalizedMessage() != null) {
-                                BungeePixel.sendConsole("&a[Pixel MOTD] LocalizedMessage: " + e.getLocalizedMessage());
+                                error("LocalizedMessage: " + e.getLocalizedMessage());
                             }
                             if(e.getStackTrace() != null) {
-                                BungeePixel.sendConsole("&a[Pixel MOTD] StackTrace: ");
+                                error("StackTrace: ");
                                 for(StackTraceElement str : e.getStackTrace()) {
-                                    BungeePixel.sendConsole("&a[Pixel MOTD] (" + str.getLineNumber() + ") " + str.toString());
+                                    error("(" + str.getLineNumber() + ") " + str.toString());
                                 }
                             }
-                            if(Arrays.toString(e.getSuppressed()) != null) {
-                                BungeePixel.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(e.getSuppressed()));
-                            }
-                            BungeePixel.sendConsole("&a[Pixel MOTD] ErrorOffset: " + e.getErrorOffset());
-                            BungeePixel.sendConsole("&a[Pixel MOTD] Class: " + e.getClass().getName() +".class");
-                            BungeePixel.sendConsole("&a[Pixel MOTD] Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
-                            BungeePixel.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
+                            error("ErrorOffset: " + e.getErrorOffset());
+                            error("Class: " + e.getClass().getName() +".class");
+                            error("Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
+                            error("---------------");
                         }
                     }
                     ids++;
@@ -90,29 +86,26 @@ public class BungeeUtils {
                 } catch (ParseException e) {
                     reportHoverError();
                     if(BungeeControl.isDetailed()) {
-                        BungeePixel.sendConsole("&a[Pixel MOTD] [Detailed Error] Information: ");
-                        //if(e.getCause().toString() != null) {
-                        //    bungeePixelMOTD.sendConsole("&a[Pixel MOTD] Cause: " + e.getCause().toString());
-                        //}
+                        error("Information: ");
                         if(e.getMessage() != null) {
-                            BungeePixel.sendConsole("&a[Pixel MOTD] Message: " + e.getMessage());
+                            error("Message: " + e.getMessage());
                         }
                         if(e.getLocalizedMessage() != null) {
-                            BungeePixel.sendConsole("&a[Pixel MOTD] LocalizedMessage: " + e.getLocalizedMessage());
+                            error("LocalizedMessage: " + e.getLocalizedMessage());
                         }
                         if(e.getStackTrace() != null) {
-                            BungeePixel.sendConsole("&a[Pixel MOTD] StackTrace: ");
+                            error("StackTrace: ");
                             for(StackTraceElement str : e.getStackTrace()) {
-                                BungeePixel.sendConsole("&a[Pixel MOTD] (" + str.getLineNumber() + ") " + str.toString());
+                                error("(" + str.getLineNumber() + ") " + str.toString());
                             }
                         }
                         if(Arrays.toString(e.getSuppressed()) != null) {
-                            BungeePixel.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(e.getSuppressed()));
+                            error("Suppressed: " + Arrays.toString(e.getSuppressed()));
                         }
-                        BungeePixel.sendConsole("&a[Pixel MOTD] ErrorOffset: " + e.getErrorOffset());
-                        BungeePixel.sendConsole("&a[Pixel MOTD] Class: " + e.getClass().getName() +".class");
-                        BungeePixel.sendConsole("&a[Pixel MOTD] Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
-                        BungeePixel.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
+                        error("ErrorOffset: " + e.getErrorOffset());
+                        error("Class: " + e.getClass().getName() +".class");
+                        error("Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
+                        error("---------------");
                     }
                 }
                 ids++;
@@ -123,10 +116,10 @@ public class BungeeUtils {
         return hoverToShow;
     }
     private static void reportHoverError() {
-        BungeePixel.sendConsole("Can't generate motd Hover, please verify if your hover is correctly created!");
+        error("Can't generate motd Hover, please verify if your hover is correctly created!");
     }
     private static void reportProtocolError() {
-        BungeePixel.sendConsole("Can't generate motd Protocol, please verify if your protocol is correctly created!");
+        error("Can't generate motd Protocol, please verify if your protocol is correctly created!");
     }
     public static File getIcons(MotdType motdType,String motdName) {
         File iconFolder = BungeePixel.getFiles().getFile(Icons.FOLDER);
@@ -277,29 +270,24 @@ public class BungeeUtils {
         } catch (ParseException e) {
             reportProtocolError();
             if(BungeeControl.isDetailed()) {
-                BungeePixel.sendConsole("&a[Pixel MOTD] [Detailed Error] Information: ");
-                //if(e.getCause().toString() != null) {
-                //    bungeePixelMOTD.sendConsole("&a[Pixel MOTD] Cause: " + e.getCause().toString());
-                //}
+                error("Information: ");
                 if(e.getMessage() != null) {
-                    BungeePixel.sendConsole("&a[Pixel MOTD] Message: " + e.getMessage());
+                    error("Message: " + e.getMessage());
                 }
                 if(e.getLocalizedMessage() != null) {
-                    BungeePixel.sendConsole("&a[Pixel MOTD] LocalizedMessage: " + e.getLocalizedMessage());
+                    error("LocalizedMessage: " + e.getLocalizedMessage());
                 }
                 if(e.getStackTrace() != null) {
-                    BungeePixel.sendConsole("&a[Pixel MOTD] StackTrace: ");
+                    error("StackTrace: ");
                     for(StackTraceElement line : e.getStackTrace()) {
-                        BungeePixel.sendConsole("&a[Pixel MOTD] (" + line.getLineNumber() + ") " + line.toString());
+                        error("(" + line.getLineNumber() + ") " + line.toString());
                     }
                 }
-                if(Arrays.toString(e.getSuppressed()) != null) {
-                    BungeePixel.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(e.getSuppressed()));
-                }
-                BungeePixel.sendConsole("&a[Pixel MOTD] ErrorOffset: " + e.getErrorOffset());
-                BungeePixel.sendConsole("&a[Pixel MOTD] Class: " + e.getClass().getName() +".class");
-                BungeePixel.sendConsole("&a[Pixel MOTD] Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
-                BungeePixel.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
+
+                error("ErrorOffset: " + e.getErrorOffset());
+                error("Class: " + e.getClass().getName() +".class");
+                error("Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
+                error("---------------");
             }
         }
         return msg;
@@ -367,7 +355,7 @@ public class BungeeUtils {
         player.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', message)));
     }
     private static void reportMistake() {
-        BungeePixel.sendConsole("&e[Pixel MOTD] &fThe plugin found an issue, fixing internal issue.");
+        error("The plugin found an issue, fixing internal issue.");
     }
     public static boolean getIconStatus(MotdType motdType,String motdName,boolean customFile) {
         if(!customFile) {

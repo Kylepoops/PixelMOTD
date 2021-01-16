@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Random;
 
 import static dev.mruniverse.pixelmotd.enums.ShowType.FIRST;
+import static dev.mruniverse.pixelmotd.utils.Logger.error;
 
 @SuppressWarnings("UnstableApiUsage")
 public class BungeeMotd implements Listener {
@@ -216,33 +217,33 @@ public class BungeeMotd implements Listener {
         } catch(IOException exception) {
             reportBadImage(file.getPath());
             if(BungeeControl.isDetailed()) {
-                BungeePixel.sendConsole("&a[Pixel MOTD] [Detailed Error] Information: ");
+                error("Information: ");
                 if(exception.getCause().toString() != null) {
-                    BungeePixel.sendConsole("&a[Pixel MOTD] Cause: " + exception.getCause().toString());
+                    error("Cause: " + exception.getCause().toString());
                 }
                 if(exception.getMessage() != null) {
-                    BungeePixel.sendConsole("&a[Pixel MOTD] Message: " + exception.getMessage());
+                    error("Message: " + exception.getMessage());
                 }
                 if(exception.getLocalizedMessage() != null) {
-                    BungeePixel.sendConsole("&a[Pixel MOTD] LocalizedMessage: " + exception.getLocalizedMessage());
+                    error("LocalizedMessage: " + exception.getLocalizedMessage());
                 }
                 if(exception.getStackTrace() != null) {
-                    BungeePixel.sendConsole("&a[Pixel MOTD] StackTrace: ");
+                    error("StackTrace: ");
                     for(StackTraceElement line : exception.getStackTrace()) {
-                        BungeePixel.sendConsole("&a[Pixel MOTD] (" + line.getLineNumber() + ") " + line.toString());
+                        error("(" + line.getLineNumber() + ") " + line.toString());
                     }
                 }
                 if(Arrays.toString(exception.getSuppressed()) != null) {
-                    BungeePixel.sendConsole("&a[Pixel MOTD] Suppressed: " + Arrays.toString(exception.getSuppressed()));
+                    error("Suppressed: " + Arrays.toString(exception.getSuppressed()));
                 }
-                BungeePixel.sendConsole("&a[Pixel MOTD] Class: " + exception.getClass().getName() +".class");
-                BungeePixel.sendConsole("&a[Pixel MOTD] Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
-                BungeePixel.sendConsole("&a[Pixel MOTD] --------------- [Detailed Error]");
+                error("Class: " + exception.getClass().getName() +".class");
+                error("Plugin version:" + BungeePixel.getInstance().getDescription().getVersion());
+                error("---------------");
             }
             return null;
         }
     }
     private void reportBadImage(String filePath) {
-        BungeePixel.sendConsole("Can't read image: &b" + filePath + "&f. Please check image size: 64x64 or check if the image isn't corrupted.");
+        error("Can't read image: &b" + filePath + "&f. Please check image size: 64x64 or check if the image isn't corrupted.");
     }
 }

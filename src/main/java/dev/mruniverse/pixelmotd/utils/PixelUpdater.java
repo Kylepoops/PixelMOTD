@@ -40,7 +40,7 @@ public class PixelUpdater {
             newestVersion = sb.toString();
         } catch (IOException ignored) {
             if(isBungee) {
-                BungeePixel.redIssue();
+                warn("Can't connect to SpigotMC and bStats");
                 if(BungeeControl.isDetailed()) {
                     error("Information:");
                     if(ignored.getMessage() != null) {

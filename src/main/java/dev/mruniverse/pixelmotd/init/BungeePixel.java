@@ -1,19 +1,15 @@
 package dev.mruniverse.pixelmotd.init;
 
-import dev.mruniverse.pixelmotd.bstats.BungeeMetrics;
-import dev.mruniverse.pixelmotd.commands.BungeeCMD;
 import dev.mruniverse.pixelmotd.enums.Files;
 import dev.mruniverse.pixelmotd.enums.InitMode;
 import dev.mruniverse.pixelmotd.enums.SaveMode;
 import dev.mruniverse.pixelmotd.files.BungeeControl;
 import dev.mruniverse.pixelmotd.files.FileManager;
-import dev.mruniverse.pixelmotd.listeners.BungeeEvents;
-import dev.mruniverse.pixelmotd.listeners.BungeeMotd;
 import dev.mruniverse.pixelmotd.utils.HexManager;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
+
+import static dev.mruniverse.pixelmotd.utils.Logger.info;
 
 public class BungeePixel extends Plugin implements Listener {
     private static BungeePixel instance;
@@ -40,12 +36,9 @@ public class BungeePixel extends Plugin implements Listener {
         loaderUtils.pluginUpdater();
         loaderUtils.registerCommands();
 
-        sendConsole("All files loaded");
+        info("All files loaded");
     }
-    @Override
-    public void onDisable() {
-        sendConsole("The plugin was unloaded.");
-    }
+
     @Override
     public void onEnable() {
         long temporalTimer = System.currentTimeMillis();
@@ -53,7 +46,12 @@ public class BungeePixel extends Plugin implements Listener {
         loaderUtils.loadMetrics();
         loaderUtils.registerListeners();
 
-        sendConsole("All events loaded in &b" + (System.currentTimeMillis() - temporalTimer) + "&fms.");
+        info("All events loaded in &b" + (System.currentTimeMillis() - temporalTimer) + "&fms.");
+    }
+
+    @Override
+    public void onDisable() {
+        info("The plugin was unloaded.");
     }
 
     public static FileManager getFiles() {
@@ -66,14 +64,6 @@ public class BungeePixel extends Plugin implements Listener {
 
     public static HexManager getHex() {
         return hManager;
-    }
-
-    public static void redIssue() {
-        instance.getProxy().getConsole().sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&',"&b[Pixel MOTD] &fCan't connect to SpigotMC and bStats, please check host internet or disable plugin autoUpdater and bStats to hide this message.")));
-    }
-
-    public static void sendConsole(String message) {
-        instance.getProxy().getConsole().sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&',"&b[Pixel MOTD] &f" + message)));
     }
 }
 
