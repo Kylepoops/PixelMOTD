@@ -44,7 +44,6 @@ dev\mruniverse\pixelmotd\bstats\BungeeMetrics$MultiLineChart.class
 dev\mruniverse\pixelmotd\enums\Files.class
 dev\mruniverse\pixelmotd\bstats\BungeeMetrics.class
 dev\mruniverse\pixelmotd\listeners\spigot\PlayerManager.class
-dev\mruniverse\pixelmotd\files\BungeeControl$1.class
 dev\mruniverse\pixelmotd\enums\MotdType.class
 dev\mruniverse\pixelmotd\bstats\BukkitMetrics$AdvancedPie.class
 dev\mruniverse\pixelmotd\enums\Icons.class
