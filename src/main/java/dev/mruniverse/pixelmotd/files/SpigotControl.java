@@ -14,26 +14,29 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-
-import static dev.mruniverse.pixelmotd.PixelSpigot.getFiles;
-import static dev.mruniverse.pixelmotd.utils.Logger.info;
+import static dev.mruniverse.pixelmotd.utils.spigotLogger.info;
 
 public class SpigotControl {
-    private static FileConfiguration rEditable, rModules, rSettings, rWhitelist, rNormal,rTimer,rCommand;
-    public static void reloadFiles() {
-        getFiles().loadFiles();
-        rEditable = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.EDITABLE));
-        rCommand = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.COMMAND));
-        rModules = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.MODULES));
-        rSettings = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.SETTINGS));
-        rWhitelist = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.WHITELIST_MOTD));
-        rNormal = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.NORMAL_MOTD));
-        rTimer = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.TIMER_MOTD));
+    private final PixelSpigot plugin;
+    public SpigotControl(PixelSpigot main) {
+        plugin = main;
     }
-    public static boolean isCommandEnabled() {
+
+    private FileConfiguration rEditable, rModules, rSettings, rWhitelist, rNormal,rTimer,rCommand;
+    public void reloadFiles() {
+        plugin.getFiles().loadFiles();
+        rEditable = YamlConfiguration.loadConfiguration(plugin.getFiles().getFile(Files.EDITABLE));
+        rCommand = YamlConfiguration.loadConfiguration(plugin.getFiles().getFile(Files.COMMAND));
+        rModules = YamlConfiguration.loadConfiguration(plugin.getFiles().getFile(Files.MODULES));
+        rSettings = YamlConfiguration.loadConfiguration(plugin.getFiles().getFile(Files.SETTINGS));
+        rWhitelist = YamlConfiguration.loadConfiguration(plugin.getFiles().getFile(Files.WHITELIST_MOTD));
+        rNormal = YamlConfiguration.loadConfiguration(plugin.getFiles().getFile(Files.NORMAL_MOTD));
+        rTimer = YamlConfiguration.loadConfiguration(plugin.getFiles().getFile(Files.TIMER_MOTD));
+    }
+    public boolean isCommandEnabled() {
         return true;
     }
-    public static FileConfiguration getControl(Files fileToControl) {
+    public FileConfiguration getControl(Files fileToControl) {
         if(fileToControl.equals(Files.WHITELIST_MOTD)) {
             if(rWhitelist == null) reloadFiles();
             return rWhitelist;
@@ -65,16 +68,16 @@ public class SpigotControl {
         info("The plugin can't load or save configuration files! (Spigot Control Issue - Caused by: One plugin is using bad the <getControl() from FileManager.class>)");
         return rSettings;
     }
-    public static boolean getWhitelistStatus() {
+    public boolean getWhitelistStatus() {
         return getControl(Files.EDITABLE).getBoolean("whitelist.toggle");
     }
-    public static MotdType getMotdType(boolean whitelistStatus) {
+    public MotdType getMotdType(boolean whitelistStatus) {
         if(whitelistStatus) {
             return MotdType.WHITELIST_MOTD;
         }
         return MotdType.NORMAL_MOTD;
     }
-    public static String getMotd(boolean isWhitelistMotd) {
+    public String getMotd(boolean isWhitelistMotd) {
         List<String> motdToGet = new ArrayList<>();
         if(isWhitelistMotd) {
             motdToGet.addAll(Objects.requireNonNull(getControl(Files.WHITELIST_MOTD).getConfigurationSection("whitelist")).getKeys(false));
@@ -84,7 +87,7 @@ public class SpigotControl {
         return motdToGet.get(new Random().nextInt(motdToGet.size()));
 
     }
-    public static String getWorlds(String msg) throws ParseException {
+    public String getWorlds(String msg) throws ParseException {
         if(msg.contains("%online_")) {
             for (World world : PixelSpigot.getInstance().getServer().getWorlds()) {
                 msg = msg.replace("%online_" + world.getName() + "%", world.getPlayers().size() + "");
@@ -93,13 +96,13 @@ public class SpigotControl {
         return replaceEventInfo(msg);
     }
 
-    public static Date getEventDate(String eventName) throws ParseException {
+    public Date getEventDate(String eventName) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
         format.setTimeZone(TimeZone.getTimeZone(getControl(Files.SETTINGS).getString("events." + eventName + ".TimeZone")));
         return format.parse(getControl(Files.SETTINGS).getString("events." + eventName + ".eventDate"));
     }
 
-    public static String replaceEventInfo(String motdLineOrHoverLine) throws ParseException {
+    public String replaceEventInfo(String motdLineOrHoverLine) throws ParseException {
         if(motdLineOrHoverLine.contains("%event_")) {
             Date CurrentDate;
             CurrentDate = new Date();
@@ -125,7 +128,7 @@ public class SpigotControl {
         return motdLineOrHoverLine;
     }
 
-    public static String convertToFinalResult(long time,String formatType) {
+    public String convertToFinalResult(long time,String formatType) {
         StringJoiner joiner = new StringJoiner(" ");
         if (formatType.equalsIgnoreCase("SECOND")) {
             long seconds = time / 1000;
@@ -239,7 +242,7 @@ public class SpigotControl {
             return joiner.toString();
         }
     }
-    public static boolean pendingPath(MotdType motdType,String motdName) {
+    public boolean pendingPath(MotdType motdType,String motdName) {
         String initial = "timers.";
         Files fileS = Files.TIMER_MOTD;
         if(motdType.equals(MotdType.NORMAL_MOTD)) {
@@ -272,7 +275,7 @@ public class SpigotControl {
         if(getControl(fileS).get(initial + motdName + ".otherSettings.customMaxPlayers.mode") == null) return true;
         return getControl(fileS).get(initial + motdName + ".otherSettings.customMaxPlayers.values") == null;
     }
-    public static void loadMotdPath(MotdType motdType,String motdName) {
+    public void loadMotdPath(MotdType motdType,String motdName) {
         if(pendingPath(motdType,motdName)) {
             List<Object> stringList = new ArrayList<>();
             if (motdType.equals(MotdType.WHITELIST_MOTD)) {
@@ -286,27 +289,27 @@ public class SpigotControl {
                 stringList.add("  &7Online: &f%online%");
                 stringList.add("  &frigox.club/discord/dev");
                 stringList.add("");
-                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".line1", "&8» &aPixelMOTD v%plugin_version% &7| &aSpigotMC");
-                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".line2", "&f&oThis server is in whitelist. (1.8-1.15 Motd)");
-                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customHover.toggle", true);
-                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customHover.hover", stringList);
-                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customIcon.toggle", true);
-                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customIcon.customFile", false);
-                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customProtocol.toggle", true);
-                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customProtocol.changeProtocolVersion", false);
-                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customProtocol.protocol", "PixelMotd Security");
-                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customHexMotd.toggle", true);
-                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customHexMotd.line1", "&8» &cPixelMOTD v%plugin_version% &7| &cSpigotMC");
-                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customHexMotd.line2", "&f&oWhitelist Mode (1.16+ Motd)");
-                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customOnlinePlayers.toggle", false);
-                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customOnlinePlayers.mode", "HALF-ADD");
-                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customMaxPlayers.toggle", true);
-                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customMaxPlayers.mode", "HALF");
+                plugin.getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".line1", "&8» &aPixelMOTD v%plugin_version% &7| &aSpigotMC");
+                plugin.getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".line2", "&f&oThis server is in whitelist. (1.8-1.15 Motd)");
+                plugin.getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customHover.toggle", true);
+                plugin.getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customHover.hover", stringList);
+                plugin.getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customIcon.toggle", true);
+                plugin.getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customIcon.customFile", false);
+                plugin.getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customProtocol.toggle", true);
+                plugin.getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customProtocol.changeProtocolVersion", false);
+                plugin.getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customProtocol.protocol", "PixelMotd Security");
+                plugin.getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customHexMotd.toggle", true);
+                plugin.getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customHexMotd.line1", "&8» &cPixelMOTD v%plugin_version% &7| &cSpigotMC");
+                plugin.getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customHexMotd.line2", "&f&oWhitelist Mode (1.16+ Motd)");
+                plugin.getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customOnlinePlayers.toggle", false);
+                plugin.getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customOnlinePlayers.mode", "HALF-ADD");
+                plugin.getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customMaxPlayers.toggle", true);
+                plugin.getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customMaxPlayers.mode", "HALF");
                 stringList = new ArrayList<>();
                 stringList.add(2021);
                 stringList.add(2022);
-                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customOnlinePlayers.values", stringList);
-                getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customMaxPlayers.values", stringList);
+                plugin.getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customOnlinePlayers.values", stringList);
+                plugin.getFiles().addConfig(Files.WHITELIST_MOTD, "whitelist." + motdName + ".otherSettings.customMaxPlayers.values", stringList);
                 return;
             }
             if (motdType.equals(MotdType.NORMAL_MOTD)) {
@@ -320,27 +323,27 @@ public class SpigotControl {
                 stringList.add("  &7Online: &f%online%&7/&f%max%");
                 stringList.add("  &frigox.club/discord/dev");
                 stringList.add("");
-                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".line1", "&b&lPixelMOTD v%plugin_version%");
-                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".line2", "&f&oThis motd only appear for 1.8 - 1.15");
-                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customHover.toggle", true);
-                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customHover.hover", stringList);
-                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customIcon.toggle", true);
-                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customIcon.customFile", false);
-                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customProtocol.toggle", true);
-                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customProtocol.changeProtocolVersion", false);
-                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customProtocol.protocol", "PixelMotd System");
-                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customHexMotd.toggle", true);
-                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customHexMotd.line1", "&b&lPixelMOTD v%plugin_version%");
-                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customHexMotd.line2", "&f&oThis motd only appear for 1.16+");
-                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customOnlinePlayers.toggle", false);
-                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customOnlinePlayers.mode", "HALF-ADD");
-                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customMaxPlayers.toggle", true);
-                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customMaxPlayers.mode", "HALF-ADD");
+                plugin.getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".line1", "&b&lPixelMOTD v%plugin_version%");
+                plugin.getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".line2", "&f&oThis motd only appear for 1.8 - 1.15");
+                plugin.getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customHover.toggle", true);
+                plugin.getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customHover.hover", stringList);
+                plugin.getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customIcon.toggle", true);
+                plugin.getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customIcon.customFile", false);
+                plugin.getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customProtocol.toggle", true);
+                plugin.getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customProtocol.changeProtocolVersion", false);
+                plugin.getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customProtocol.protocol", "PixelMotd System");
+                plugin.getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customHexMotd.toggle", true);
+                plugin.getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customHexMotd.line1", "&b&lPixelMOTD v%plugin_version%");
+                plugin.getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customHexMotd.line2", "&f&oThis motd only appear for 1.16+");
+                plugin.getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customOnlinePlayers.toggle", false);
+                plugin.getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customOnlinePlayers.mode", "HALF-ADD");
+                plugin.getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customMaxPlayers.toggle", true);
+                plugin.getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customMaxPlayers.mode", "HALF-ADD");
                 stringList = new ArrayList<>();
                 stringList.add(2021);
                 stringList.add(2022);
-                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customOnlinePlayers.values", stringList);
-                getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customMaxPlayers.values", stringList);
+                plugin.getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customOnlinePlayers.values", stringList);
+                plugin.getFiles().addConfig(Files.NORMAL_MOTD, "normal." + motdName + ".otherSettings.customMaxPlayers.values", stringList);
                 return;
             }
             stringList.add("     &9&lPIXEL MOTD");
@@ -353,35 +356,35 @@ public class SpigotControl {
             stringList.add("&7By the console automatically!");
             stringList.add("&frigox.club/discord/dev");
             stringList.add("");
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".enabled", false);
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".line1", "&6&l%event_timeLeft%");
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".line2", "&f&oThis is a timer motd");
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customHover.toggle", true);
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customHover.hover", stringList);
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customIcon.toggle", true);
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customIcon.customFile", false);
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customProtocol.toggle", true);
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customProtocol.changeProtocolVersion", false);
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customProtocol.protocol", "PixelMotd System");
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customHexMotd.toggle", true);
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customHexMotd.line1", "&6&l%event_timeLeft%");
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customHexMotd.line2", "&f&oThis motd only appear for 1.16+");
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customOnlinePlayers.toggle", false);
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customOnlinePlayers.mode", "HALF-ADD");
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customMaxPlayers.toggle", true);
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customMaxPlayers.mode", "HALF-ADD");
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".enabled", false);
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".line1", "&6&l%event_timeLeft%");
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".line2", "&f&oThis is a timer motd");
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customHover.toggle", true);
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customHover.hover", stringList);
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customIcon.toggle", true);
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customIcon.customFile", false);
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customProtocol.toggle", true);
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customProtocol.changeProtocolVersion", false);
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customProtocol.protocol", "PixelMotd System");
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customHexMotd.toggle", true);
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customHexMotd.line1", "&6&l%event_timeLeft%");
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customHexMotd.line2", "&f&oThis motd only appear for 1.16+");
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customOnlinePlayers.toggle", false);
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customOnlinePlayers.mode", "HALF-ADD");
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customMaxPlayers.toggle", true);
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customMaxPlayers.mode", "HALF-ADD");
             stringList = new ArrayList<>();
             stringList.add("/pmotd whitelist off");
             stringList.add("/alert Maintenance off automatically!");
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".timerSettings.commandsToExecute", stringList);
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".timerSettings.commandsToExecute", stringList);
             stringList = new ArrayList<>();
             stringList.add(2021);
             stringList.add(2022);
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customOnlinePlayers.values", stringList);
-            getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customMaxPlayers.values", stringList);
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customOnlinePlayers.values", stringList);
+            plugin.getFiles().addConfig(Files.TIMER_MOTD, "timers." + motdName + ".otherSettings.customMaxPlayers.values", stringList);
         }
     }
-    public static void loadMotdPaths(MotdType motdType) {
+    public void loadMotdPaths(MotdType motdType) {
         if(motdType.equals(MotdType.NORMAL_MOTD)) {
             for (String motdName : Objects.requireNonNull(getControl(Files.NORMAL_MOTD).getConfigurationSection("normal")).getKeys(false)) {
                 loadMotdPath(motdType,motdName);
@@ -398,7 +401,7 @@ public class SpigotControl {
             loadMotdPath(motdType,motdName);
         }
     }
-    public static boolean callMotds(MotdType motdType) {
+    public boolean callMotds(MotdType motdType) {
         try {
             if (motdType.equals(MotdType.NORMAL_MOTD)) {
                 return getControl(Files.NORMAL_MOTD).get("normal") == null;
@@ -411,62 +414,62 @@ public class SpigotControl {
             return true;
         }
     }
-    public static boolean isDetailed() {
+    public boolean isDetailed() {
         return getControl(Files.SETTINGS).getBoolean("settings.show-detailed-errors");
     }
-    public static void reloadFile(SaveMode Mode) {
-        getFiles().loadFiles();
+    public void reloadFile(SaveMode Mode) {
+        plugin.getFiles().loadFiles();
         if(Mode.equals(SaveMode.EDITABLE) || Mode.equals(SaveMode.ALL)) {
-            rEditable = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.EDITABLE));
+            rEditable = YamlConfiguration.loadConfiguration(plugin.getFiles().getFile(Files.EDITABLE));
         }
         if(Mode.equals(SaveMode.COMMAND) || Mode.equals(SaveMode.ALL)) {
-            rCommand = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.COMMAND));
+            rCommand = YamlConfiguration.loadConfiguration(plugin.getFiles().getFile(Files.COMMAND));
         }
         if(Mode.equals(SaveMode.MODULES) || Mode.equals(SaveMode.ALL)) {
-            rModules = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.MODULES));
+            rModules = YamlConfiguration.loadConfiguration(plugin.getFiles().getFile(Files.MODULES));
         }
         if(Mode.equals(SaveMode.SETTINGS) || Mode.equals(SaveMode.ALL)) {
-            rSettings = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.SETTINGS));
+            rSettings = YamlConfiguration.loadConfiguration(plugin.getFiles().getFile(Files.SETTINGS));
         }
         if(Mode.equals(SaveMode.MOTDS) || Mode.equals(SaveMode.ALL)) {
-            rWhitelist = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.WHITELIST_MOTD));
-            rNormal = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.NORMAL_MOTD));
-            rTimer = YamlConfiguration.loadConfiguration(getFiles().getFile(Files.TIMER_MOTD));
+            rWhitelist = YamlConfiguration.loadConfiguration(plugin.getFiles().getFile(Files.WHITELIST_MOTD));
+            rNormal = YamlConfiguration.loadConfiguration(plugin.getFiles().getFile(Files.NORMAL_MOTD));
+            rTimer = YamlConfiguration.loadConfiguration(plugin.getFiles().getFile(Files.TIMER_MOTD));
         }
     }
-    public static void save(SaveMode Mode) {
+    public void save(SaveMode Mode) {
         try {
             if(Mode.equals(SaveMode.MODULES) || Mode.equals(SaveMode.ALL)) {
-                getControl(Files.MODULES).save(getFiles().getFile(Files.MODULES));
+                getControl(Files.MODULES).save(plugin.getFiles().getFile(Files.MODULES));
             }
             if(Mode.equals(SaveMode.TIMER_MOTD) || Mode.equals(SaveMode.ALL)) {
-                getControl(Files.TIMER_MOTD).save(getFiles().getFile(Files.TIMER_MOTD));
+                getControl(Files.TIMER_MOTD).save(plugin.getFiles().getFile(Files.TIMER_MOTD));
             }
             if(Mode.equals(SaveMode.COMMAND) || Mode.equals(SaveMode.ALL)) {
-                getControl(Files.COMMAND).save(getFiles().getFile(Files.COMMAND));
+                getControl(Files.COMMAND).save(plugin.getFiles().getFile(Files.COMMAND));
             }
             if(Mode.equals(SaveMode.EDITABLE) || Mode.equals(SaveMode.ALL)) {
-                getControl(Files.EDITABLE).save(getFiles().getFile(Files.EDITABLE));
+                getControl(Files.EDITABLE).save(plugin.getFiles().getFile(Files.EDITABLE));
             }
             if(Mode.equals(SaveMode.NORMAL_MOTD) || Mode.equals(SaveMode.ALL)) {
-                getControl(Files.NORMAL_MOTD).save(getFiles().getFile(Files.NORMAL_MOTD));
+                getControl(Files.NORMAL_MOTD).save(plugin.getFiles().getFile(Files.NORMAL_MOTD));
             }
             if(Mode.equals(SaveMode.WHITELIST_MOTD) || Mode.equals(SaveMode.ALL)) {
-                getControl(Files.WHITELIST_MOTD).save(getFiles().getFile(Files.WHITELIST_MOTD));
+                getControl(Files.WHITELIST_MOTD).save(plugin.getFiles().getFile(Files.WHITELIST_MOTD));
             }
             if(Mode.equals(SaveMode.SETTINGS) || Mode.equals(SaveMode.ALL)) {
-                getControl(Files.SETTINGS).save(getFiles().getFile(Files.SETTINGS));
+                getControl(Files.SETTINGS).save(plugin.getFiles().getFile(Files.SETTINGS));
             }
             if(Mode.equals(SaveMode.MOTDS) || Mode.equals(SaveMode.ALL)) {
-                getControl(Files.NORMAL_MOTD).save(getFiles().getFile(Files.NORMAL_MOTD));
-                getControl(Files.WHITELIST_MOTD).save(getFiles().getFile(Files.WHITELIST_MOTD));
-                getControl(Files.TIMER_MOTD).save(getFiles().getFile(Files.TIMER_MOTD));
+                getControl(Files.NORMAL_MOTD).save(plugin.getFiles().getFile(Files.NORMAL_MOTD));
+                getControl(Files.WHITELIST_MOTD).save(plugin.getFiles().getFile(Files.WHITELIST_MOTD));
+                getControl(Files.TIMER_MOTD).save(plugin.getFiles().getFile(Files.TIMER_MOTD));
             }
         } catch(IOException exception) {
             info("The plugin can't load or save configuration files! (Spigot Control Issue - Caused by: One plugin is using bad the <getControl() from FileManager.class>)");
         }
     }
-    public static String getWhitelistAuthor() {
+    public String getWhitelistAuthor() {
         if(!Objects.requireNonNull(getControl(Files.EDITABLE).getString("whitelist.author")).equalsIgnoreCase("CONSOLE")) {
             return getControl(Files.EDITABLE).getString("whitelist.author");
         } else {

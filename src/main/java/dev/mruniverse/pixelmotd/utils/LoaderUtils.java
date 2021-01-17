@@ -14,29 +14,29 @@ import dev.mruniverse.pixelmotd.listeners.SpigotEvents;
 
 import java.util.List;
 
-import static dev.mruniverse.pixelmotd.utils.Logger.debug;
-import static dev.mruniverse.pixelmotd.utils.Logger.info;
+import static dev.mruniverse.pixelmotd.utils.bungeeLogger.debug;
+import static dev.mruniverse.pixelmotd.utils.bungeeLogger.info;
 
 public class LoaderUtils {
-    public static boolean isBungee;
+    public boolean isBungee;
 
     /**
      * Specify if it's Bungee or Spigot
      * when initialize this class constructor.
      *
-     * @param isBungee spigot if false.
+     * @param bungeeMode spigot if false.
      */
-    public LoaderUtils (boolean isBungee) {
-        LoaderUtils.isBungee = isBungee;
+    public LoaderUtils (boolean bungeeMode) {
+        isBungee = bungeeMode;
     }
-
+    public boolean isBungeeMode() { return isBungee; }
     public void pluginUpdater() {
         boolean control;
 
         if (isBungee) {
             control = PixelBungee.getInstance().getBungeeControl().getControl(Files.SETTINGS).getBoolean("settings.update-check");
         } else {
-            control = SpigotControl.getControl(Files.SETTINGS).getBoolean("settings.update-check");
+            control = PixelSpigot.getInstance().getSpigotControl().getControl(Files.SETTINGS).getBoolean("settings.update-check");
         }
 
         if (control) {

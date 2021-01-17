@@ -18,7 +18,7 @@ import net.md_5.bungee.event.EventHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-import static dev.mruniverse.pixelmotd.utils.Logger.info;
+import static dev.mruniverse.pixelmotd.utils.bungeeLogger.info;
 
 public class BungeeEvents implements Listener {
     private final PixelBungee plugin;
