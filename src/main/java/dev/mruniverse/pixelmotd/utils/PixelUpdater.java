@@ -1,15 +1,16 @@
 package dev.mruniverse.pixelmotd.utils;
 
+import dev.mruniverse.pixelmotd.files.BungeeControl;
+import dev.mruniverse.pixelmotd.files.SpigotControl;
 import dev.mruniverse.pixelmotd.PixelBungee;
 import dev.mruniverse.pixelmotd.PixelSpigot;
-import dev.mruniverse.pixelmotd.files.SpigotControl;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Arrays;
+import javax.net.ssl.HttpsURLConnection;
 
 import static dev.mruniverse.pixelmotd.utils.Logger.error;
 import static dev.mruniverse.pixelmotd.utils.Logger.warn;

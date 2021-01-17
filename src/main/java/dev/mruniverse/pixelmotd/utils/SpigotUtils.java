@@ -18,9 +18,9 @@ public class SpigotUtils {
     public static List<String> getPlayers(WhitelistMembers mode, String worldName) {
         if(mode.equals(WhitelistMembers.NAMEs)) {
             if(SpigotControl.getControl(Files.MODULES).get(Extras.getWorldPath(Whitelist.PLAYERS_NAME,worldName)) != null)
-            if(SpigotControl.getControl(Files.MODULES).get("modules.world-whitelist.worlds." + worldName + " .players-name") != null) {
-                return SpigotControl.getControl(Files.MODULES).getStringList("modules.world-whitelist.worlds." + worldName + " .players-name");
-            }
+                if(SpigotControl.getControl(Files.MODULES).get("modules.world-whitelist.worlds." + worldName + " .players-name") != null) {
+                    return SpigotControl.getControl(Files.MODULES).getStringList("modules.world-whitelist.worlds." + worldName + " .players-name");
+                }
             return new ArrayList<>();
         }
         if(SpigotControl.getControl(Files.MODULES).get("modules.world-whitelist.worlds." + worldName + " .players-uuid") != null) {

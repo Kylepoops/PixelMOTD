@@ -133,7 +133,7 @@ public class BungeeEvents implements Listener {
         info("&aMotd Type: " + event.getMotdType().toString());
         info("&aIs Custom Hex Motd: " + event.isCustomHexMotd());
     }
-    
+
     @EventHandler
     public void onServerSwitch(ServerConnectEvent event) {
         if(event.isCancelled()) return;
@@ -144,7 +144,7 @@ public class BungeeEvents implements Listener {
                 if(!plugin.getBungeeUtils().getPlayers(WhitelistMembers.NAMEs,name).contains(player.getName()) || !plugin.getBungeeUtils().getPlayers(WhitelistMembers.UUIDs,name).contains(player.getUniqueId().toString())) {
                     for (String message : plugin.getBungeeControl().getControl(Files.MODULES).getStringList("modules.servers-whitelist.kickMessage")) {
                         message = message.replace("%whitelist_author%", plugin.getBungeeControl().getControl(Files.MODULES).getString(Extras.getServerPath(Whitelist.AUTHOR,name)))
-                            .replace("%whitelist_reason%", plugin.getBungeeControl().getControl(Files.MODULES).getString(Extras.getServerPath(Whitelist.REASON,name))).replace("%type%","server").replace("%value%",name);
+                                .replace("%whitelist_reason%", plugin.getBungeeControl().getControl(Files.MODULES).getString(Extras.getServerPath(Whitelist.REASON,name))).replace("%type%","server").replace("%value%",name);
                         player.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', message)));
                     }
                     event.setCancelled(true);

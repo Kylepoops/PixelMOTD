@@ -22,55 +22,55 @@ import static dev.mruniverse.pixelmotd.utils.Logger.info;
 
 public class BungeeControl {
     private final PixelBungee plugin;
-    
+
     private Configuration pEditable,pTimer, pModules ,pSettings, pWhitelist, pNormal,pCommand;
 
     public BungeeControl(PixelBungee plugin) {
         this.plugin = plugin;
     }
-    
+
     private File newFile(String file) {
         return new File(plugin.getDataFolder(), file + ".yml");
     }
 
     private File getFile(Files fileToGet) {
 
-//        switch (fileToGet) {
-//            case NORMAL_MOTD:
-//                return newFile("normal-motd");
-//            case COMMAND:
-//                return newFile("command");
-//            case WHITELIST_MOTD:
-//                return newFile("whitelist-motd");
-//            case EDITABLE:
-//                return newFile("edit");
-//            case TIMER_MOTD:
-//                return newFile("timer-motd");
-//            case MODULES:
-//                return newFile("modules");
-//            default:
-//                return newFile("settings");
-//        }
+        switch (fileToGet) {
+            case NORMAL_MOTD:
+                return newFile("normal-motd");
+            case COMMAND:
+                return newFile("command");
+            case WHITELIST_MOTD:
+                return newFile("whitelist-motd");
+            case EDITABLE:
+                return newFile("edit");
+            case TIMER_MOTD:
+                return newFile("timer-motd");
+            case MODULES:
+                return newFile("modules");
+            default:
+                return newFile("settings");
+        }
 
-        if(fileToGet.equals(Files.NORMAL_MOTD)) {
-            return new File(PixelBungee.getInstance().getDataFolder(), "normal-motd.yml");
-        }
-        if(fileToGet.equals(Files.COMMAND)) {
-            return new File(PixelBungee.getInstance().getDataFolder(), "command.yml");
-        }
-        if(fileToGet.equals(Files.WHITELIST_MOTD)) {
-            return new File(PixelBungee.getInstance().getDataFolder(), "whitelist-motd.yml");
-        }
-        if(fileToGet.equals(Files.EDITABLE)) {
-            return new File(PixelBungee.getInstance().getDataFolder(), "edit.yml");
-        }
-        if(fileToGet.equals(Files.TIMER_MOTD)) {
-            return new File(PixelBungee.getInstance().getDataFolder(), "timer-motd.yml");
-        }
-        if(fileToGet.equals(Files.MODULES)) {
-            return new File(PixelBungee.getInstance().getDataFolder(), "modules.yml");
-        }
-        return new File(PixelBungee.getInstance().getDataFolder(), "settings.yml");
+//        if(fileToGet.equals(Files.NORMAL_MOTD)) {
+//            return new File(PixelBungee.getInstance().getDataFolder(), "normal-motd.yml");
+//        }
+//        if(fileToGet.equals(Files.COMMAND)) {
+//            return new File(PixelBungee.getInstance().getDataFolder(), "command.yml");
+//        }
+//        if(fileToGet.equals(Files.WHITELIST_MOTD)) {
+//            return new File(PixelBungee.getInstance().getDataFolder(), "whitelist-motd.yml");
+//        }
+//        if(fileToGet.equals(Files.EDITABLE)) {
+//            return new File(PixelBungee.getInstance().getDataFolder(), "edit.yml");
+//        }
+//        if(fileToGet.equals(Files.TIMER_MOTD)) {
+//            return new File(PixelBungee.getInstance().getDataFolder(), "timer-motd.yml");
+//        }
+//        if(fileToGet.equals(Files.MODULES)) {
+//            return new File(PixelBungee.getInstance().getDataFolder(), "modules.yml");
+//        }
+//        return new File(PixelBungee.getInstance().getDataFolder(), "settings.yml");
     }
     public boolean callMotds(MotdType motdType) {
         try {

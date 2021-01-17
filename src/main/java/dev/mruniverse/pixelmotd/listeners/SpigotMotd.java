@@ -45,21 +45,21 @@ public class SpigotMotd {
             max = ping.getPlayersMaximum();
             online = ping.getPlayersOnline();
 
-                if (SpigotControl.getControl(Files.EDITABLE).getBoolean("whitelist.toggle")) {
-                    motdName = SpigotControl.getMotd(true);
-                    motdType = MotdType.WHITELIST_MOTD;
-                } else {
-                    motdName = SpigotControl.getMotd(false);
-                    motdType = MotdType.NORMAL_MOTD;
-                }
-                showType = ShowType.FIRST;
+            if (SpigotControl.getControl(Files.EDITABLE).getBoolean("whitelist.toggle")) {
+                motdName = SpigotControl.getMotd(true);
+                motdType = MotdType.WHITELIST_MOTD;
+            } else {
+                motdName = SpigotControl.getMotd(false);
+                motdType = MotdType.NORMAL_MOTD;
+            }
+            showType = ShowType.FIRST;
 
-                //* Motd Version Setup
-                if (ProtocolLibrary.getProtocolManager().getProtocolVersion(e.getPlayer()) >= 721) {
-                    if (SpigotUtils.getHexMotdStatus(motdType, motdName)) {
-                        showType = ShowType.SECOND;
-                    }
+            //* Motd Version Setup
+            if (ProtocolLibrary.getProtocolManager().getProtocolVersion(e.getPlayer()) >= 721) {
+                if (SpigotUtils.getHexMotdStatus(motdType, motdName)) {
+                    showType = ShowType.SECOND;
                 }
+            }
             try {
                 //* Favicon Setup
                 //* Custom Server Icon Setup

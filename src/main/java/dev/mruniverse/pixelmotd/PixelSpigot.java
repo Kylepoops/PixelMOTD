@@ -3,20 +3,21 @@ package dev.mruniverse.pixelmotd;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import dev.mruniverse.pixelmotd.enums.Files;
+import dev.mruniverse.pixelmotd.enums.InitMode;
 import dev.mruniverse.pixelmotd.enums.SaveMode;
 import dev.mruniverse.pixelmotd.files.FileManager;
 import dev.mruniverse.pixelmotd.files.SpigotControl;
+import dev.mruniverse.pixelmotd.utils.LoaderUtils;
 import dev.mruniverse.pixelmotd.listeners.SpigotMotd;
 import dev.mruniverse.pixelmotd.utils.HexManager;
-import dev.mruniverse.pixelmotd.utils.LoaderUtils;
-import dev.mruniverse.pixelmotd.utils.Logger;
 import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import static dev.mruniverse.pixelmotd.utils.Logger.error;
 import static dev.mruniverse.pixelmotd.utils.Logger.info;
 
-public class PixelSpigot extends JavaPlugin {
+public class PixelSpigot extends JavaPlugin implements Listener {
     private static PixelSpigot instance;
     private static HexManager hManager;
     private static FileManager fManager;

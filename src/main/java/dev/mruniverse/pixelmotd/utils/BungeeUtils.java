@@ -17,12 +17,12 @@ import static dev.mruniverse.pixelmotd.utils.Logger.error;
 
 public class BungeeUtils {
     private final PixelBungee plugin;
-    
+
     public BungeeUtils(PixelBungee plugin) {
         this.plugin = plugin;
-        
+
     }
-    
+
     public List<String> getPlayers(WhitelistMembers mode, String serverName) {
         if(mode.equals(WhitelistMembers.NAMEs)) {
             if(plugin.getBungeeControl().getControl(Files.MODULES).get(Extras.getServerPath(Whitelist.PLAYERS_NAME,serverName)) != null)

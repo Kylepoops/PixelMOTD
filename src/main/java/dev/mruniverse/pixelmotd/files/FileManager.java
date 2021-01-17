@@ -20,7 +20,7 @@ public class FileManager {
 //    private SpigotControl sControl;
 
     public FileManager(PixelBungee bPlugin) {
-         bControl = bPlugin.getBungeeControl();
+        bControl = bPlugin.getBungeeControl();
 
     }
 
@@ -232,7 +232,7 @@ public class FileManager {
             }
         }
     }
-public void loadFolder(File folderToLoad, String folderName) {
+    public void loadFolder(File folderToLoad, String folderName) {
         boolean result = false;
         if(!folderToLoad.exists()) result = folderToLoad.mkdir();
         if(result) {

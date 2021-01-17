@@ -1,7 +1,6 @@
 package dev.mruniverse.pixelmotd.utils;
 
 import dev.mruniverse.pixelmotd.PixelBungee;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,12 +13,8 @@ public class Logger {
      * @param message Message to transform.
      * @return transformed message with colors.
      */
-    public static String spigotColor(String message) {
+    public static String color(String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
-    }
-
-    public static String bungeeColor(String message) {
-        return net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', message);
     }
 
     /**
@@ -61,7 +56,7 @@ public class Logger {
      * @param message Message to send.
      */
     public static void sendMessage(CommandSender sender, String message) {
-        sender.sendMessage(spigotColor(message));
+        sender.sendMessage(color(message));
     }
 
     /**
@@ -71,7 +66,7 @@ public class Logger {
      * @param message Message to send.
      */
     public static void sendMessage(net.md_5.bungee.api.CommandSender player, String message) {
-        player.sendMessage(new ComponentBuilder(bungeeColor(message)).create());
+        player.sendMessage(new ComponentBuilder(color(message)).create());
     }
 
     /**
@@ -81,12 +76,11 @@ public class Logger {
      * @param message Provided message
      */
     private static void sendMessage(String message) {
-        // Send a message to Spigot console with different color method.
         if (!LoaderUtils.isBungee) {
-            Bukkit.getConsoleSender().sendMessage(spigotColor(message));
+            Bukkit.getConsoleSender().sendMessage(color(message));
         }
 
         PixelBungee plugin = PixelBungee.getInstance();
-        plugin.getProxy().getConsole().sendMessage(new ComponentBuilder(bungeeColor(message)).create());
+        plugin.getProxy().getConsole().sendMessage(new ComponentBuilder(color(message)).create());
     }
 }
