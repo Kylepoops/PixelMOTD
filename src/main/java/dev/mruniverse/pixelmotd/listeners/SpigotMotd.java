@@ -22,8 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static dev.mruniverse.pixelmotd.utils.Logger.error;
-import static dev.mruniverse.pixelmotd.utils.Logger.warn;
+import static dev.mruniverse.pixelmotd.utils.spigotLogger.error;
+import static dev.mruniverse.pixelmotd.utils.spigotLogger.warn;
 
 @SuppressWarnings({"UnstableApiUsage", "CatchMayIgnoreException"})
 public class SpigotMotd {

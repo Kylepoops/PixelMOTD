@@ -15,8 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static dev.mruniverse.pixelmotd.utils.Logger.error;
-import static dev.mruniverse.pixelmotd.utils.Logger.sendMessage;
+import static dev.mruniverse.pixelmotd.utils.bungeeLogger.error;
+import static dev.mruniverse.pixelmotd.utils.bungeeLogger.sendMessage;
 
 public class SpigotCMD implements CommandExecutor {
 

@@ -12,16 +12,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static dev.mruniverse.pixelmotd.utils.Logger.info;
+import static dev.mruniverse.pixelmotd.utils.bungeeLogger.info;
 
 public class FileManager {
-    private final boolean bungeeMode = LoaderUtils.isBungee;
+    private boolean bungeeMode;
     private BungeeControl bControl;
+    private SpigotControl sControl;
 //    private SpigotControl sControl;
 
     public FileManager(PixelBungee bPlugin) {
-         bControl = bPlugin.getBungeeControl();
-
+        bControl = bPlugin.getBungeeControl();
+        bungeeMode = true;
+    }
+    public FileManager(PixelSpigot sPlugin) {
+        sControl = sPlugin.getSpigotControl();
+        bungeeMode = false;
     }
 
     public static File dataFolder,

@@ -12,9 +12,13 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.*;
 
-import static dev.mruniverse.pixelmotd.utils.Logger.*;
+import static dev.mruniverse.pixelmotd.utils.bungeeLogger.*;
 
 public class SpigotUtils {
+    private PixelSpigot plugin;
+    public SpigotUtils(PixelSpigot main) {
+        plugin = main;
+    }
     public static List<String> getPlayers(WhitelistMembers mode, String worldName) {
         if(mode.equals(WhitelistMembers.NAMEs)) {
             if(SpigotControl.getControl(Files.MODULES).get(Extras.getWorldPath(Whitelist.PLAYERS_NAME,worldName)) != null)

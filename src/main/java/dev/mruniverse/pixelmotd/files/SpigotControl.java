@@ -16,9 +16,14 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static dev.mruniverse.pixelmotd.PixelSpigot.getFiles;
-import static dev.mruniverse.pixelmotd.utils.Logger.info;
+import static dev.mruniverse.pixelmotd.utils.spigotLogger.info;
 
 public class SpigotControl {
+    private PixelSpigot plugin;
+    public SpigotControl(PixelSpigot main) {
+        plugin = main;
+    }
+
     private static FileConfiguration rEditable, rModules, rSettings, rWhitelist, rNormal,rTimer,rCommand;
     public static void reloadFiles() {
         getFiles().loadFiles();
