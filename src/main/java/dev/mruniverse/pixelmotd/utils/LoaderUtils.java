@@ -36,7 +36,7 @@ public class LoaderUtils {
         if (isBungee) {
             control = PixelBungee.getInstance().getBungeeControl().getControl(Files.SETTINGS).getBoolean("settings.update-check");
         } else {
-            control = SpigotControl.getControl(Files.SETTINGS).getBoolean("settings.update-check");
+            control = PixelSpigot.getInstance().getSpigotControl().getControl(Files.SETTINGS).getBoolean("settings.update-check");
         }
 
         if (control) {

@@ -1,6 +1,5 @@
 package dev.mruniverse.pixelmotd.utils;
 
-import dev.mruniverse.pixelmotd.files.SpigotControl;
 import dev.mruniverse.pixelmotd.PixelBungee;
 import dev.mruniverse.pixelmotd.PixelSpigot;
 
@@ -25,6 +24,7 @@ public class PixelUpdater {
             isDetailed     = PixelBungee.getInstance().getBungeeControl().isDetailed();
         } else {
             currentVersion = PixelSpigot.getInstance().getDescription().getVersion();
+            isDetailed = PixelSpigot.getInstance().getSpigotControl().isDetailed();
             // TODO ISDETAILED FOR SPIGOT
         }
         try {
@@ -68,7 +68,7 @@ public class PixelUpdater {
                 }
             } else {
                 spigotLogger.warn("Can't connect to SpigotMC and bStats");
-                if(SpigotControl.isDetailed()) {
+                if(isDetailed) {
                     spigotLogger.error("[Detailed Error] Information:");
                     if(ignored.getMessage() != null) {
                         spigotLogger.error("Message: " + ignored.getMessage());

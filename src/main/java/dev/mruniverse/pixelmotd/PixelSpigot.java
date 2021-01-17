@@ -43,10 +43,10 @@ public class PixelSpigot extends JavaPlugin implements Listener {
         spigotControl = new SpigotControl(this);
         spigotUtils = new SpigotUtils(this);
 
-        SpigotControl.save(SaveMode.ALL);
+        spigotControl.save(SaveMode.ALL);
 
         hManager = new HexManager();
-        hManager.setHex(SpigotControl.getControl(Files.SETTINGS).getBoolean("settings.hexColors"));
+        hManager.setHex(spigotControl.getControl(Files.SETTINGS).getBoolean("settings.hexColors"));
 
         loaderUtils.pluginUpdater();
 
@@ -78,7 +78,7 @@ public class PixelSpigot extends JavaPlugin implements Listener {
         }
 
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-        protocolManager.addPacketListener((new SpigotMotd()).getPacketAdapter());
+        protocolManager.addPacketListener((new SpigotMotd(this)).getPacketAdapter());
         info("Hooked with ProtocolLib!");
     }
     public SpigotControl getSpigotControl() {
@@ -87,7 +87,7 @@ public class PixelSpigot extends JavaPlugin implements Listener {
     public SpigotUtils getSpigotUtils() {
         return spigotUtils;
     }
-    public static FileManager getFiles() {
+    public FileManager getFiles() {
         return fManager;
     }
 
