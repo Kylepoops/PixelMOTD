@@ -9,12 +9,24 @@ import org.bukkit.command.CommandSender;
 public class Logger {
     /**
      * Colorize a string provided to method
+     * for spigot
      *
      * @param message Message to transform.
      * @return transformed message with colors.
      */
-    public static String color(String message) {
+    public static String spigotColor(String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
+    }
+
+    /**
+     * Colorize a string provided to method
+     * for proxies.
+     *
+     * @param message Message to transform.
+     * @return transformed message with colors.
+     */
+    public static String bungeeColor(String message) {
+        return net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', message);
     }
 
     /**
@@ -56,7 +68,7 @@ public class Logger {
      * @param message Message to send.
      */
     public static void sendMessage(CommandSender sender, String message) {
-        sender.sendMessage(color(message));
+        sender.sendMessage(spigotColor(message));
     }
 
     /**
@@ -66,7 +78,7 @@ public class Logger {
      * @param message Message to send.
      */
     public static void sendMessage(net.md_5.bungee.api.CommandSender player, String message) {
-        player.sendMessage(new ComponentBuilder(color(message)).create());
+        player.sendMessage(new ComponentBuilder(bungeeColor(message)).create());
     }
 
     /**
@@ -77,10 +89,10 @@ public class Logger {
      */
     private static void sendMessage(String message) {
         if (!LoaderUtils.isBungee) {
-            Bukkit.getConsoleSender().sendMessage(color(message));
+            Bukkit.getConsoleSender().sendMessage(spigotColor(message));
         }
 
         PixelBungee plugin = PixelBungee.getInstance();
-        plugin.getProxy().getConsole().sendMessage(new ComponentBuilder(color(message)).create());
+        plugin.getProxy().getConsole().sendMessage(new ComponentBuilder(bungeeColor(message)).create());
     }
 }

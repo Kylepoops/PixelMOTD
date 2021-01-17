@@ -27,20 +27,18 @@ public class PixelBungee extends Plugin implements Listener {
     public void onLoad() {
         instance = this;
 
-        // Set value to isBungee boolean.
-        loaderUtils = new LoaderUtils(true);
+        loaderUtils   = new LoaderUtils(true);
 
         bungeeControl = new BungeeControl(this);
-        bungeeControl.save(SaveMode.ALL);
+        bungeeUtils   = new BungeeUtils(this);
+        fManager      = new FileManager(this);
+        hManager      = new HexManager();
 
-        bungeeUtils = new BungeeUtils(this);
+        bungeeControl.save(SaveMode.ALL);
 
         hManager.setHex(bungeeControl.getControl(Files.SETTINGS).getBoolean("settings.hexColors"));
 
-        fManager = new FileManager();
         fManager.loadFiles();
-
-        hManager = new HexManager();
         fManager.loadConfiguration();
 
         loaderUtils.pluginUpdater();
@@ -53,8 +51,8 @@ public class PixelBungee extends Plugin implements Listener {
     public void onEnable() {
         long temporalTimer = System.currentTimeMillis();
 
-        loaderUtils.loadMetrics();
         loaderUtils.registerListeners();
+        loaderUtils.loadMetrics();
 
         info("All events loaded in &b" + (System.currentTimeMillis() - temporalTimer) + "&fms.");
     }

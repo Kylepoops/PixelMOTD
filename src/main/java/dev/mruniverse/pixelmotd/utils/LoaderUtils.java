@@ -19,6 +19,7 @@ import static dev.mruniverse.pixelmotd.utils.Logger.info;
 
 public class LoaderUtils {
     public static boolean isBungee;
+    boolean control;
 
     /**
      * Specify if it's Bungee or Spigot
@@ -31,7 +32,7 @@ public class LoaderUtils {
     }
 
     public void pluginUpdater() {
-        boolean control;
+
 
         if (isBungee) {
             control = PixelBungee.getInstance().getBungeeControl().getControl(Files.SETTINGS).getBoolean("settings.update-check");
@@ -92,11 +93,13 @@ public class LoaderUtils {
      * Load it on the onEnable method.
      */
     public void loadMetrics() {
-        if (!isBungee) {
-            BukkitMetrics bukkitMetrics = new BukkitMetrics(PixelSpigot.getInstance(), 8509);
-            debug(String.format("Spigot metrics has been enabled &7(%s)", bukkitMetrics.isEnabled()));
-            return;
-        }
+        // TODO Fix bukkit metrics.
+//        if (!isBungee) {
+//            BukkitMetrics bukkitMetrics = new BukkitMetrics(PixelSpigot.getInstance(), 8509);
+//            new BukkitMetrics(PixelSpigot.getInstance(), 8509);
+//            debug(String.format("Spigot metrics has been enabled &7(%s)", bukkitMetrics.isEnabled()));
+//            return;
+//        }
 
         BungeeMetrics bungeeMetrics = new BungeeMetrics(PixelBungee.getInstance(), 8509);
         debug(String.format("Proxy metrics has been enabled &7(%s)", bungeeMetrics.isEnabled()));
