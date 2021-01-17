@@ -12,21 +12,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static dev.mruniverse.pixelmotd.utils.bungeeLogger.info;
+import static dev.mruniverse.pixelmotd.utils.Logger.info;
 
 public class FileManager {
-    private boolean bungeeMode;
+    private final boolean bungeeMode = LoaderUtils.isBungee;
     private BungeeControl bControl;
-    private SpigotControl sControl;
 //    private SpigotControl sControl;
 
     public FileManager(PixelBungee bPlugin) {
         bControl = bPlugin.getBungeeControl();
-        bungeeMode = true;
-    }
-    public FileManager(PixelSpigot sPlugin) {
-        sControl = sPlugin.getSpigotControl();
-        bungeeMode = false;
 
     }
 
@@ -62,24 +56,24 @@ public class FileManager {
             if (bungeeMode) {
                 return bControl.callMotds(MotdType.WHITELIST_MOTD);
             }
-            return sControl.callMotds(MotdType.WHITELIST_MOTD);
+            return SpigotControl.callMotds(MotdType.WHITELIST_MOTD);
         }
         if(motdType.equals(MotdType.TIMER_MOTD)) {
             if (bungeeMode) {
                 return bControl.callMotds(MotdType.TIMER_MOTD);
             }
-            return sControl.callMotds(MotdType.TIMER_MOTD);
+            return SpigotControl.callMotds(MotdType.TIMER_MOTD);
         }
         if (bungeeMode) {
             return bControl.callMotds(MotdType.NORMAL_MOTD);
         }
-        return sControl.callMotds(MotdType.NORMAL_MOTD);
+        return SpigotControl.callMotds(MotdType.NORMAL_MOTD);
     }
     private boolean callEventsExists() {
         if (bungeeMode) {
             return bControl.getControl(Files.SETTINGS).contains("events");
         }
-        return sControl.getControl(Files.SETTINGS).contains("events");
+        return SpigotControl.getControl(Files.SETTINGS).contains("events");
     }
     private void callMotdVerificator(MotdType motdType) {
         if(motdType.equals(MotdType.WHITELIST_MOTD)) {
@@ -87,20 +81,20 @@ public class FileManager {
                 bControl.loadMotdPaths(MotdType.WHITELIST_MOTD);
                 return;
             }
-            sControl.loadMotdPaths(MotdType.WHITELIST_MOTD);
+            SpigotControl.loadMotdPaths(MotdType.WHITELIST_MOTD);
         }
         if(motdType.equals(MotdType.TIMER_MOTD)) {
             if (bungeeMode) {
                 bControl.loadMotdPaths(MotdType.TIMER_MOTD);
                 return;
             }
-            sControl.loadMotdPaths(MotdType.TIMER_MOTD);
+            SpigotControl.loadMotdPaths(MotdType.TIMER_MOTD);
         }
         if (bungeeMode) {
             bControl.loadMotdPaths(MotdType.NORMAL_MOTD);
             return;
         }
-        sControl.loadMotdPaths(MotdType.NORMAL_MOTD);
+        SpigotControl.loadMotdPaths(MotdType.NORMAL_MOTD);
     }
     private void callDataFolder() {
         if(bungeeMode) {
@@ -546,38 +540,38 @@ public class FileManager {
         path = callConvert(path);
         if(!bungeeMode) {
             if(fileToControl.equals(Files.WHITELIST_MOTD)) {
-                if(!sControl.getControl(Files.WHITELIST_MOTD).contains(path)) {
-                    sControl.getControl(Files.WHITELIST_MOTD).set(path,value);
+                if(!SpigotControl.getControl(Files.WHITELIST_MOTD).contains(path)) {
+                    SpigotControl.getControl(Files.WHITELIST_MOTD).set(path,value);
                 }
                 return;
             }
             if(fileToControl.equals(Files.COMMAND)) {
-                if(!sControl.getControl(Files.COMMAND).contains(path)) {
-                    sControl.getControl(Files.COMMAND).set(path,value);
+                if(!SpigotControl.getControl(Files.COMMAND).contains(path)) {
+                    SpigotControl.getControl(Files.COMMAND).set(path,value);
                 }
                 return;
             }
             if(fileToControl.equals(Files.NORMAL_MOTD)) {
-                if(!sControl.getControl(Files.NORMAL_MOTD).contains(path)) {
-                    sControl.getControl(Files.NORMAL_MOTD).set(path,value);
+                if(!SpigotControl.getControl(Files.NORMAL_MOTD).contains(path)) {
+                    SpigotControl.getControl(Files.NORMAL_MOTD).set(path,value);
                 }
                 return;
             }
             if(fileToControl.equals(Files.EDITABLE)) {
-                if(!sControl.getControl(Files.EDITABLE).contains(path)) {
-                    sControl.getControl(Files.EDITABLE).set(path,value);
+                if(!SpigotControl.getControl(Files.EDITABLE).contains(path)) {
+                    SpigotControl.getControl(Files.EDITABLE).set(path,value);
                 }
                 return;
             }
             if(fileToControl.equals(Files.MODULES)) {
-                if(!sControl.getControl(Files.MODULES).contains(path)) {
-                    sControl.getControl(Files.MODULES).set(path,value);
+                if(!SpigotControl.getControl(Files.MODULES).contains(path)) {
+                    SpigotControl.getControl(Files.MODULES).set(path,value);
                 }
                 return;
             }
             if(fileToControl.equals(Files.SETTINGS)) {
-                if(!sControl.getControl(Files.SETTINGS).contains(path)) {
-                    sControl.getControl(Files.SETTINGS).set(path,value);
+                if(!SpigotControl.getControl(Files.SETTINGS).contains(path)) {
+                    SpigotControl.getControl(Files.SETTINGS).set(path,value);
                 }
                 return;
             }

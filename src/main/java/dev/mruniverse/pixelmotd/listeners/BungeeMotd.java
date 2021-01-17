@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Random;
 
 import static dev.mruniverse.pixelmotd.enums.ShowType.FIRST;
-import static dev.mruniverse.pixelmotd.utils.bungeeLogger.error;
+import static dev.mruniverse.pixelmotd.utils.Logger.error;
 
 @SuppressWarnings("UnstableApiUsage")
 public class BungeeMotd implements Listener {

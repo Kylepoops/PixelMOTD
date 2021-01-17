@@ -17,16 +17,16 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static dev.mruniverse.pixelmotd.utils.bungeeLogger.error;
-import static dev.mruniverse.pixelmotd.utils.bungeeLogger.info;
+import static dev.mruniverse.pixelmotd.utils.Logger.error;
+import static dev.mruniverse.pixelmotd.utils.Logger.info;
 
 public class BungeeControl {
     private final PixelBungee plugin;
 
     private Configuration pEditable,pTimer, pModules ,pSettings, pWhitelist, pNormal,pCommand;
 
-    public BungeeControl() {
-        this.plugin = PixelBungee.getInstance();
+    public BungeeControl(PixelBungee plugin) {
+        this.plugin = plugin;
     }
 
     private File newFile(String file) {

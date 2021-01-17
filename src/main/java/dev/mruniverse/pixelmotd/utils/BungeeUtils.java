@@ -1,15 +1,19 @@
 package dev.mruniverse.pixelmotd.utils;
 
 import dev.mruniverse.pixelmotd.enums.*;
+import dev.mruniverse.pixelmotd.files.BungeeControl;
 import dev.mruniverse.pixelmotd.PixelBungee;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ServerPing;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.io.File;
 import java.text.ParseException;
 import java.util.*;
 
-import static dev.mruniverse.pixelmotd.utils.bungeeLogger.error;
+import static dev.mruniverse.pixelmotd.utils.Logger.error;
 
 public class BungeeUtils {
     private final PixelBungee plugin;

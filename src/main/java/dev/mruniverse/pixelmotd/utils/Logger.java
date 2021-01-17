@@ -1,10 +1,12 @@
 package dev.mruniverse.pixelmotd.utils;
 
-import dev.mruniverse.pixelmotd.PixelSpigot;
-import net.md_5.bungee.api.ChatColor;
+import dev.mruniverse.pixelmotd.PixelBungee;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-public class spigotLogger {
+public class Logger {
     /**
      * Colorize a string provided to method
      *
@@ -48,13 +50,23 @@ public class spigotLogger {
     }
 
     /**
+     * Sends a message to a Bukkit command sender.
+     *
+     * @param sender Bukkit CommandSender
+     * @param message Message to send.
+     */
+    public static void sendMessage(CommandSender sender, String message) {
+        sender.sendMessage(color(message));
+    }
+
+    /**
      * Sends a message to a Proxied Player.
      *
      * @param player Proxied Player
      * @param message Message to send.
      */
-    public static void sendMessage(CommandSender player, String message) {
-        player.sendMessage(color(message));
+    public static void sendMessage(net.md_5.bungee.api.CommandSender player, String message) {
+        player.sendMessage(new ComponentBuilder(color(message)).create());
     }
 
     /**
@@ -64,6 +76,11 @@ public class spigotLogger {
      * @param message Provided message
      */
     private static void sendMessage(String message) {
-        PixelSpigot.getInstance().getServer().getConsoleSender().sendMessage(color(message));
+        if (!LoaderUtils.isBungee) {
+            Bukkit.getConsoleSender().sendMessage(color(message));
+        }
+
+        PixelBungee plugin = PixelBungee.getInstance();
+        plugin.getProxy().getConsole().sendMessage(new ComponentBuilder(color(message)).create());
     }
 }

@@ -10,7 +10,7 @@ import dev.mruniverse.pixelmotd.utils.LoaderUtils;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 
-import static dev.mruniverse.pixelmotd.utils.bungeeLogger.info;
+import static dev.mruniverse.pixelmotd.utils.Logger.info;
 
 public class PixelBungee extends Plugin implements Listener {
     private static PixelBungee instance;
@@ -22,6 +22,7 @@ public class PixelBungee extends Plugin implements Listener {
     private BungeeUtils bungeeUtils;
 
     private LoaderUtils loaderUtils;
+
     @Override
     public void onLoad() {
         instance = this;
@@ -29,14 +30,14 @@ public class PixelBungee extends Plugin implements Listener {
         // Set value to isBungee boolean.
         loaderUtils = new LoaderUtils(true);
 
-        bungeeControl = new BungeeControl();
+        bungeeControl = new BungeeControl(this);
         bungeeControl.save(SaveMode.ALL);
 
         bungeeUtils = new BungeeUtils(this);
 
         hManager.setHex(bungeeControl.getControl(Files.SETTINGS).getBoolean("settings.hexColors"));
 
-        fManager = new FileManager(this);
+        fManager = new FileManager();
         fManager.loadFiles();
 
         hManager = new HexManager();
@@ -70,7 +71,7 @@ public class PixelBungee extends Plugin implements Listener {
     public static PixelBungee getInstance() {
         return instance;
     }
-    public LoaderUtils getLoader() { return loaderUtils; }
+
     public HexManager getHex() {
         return hManager;
     }

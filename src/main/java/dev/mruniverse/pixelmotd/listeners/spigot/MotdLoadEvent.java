@@ -1,9 +1,9 @@
 package dev.mruniverse.pixelmotd.listeners.spigot;
 
 
-import dev.mruniverse.pixelmotd.PixelSpigot;
 import dev.mruniverse.pixelmotd.enums.Files;
 import dev.mruniverse.pixelmotd.enums.MotdType;
+import dev.mruniverse.pixelmotd.files.SpigotControl;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -46,13 +46,13 @@ public class MotdLoadEvent extends Event {
             motdFile = Files.TIMER_MOTD;
             path = "timers." + id + ".";
         }
-        protocolVersion = PixelSpigot.getInstance().getSpigotControl().getControl(motdFile).getBoolean(path + "otherSettings.customProtocol.changeProtocolVersion");
-        motdHover = PixelSpigot.getInstance().getSpigotControl().getControl(motdFile).getStringList(path + "otherSettings.customHover.hover");
-        isHoverEnabled = PixelSpigot.getInstance().getSpigotControl().getControl(motdFile).getBoolean(path + "otherSettings.customHover.toggle");
+        protocolVersion = SpigotControl.getControl(motdFile).getBoolean(path + "otherSettings.customProtocol.changeProtocolVersion");
+        motdHover = SpigotControl.getControl(motdFile).getStringList(path + "otherSettings.customHover.hover");
+        isHoverEnabled = SpigotControl.getControl(motdFile).getBoolean(path + "otherSettings.customHover.toggle");
         CustomHexMotdStatus = customHex;
-        customProtocolStatus = PixelSpigot.getInstance().getSpigotControl().getControl(motdFile).getBoolean(path + "otherSettings.customProtocol.toggle");
-        iconManager = new IconManager(PixelSpigot.getInstance().getSpigotControl().getControl(motdFile).getBoolean(path + "otherSettings.customIcon.toggle"),
-                PixelSpigot.getInstance().getSpigotControl().getControl(motdFile).getBoolean(path + "otherSettings.customIcon.customFile"),icon);
+        customProtocolStatus = SpigotControl.getControl(motdFile).getBoolean(path + "otherSettings.customProtocol.toggle");
+        iconManager = new IconManager(SpigotControl.getControl(motdFile).getBoolean(path + "otherSettings.customIcon.toggle"),
+                SpigotControl.getControl(motdFile).getBoolean(path + "otherSettings.customIcon.customFile"),icon);
     }
 
     @Override

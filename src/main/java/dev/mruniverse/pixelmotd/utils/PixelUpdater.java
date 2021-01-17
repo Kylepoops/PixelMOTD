@@ -1,5 +1,7 @@
 package dev.mruniverse.pixelmotd.utils;
 
+import dev.mruniverse.pixelmotd.files.BungeeControl;
+import dev.mruniverse.pixelmotd.files.SpigotControl;
 import dev.mruniverse.pixelmotd.PixelBungee;
 import dev.mruniverse.pixelmotd.PixelSpigot;
 
@@ -10,6 +12,8 @@ import java.net.URL;
 import java.util.Arrays;
 import javax.net.ssl.HttpsURLConnection;
 
+import static dev.mruniverse.pixelmotd.utils.Logger.error;
+import static dev.mruniverse.pixelmotd.utils.Logger.warn;
 
 
 public class PixelUpdater {
@@ -24,7 +28,6 @@ public class PixelUpdater {
             isDetailed     = PixelBungee.getInstance().getBungeeControl().isDetailed();
         } else {
             currentVersion = PixelSpigot.getInstance().getDescription().getVersion();
-            isDetailed = PixelSpigot.getInstance().getSpigotControl().isDetailed();
             // TODO ISDETAILED FOR SPIGOT
         }
         try {
@@ -42,54 +45,54 @@ public class PixelUpdater {
             newestVersion = sb.toString();
         } catch (IOException ignored) {
             if(isBungee) {
-                bungeeLogger.warn("Can't connect to SpigotMC and bStats");
+                warn("Can't connect to SpigotMC and bStats");
                 if(isDetailed) {
-                    bungeeLogger.error("Information:");
+                    error("Information:");
                     if(ignored.getMessage() != null) {
-                        bungeeLogger.error("Message: " + ignored.getMessage());
+                        error("Message: " + ignored.getMessage());
                     }
                     if(ignored.getLocalizedMessage() != null) {
-                        bungeeLogger.error("LocalizedMessage: " + ignored.getLocalizedMessage());
+                        error("LocalizedMessage: " + ignored.getLocalizedMessage());
                     }
                     if(ignored.getStackTrace() != null) {
-                        bungeeLogger.error("StackTrace: ");
+                        error("StackTrace: ");
                         for(StackTraceElement line : ignored.getStackTrace()) {
-                            bungeeLogger.error("(" + line.getLineNumber() + ") " + line.toString());
+                            error("(" + line.getLineNumber() + ") " + line.toString());
                         }
                     }
                     if(ignored.getSuppressed() != null) {
-                        bungeeLogger.error("Suppressed: " + Arrays.toString(ignored.getSuppressed()));
+                        error("Suppressed: " + Arrays.toString(ignored.getSuppressed()));
                     }
                     if(ignored.getClass() != null) {
-                        bungeeLogger.error("Class: " + ignored.getClass().getName());
+                        error("Class: " + ignored.getClass().getName());
                     }
-                    bungeeLogger.error("Plugin version:" + PixelBungee.getInstance().getDescription().getVersion());
-                    bungeeLogger.error("--------------- [Detailed Error]");
+                    error("Plugin version:" + PixelBungee.getInstance().getDescription().getVersion());
+                    error("--------------- [Detailed Error]");
                 }
             } else {
-                spigotLogger.warn("Can't connect to SpigotMC and bStats");
-                if(isDetailed) {
-                    spigotLogger.error("[Detailed Error] Information:");
+                warn("Can't connect to SpigotMC and bStats");
+                if(SpigotControl.isDetailed()) {
+                    error("[Detailed Error] Information:");
                     if(ignored.getMessage() != null) {
-                        spigotLogger.error("Message: " + ignored.getMessage());
+                        error("Message: " + ignored.getMessage());
                     }
                     if(ignored.getLocalizedMessage() != null) {
-                        spigotLogger.error("LocalizedMessage: " + ignored.getLocalizedMessage());
+                        error("LocalizedMessage: " + ignored.getLocalizedMessage());
                     }
                     if(ignored.getStackTrace() != null) {
-                        spigotLogger.error("StackTrace: ");
+                        error("StackTrace: ");
                         for(StackTraceElement line : ignored.getStackTrace()) {
-                            spigotLogger.error("(" + line.getLineNumber() + ") " + line.toString());
+                            error("(" + line.getLineNumber() + ") " + line.toString());
                         }
                     }
                     if(ignored.getSuppressed() != null) {
-                        spigotLogger.error("Suppressed: " + Arrays.toString(ignored.getSuppressed()));
+                        error("Suppressed: " + Arrays.toString(ignored.getSuppressed()));
                     }
                     if(ignored.getClass() != null) {
-                        spigotLogger.error("Class: " + ignored.getClass().getName());
+                        error("Class: " + ignored.getClass().getName());
                     }
-                    spigotLogger.error("Plugin version:" + PixelSpigot.getInstance().getDescription().getVersion());
-                    spigotLogger.error("---------------");
+                    error("Plugin version:" + PixelSpigot.getInstance().getDescription().getVersion());
+                    error("---------------");
                 }
             }
         }
