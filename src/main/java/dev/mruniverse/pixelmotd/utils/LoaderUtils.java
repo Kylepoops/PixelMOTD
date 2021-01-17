@@ -19,7 +19,6 @@ import static dev.mruniverse.pixelmotd.utils.Logger.info;
 
 public class LoaderUtils {
     public static boolean isBungee;
-    private final boolean control;
 
     /**
      * Specify if it's Bungee or Spigot
@@ -29,15 +28,17 @@ public class LoaderUtils {
      */
     public LoaderUtils (boolean isBungee) {
         LoaderUtils.isBungee = isBungee;
-
-        if (isBungee) {
-            control = PixelBungee.getInstance().getBungeeControl().getControl(Files.SETTINGS).getBoolean("settings.update-check");
-            return;
-        }
-        control = SpigotControl.getControl(Files.SETTINGS).getBoolean("settings.update-check");
     }
 
     public void pluginUpdater() {
+        boolean control;
+
+        if (isBungee) {
+            control = PixelBungee.getInstance().getBungeeControl().getControl(Files.SETTINGS).getBoolean("settings.update-check");
+        } else {
+            control = SpigotControl.getControl(Files.SETTINGS).getBoolean("settings.update-check");
+        }
+
         if (control) {
             PixelUpdater updater = new PixelUpdater(isBungee, 37177);
             String updaterResult = updater.getUpdateResult();
@@ -63,7 +64,6 @@ public class LoaderUtils {
                             info("&aYou are Running a &bPreRelease Version&a, this is a stable version but is not the final version or don't have finished all things of the final version, but is a stable version,awesome!");
                             break;
                         default:
-                            info("DEBUG... 1");
                             break;
                     }
                     break;
@@ -83,7 +83,6 @@ public class LoaderUtils {
                     info("&cYou are Running a &aPre Alpha version&c, it is normal to find several errors, please report these errors so that they can be solved. &eWARNING: &cI (MrUniverse) recommend a Stable version, PreAlpha aren't stable versions!");
                     break;
                 default:
-                    info("DEBUG... 2");
                     break;
             }
         }

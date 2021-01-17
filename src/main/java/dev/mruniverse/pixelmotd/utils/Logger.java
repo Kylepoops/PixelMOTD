@@ -7,7 +7,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 public class Logger {
-    public static boolean isBungee;
     /**
      * Colorize a string provided to method
      *

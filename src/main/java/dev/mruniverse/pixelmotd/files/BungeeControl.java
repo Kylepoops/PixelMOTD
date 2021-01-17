@@ -21,7 +21,7 @@ import static dev.mruniverse.pixelmotd.utils.Logger.error;
 import static dev.mruniverse.pixelmotd.utils.Logger.info;
 
 public class BungeeControl {
-    private PixelBungee plugin;
+    private final PixelBungee plugin;
     
     private Configuration pEditable,pTimer, pModules ,pSettings, pWhitelist, pNormal,pCommand;
 
@@ -30,7 +30,7 @@ public class BungeeControl {
     }
     
     private File newFile(String file) {
-        return new File(PixelBungee.getInstance().getDataFolder(), file + ".yml");
+        return new File(plugin.getDataFolder(), file + ".yml");
     }
 
     private File getFile(Files fileToGet) {
