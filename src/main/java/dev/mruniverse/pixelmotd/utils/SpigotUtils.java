@@ -21,17 +21,14 @@ public class SpigotUtils {
     }
     public List<String> getPlayers(WhitelistMembers mode, String worldName) {
         if(mode.equals(WhitelistMembers.NAMEs)) {
-<<<<<<< HEAD
             if(SpigotControl.getControl(Files.MODULES).get(Extras.getWorldPath(Whitelist.PLAYERS_NAME,worldName)) != null)
                 if(SpigotControl.getControl(Files.MODULES).get("modules.world-whitelist.worlds." + worldName + " .players-name") != null) {
                     return SpigotControl.getControl(Files.MODULES).getStringList("modules.world-whitelist.worlds." + worldName + " .players-name");
                 }
-=======
             if(plugin.getSpigotControl().getControl(Files.MODULES).get(Extras.getWorldPath(Whitelist.PLAYERS_NAME,worldName)) != null)
             if(plugin.getSpigotControl().getControl(Files.MODULES).get("modules.world-whitelist.worlds." + worldName + " .players-name") != null) {
                 return plugin.getSpigotControl().getControl(Files.MODULES).getStringList("modules.world-whitelist.worlds." + worldName + " .players-name");
             }
->>>>>>> 8c769325e60fc856c61791189dce1d62afd1eaa2
             return new ArrayList<>();
         }
         if(plugin.getSpigotControl().getControl(Files.MODULES).get("modules.world-whitelist.worlds." + worldName + " .players-uuid") != null) {

@@ -48,7 +48,6 @@ public class SpigotMotd {
             max = ping.getPlayersMaximum();
             online = ping.getPlayersOnline();
 
-<<<<<<< HEAD
             if (SpigotControl.getControl(Files.EDITABLE).getBoolean("whitelist.toggle")) {
                 motdName = SpigotControl.getMotd(true);
                 motdType = MotdType.WHITELIST_MOTD;
@@ -62,7 +61,6 @@ public class SpigotMotd {
             if (ProtocolLibrary.getProtocolManager().getProtocolVersion(e.getPlayer()) >= 721) {
                 if (SpigotUtils.getHexMotdStatus(motdType, motdName)) {
                     showType = ShowType.SECOND;
-=======
                 if (main.getSpigotControl().getControl(Files.EDITABLE).getBoolean("whitelist.toggle")) {
                     motdName = main.getSpigotControl().getMotd(true);
                     motdType = MotdType.WHITELIST_MOTD;
@@ -77,7 +75,6 @@ public class SpigotMotd {
                     if (main.getSpigotUtils().getHexMotdStatus(motdType, motdName)) {
                         showType = ShowType.SECOND;
                     }
->>>>>>> 8c769325e60fc856c61791189dce1d62afd1eaa2
                 }
             }
             try {

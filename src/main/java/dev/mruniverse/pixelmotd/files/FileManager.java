@@ -22,15 +22,12 @@ public class FileManager {
 
     public FileManager(PixelBungee bPlugin) {
         bControl = bPlugin.getBungeeControl();
-<<<<<<< HEAD
-
-=======
         bungeeMode = true;
     }
     public FileManager(PixelSpigot sPlugin) {
         sControl = sPlugin.getSpigotControl();
         bungeeMode = false;
->>>>>>> 8c769325e60fc856c61791189dce1d62afd1eaa2
+
     }
 
     public static File dataFolder,
