@@ -36,6 +36,7 @@ public class FileManager {
             Timer,
             Command = null;
 
+
     public FileManager() {
         if (bungeeMode) {
             dataFolder = PixelBungee.getInstance().getDataFolder();

@@ -33,12 +33,14 @@ public class PixelSpigot extends JavaPlugin implements Listener {
         loaderUtils = new LoaderUtils(false);
 
         fManager = new FileManager();
+        hManager = new HexManager();
+
         fManager.loadFiles();
         fManager.loadConfiguration();
 
         SpigotControl.save(SaveMode.ALL);
 
-        hManager = new HexManager();
+
         hManager.setHex(SpigotControl.getControl(Files.SETTINGS).getBoolean("settings.hexColors"));
 
         loaderUtils.pluginUpdater();
@@ -75,7 +77,7 @@ public class PixelSpigot extends JavaPlugin implements Listener {
         info("Hooked with ProtocolLib!");
     }
 
-    public static FileManager getFiles() {
+    public FileManager getFiles() {
         return fManager;
     }
 
