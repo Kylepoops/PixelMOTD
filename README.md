@@ -1,4 +1,4 @@
-## PIXEL MOTD OFFICE GITHUB
+## PIXEL MOTD Fork
 
 <img align="left" alt="PixelMOTD Image" src="https://i.imgur.com/jrrrOYL.png" />
 
